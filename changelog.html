@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Changelog - Room TBA</title>
+    <link rel="icon" type="image/jpeg" href="carillon.jpg">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            margin-bottom: 32px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .brand-logo {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #7b2d26;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 24px;
+            color: #7b2d26;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        h2 {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 16px;
+        }
+
+        .version {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .version-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .version-number {
+            background: #7b2d26;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .version-date {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .version-tag {
+            background: #e8f4e8;
+            color: #2d5a3d;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .changes {
+            list-style: none;
+        }
+
+        .changes li {
+            padding: 8px 0;
+            padding-left: 24px;
+            position: relative;
+            border-bottom: 1px solid #eee;
+        }
+
+        .changes li:last-child {
+            border-bottom: none;
+        }
+
+        .changes li::before {
+            content: "•";
+            position: absolute;
+            left: 8px;
+            color: #7b2d26;
+            font-weight: bold;
+        }
+
+        .change-type {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-right: 8px;
+            text-transform: uppercase;
+        }
+
+        .change-type.new {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .change-type.fix {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .change-type.improve {
+            background: #cce5ff;
+            color: #004085;
+        }
+
+        footer {
+            text-align: center;
+            padding: 24px;
+            color: #888;
+            font-size: 13px;
+        }
+
+        footer a {
+            color: #7b2d26;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">← Back to Room TBA</a>
+        
+        <header>
+            <div class="brand">
+                <img src="carillon.jpg" alt="UPLB Carillon Tower" class="brand-logo">
+                <div>
+                    <h1>Changelog</h1>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <div class="version">
+                <div class="version-header">
+                    <span class="version-number">v0.0.1</span>
+                    <span class="version-date">January 24, 2026</span>
+                    <span class="version-tag">Initial Release</span>
+                </div>
+                
+                <ul class="changes">
+                    <li>
+                        <span class="change-type new">New</span>
+                        Initial launch of Room TBA - UPLB Room Finder
+                    </li>
+                    <li>
+                        <span class="change-type new">New</span>
+                        Search rooms by name, building, college, division, or course code
+                    </li>
+                    <li>
+                        <span class="change-type new">New</span>
+                        Filter rooms by Building, College, or Division
+                    </li>
+                    <li>
+                        <span class="change-type new">New</span>
+                        View room schedules with visual timetable display
+                    </li>
+                    <li>
+                        <span class="change-type new">New</span>
+                        Building information panel with directions and OpenStreetMap integration
+                    </li>
+                    <li>
+                        <span class="change-type new">New</span>
+                        Room-specific directions for commonly asked-about rooms (PSLH, ICS PC Labs, TBA, etc.)
+                    </li>
+                    <li>
+                        <span class="change-type new">New</span>
+                        Course search mode to find classes by course code
+                    </li>
+                    <li>
+                        <span class="change-type new">New</span>
+                        Mobile-responsive design with accessibility features
+                    </li>
+                    <li>
+                        <span class="change-type new">New</span>
+                        Data sourced from UPLB AMIS for 2nd Semester AY 2025-2026
+                    </li>
+                </ul>
+            </div>
+        </main>
+
+        <footer>
+            <p>
+                <a href="index.html">Room TBA</a> • 
+                Developed by <a href="https://stimmie.dev" target="_blank" rel="noopener">Simonee Ezekiel Mariquit</a>
+            </p>
+        </footer>
+    </div>
+</body>
+</html>

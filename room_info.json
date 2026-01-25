@@ -1,0 +1,652 @@
+{
+  "_meta": {
+    "description": "UPLB Room Information Database - Directions and Details",
+    "last_updated": "2026-01-24",
+    "sources": ["r/peyups", "UPLB SAIS", "Student knowledge"],
+    "notes": "Coordinates left blank for future mapping. Directions compiled from various sources."
+  },
+  "buildings": {
+    "Physical Sciences Building": {
+      "aliases": ["PhySci", "Francisco O. Santos Hall", "PS"],
+      "description": "Main building for physical sciences, located right of Oblation statue",
+      "general_directions": "From the main gate, walk towards the Oblation statue. The Physical Sciences Building is the wide building to the right of Oble. You should see the sign 'Francisco O. Santos Hall'.",
+      "coordinates": ""
+    },
+    "CAS Building": {
+      "aliases": ["Humanities Building", "HUM", "CAS Main"],
+      "description": "College of Arts and Sciences main building, behind Oblation statue",
+      "general_directions": "Located directly behind the Oblation statue. Walk up the Humanities steps (hum steps) from Oble. The basement rooms are accessible from the ground floor.",
+      "coordinates": ""
+    },
+    "CAS Annex 1": {
+      "aliases": ["CAS A1", "CASA1"],
+      "description": "Four-story building to the left of Oblation, near OUR",
+      "general_directions": "From Oblation, turn left. CAS Annex 1 is the tall four-story building beside the Office of the University Registrar (OUR). It's also near the ruins.",
+      "coordinates": ""
+    },
+    "CAS Annex 2": {
+      "aliases": ["CAS A2", "CASA2"],
+      "description": "Building across from the registrar",
+      "general_directions": "Located across from the Office of the University Registrar. The Multi-Purpose Hall (MPH) is on the first floor, near the side facing the ruins.",
+      "coordinates": ""
+    },
+    "E.B. Copeland Gymnasium": {
+      "aliases": ["Copeland", "Copeland Gym", "EB Copeland", "EB GYM"],
+      "description": "Main gymnasium with lecture rooms on upper floors",
+      "general_directions": "Located across from the Raymundo Gate. Has multiple floors with lecture rooms. Wing B is towards the parking area at the back.",
+      "coordinates": ""
+    },
+    "Math Building": {
+      "aliases": ["IMSP Building", "Mathematics Building", "MB"],
+      "description": "Institute of Mathematical Sciences and Physics building",
+      "general_directions": "From Physical Sciences Building, take the path behind towards the Nutrition/CHE buildings area. The Math Building is across from St. Therese church area.",
+      "coordinates": ""
+    },
+    "Biological Sciences Building": {
+      "aliases": ["BioSci", "IBS", "BS Building"],
+      "description": "Institute of Biological Sciences building",
+      "general_directions": "Located in front of CAS Annex 1 and to the left of SEARCA. Near the BioSci area past the CAS buildings.",
+      "coordinates": ""
+    },
+    "Institute of Computer Science": {
+      "aliases": ["ICS", "ComSci"],
+      "description": "Part of the Physical Sciences complex",
+      "general_directions": "Located within the Physical Sciences Building complex. ICS offices and PC labs are on various floors.",
+      "coordinates": ""
+    },
+    "CEAT Building": {
+      "aliases": ["Engineering Building", "College of Engineering"],
+      "description": "College of Engineering and Agro-Industrial Technology",
+      "general_directions": "Located in the engineering area of the campus.",
+      "coordinates": ""
+    },
+    "ICoPED Building": {
+      "aliases": ["ICoPED", "College of Public Affairs and Development"],
+      "description": "Institute for Governance and Rural Development",
+      "general_directions": "Located across from Raymundo Gate, near E.B. Copeland Gymnasium. About 400 meters from BioSci.",
+      "coordinates": ""
+    },
+    "SESAM Building": {
+      "aliases": ["School of Environmental Science and Management"],
+      "description": "Environmental science complex",
+      "general_directions": "Located past CAS Annex area. BioSci is past SESAM.",
+      "coordinates": ""
+    },
+    "NCAS Building": {
+      "aliases": ["National College of Agriculture Studies"],
+      "description": "Agriculture studies building, known for good CR on 4th floor",
+      "general_directions": "Located in the agriculture complex area.",
+      "coordinates": ""
+    },
+    "DevCom Building": {
+      "aliases": ["Development Communication", "CDC"],
+      "description": "College of Development Communication, near Carabao Park",
+      "general_directions": "Located near Carabao Park (C-Park), which is the first area you see from the main gate with carabao statues. DevCom people usually hang out here.",
+      "coordinates": ""
+    },
+    "Student Union Building": {
+      "aliases": ["SU", "Student Union"],
+      "description": "Student services building with billiards and bowling in basement",
+      "general_directions": "Has offices on second floor, billiards and bowling in basement. Printing services available at the far end.",
+      "coordinates": ""
+    },
+    "D.L. Umali Hall": {
+      "aliases": ["DL Umali", "Umali Hall"],
+      "description": "Main auditorium for events like Isko't Iska",
+      "general_directions": "Located near Freedom Park (F-Park). Below DL Umali Hall is an art gallery with occasional exhibits.",
+      "coordinates": ""
+    },
+    "Main Library": {
+      "aliases": ["Library", "UPLB Library"],
+      "description": "Main campus library with Pegaraw statue in front",
+      "general_directions": "Has the Pegaraw statue (winged tamaraw) in front. The Infinity Bridge (Never-Ending Bridge) is behind it, leading to the Forestry area.",
+      "coordinates": ""
+    },
+    "Carillion": {
+      "aliases": ["Carillon", "Bell Tower"],
+      "description": "Tallest building in Freedom Park",
+      "general_directions": "The tallest building located in Freedom Park (F-Park).",
+      "coordinates": ""
+    },
+    "Baker Hall": {
+      "aliases": ["Baker"],
+      "description": "Historic building with rumored WW2 tunnels underneath",
+      "general_directions": "Historic building. Legend says there are tunnels underneath that were used during WW2.",
+      "coordinates": ""
+    },
+    "CHE Building": {
+      "aliases": ["College of Human Ecology", "CHE", "Nutrition Building"],
+      "description": "College of Human Ecology and Nutrition programs",
+      "general_directions": "Located behind Physical Sciences Building, in the area near UPF and the Nutrition buildings.",
+      "coordinates": ""
+    },
+    "HFDS Building": {
+      "aliases": ["Human and Family Development Studies", "Annex Lecture Hall"],
+      "description": "Contains the Annex Lecture Hall",
+      "general_directions": "The Annex Lecture Hall is in this building. Can shortcut from Physical Sciences Building through the back path.",
+      "coordinates": ""
+    },
+    "ICropS Building": {
+      "aliases": ["Institute of Crop Science", "ICropS"],
+      "description": "Institute of Crop Science with Gonzales Wing",
+      "general_directions": "ICropS 200 Gonzales Wing is on the 2nd floor.",
+      "coordinates": ""
+    }
+  },
+  "rooms": {
+    "PSLH 1": {
+      "full_name": "Physical Sciences Lecture Hall 1",
+      "building": "Physical Sciences Building",
+      "floor": "Ground Floor",
+      "type": "Lecture Hall",
+      "coordinates": "",
+      "directions": "Located in the Physical Sciences Building ground floor area."
+    },
+    "PSLH 2": {
+      "full_name": "Physical Sciences Lecture Hall 2",
+      "building": "Physical Sciences Building",
+      "floor": "Ground Floor",
+      "type": "Lecture Hall",
+      "coordinates": "",
+      "directions": "Located in the Physical Sciences Building ground floor area."
+    },
+    "PSLH 3": {
+      "full_name": "Physical Sciences Lecture Hall 3",
+      "building": "Physical Sciences Building",
+      "floor": "Ground Floor",
+      "type": "Lecture Hall",
+      "coordinates": "",
+      "directions": "Located in the Physical Sciences Building ground floor area."
+    },
+    "PSLH 4": {
+      "full_name": "Physical Sciences Lecture Hall 4 (now MMMLH)",
+      "building": "Physical Sciences Building",
+      "floor": "3rd Floor",
+      "type": "Large Lecture Hall",
+      "coordinates": "",
+      "directions": "Now renamed to Manuel M. Manuel Lecture Hall (MMMLH). From the front entrance of the Physical Sciences Building, climb to the third floor until you see the Institute of Statistics. The lecture hall is nearby."
+    },
+    "MMMLH": {
+      "full_name": "Manuel M. Manuel Lecture Hall",
+      "aliases": ["PSLH 4"],
+      "building": "Physical Sciences Building",
+      "floor": "3rd Floor",
+      "type": "Large Lecture Hall",
+      "coordinates": "",
+      "directions": "Previously known as PSLH 4. From the front entrance of the Physical Sciences Building, climb to the third floor until you see the Institute of Statistics. The lecture hall is on this floor."
+    },
+    "ICSMH": {
+      "full_name": "ICS Mega Hall",
+      "building": "Physical Sciences Building",
+      "floor": "2nd Floor",
+      "type": "Large Lecture Hall",
+      "coordinates": "",
+      "directions": "Located on the 2nd floor of the Physical Sciences Building (PhySci). Go to the ICS area and look for the Mega Hall."
+    },
+    "ICSLH 1": {
+      "full_name": "ICS Lecture Hall 1",
+      "building": "Physical Sciences Building",
+      "floor": "Ground/1st Floor",
+      "type": "Lecture Hall",
+      "coordinates": "",
+      "directions": "In the ICS area of the Physical Sciences Building."
+    },
+    "ICSLH 2": {
+      "full_name": "ICS Lecture Hall 2",
+      "building": "Physical Sciences Building",
+      "floor": "Ground/1st Floor",
+      "type": "Lecture Hall",
+      "coordinates": "",
+      "directions": "In the ICS area of the Physical Sciences Building."
+    },
+    "ICSLH 3": {
+      "full_name": "ICS Lecture Hall 3",
+      "building": "Physical Sciences Building",
+      "floor": "Ground/1st Floor",
+      "type": "Lecture Hall",
+      "coordinates": "",
+      "directions": "In the ICS area of the Physical Sciences Building."
+    },
+    "ICSLH 4": {
+      "full_name": "ICS Lecture Hall 4",
+      "building": "Physical Sciences Building",
+      "floor": "Ground/1st Floor",
+      "type": "Lecture Hall",
+      "coordinates": "",
+      "directions": "In the ICS area of the Physical Sciences Building. This is where ICS classes are commonly held."
+    },
+    "ICS PC1": {
+      "full_name": "ICS PC Lab 1",
+      "building": "Physical Sciences Building",
+      "floor": "Various",
+      "type": "Computer Laboratory",
+      "coordinates": "",
+      "directions": "One of the ICS PC labs (PSC - PC labs) in the Physical Sciences Building. Ask ICS staff for specific location."
+    },
+    "ICS PC2": {
+      "full_name": "ICS PC Lab 2",
+      "building": "Physical Sciences Building",
+      "floor": "Various",
+      "type": "Computer Laboratory",
+      "coordinates": "",
+      "directions": "One of the ICS PC labs in the Physical Sciences Building."
+    },
+    "ICS PC3": {
+      "full_name": "ICS PC Lab 3",
+      "building": "Physical Sciences Building",
+      "floor": "Various",
+      "type": "Computer Laboratory",
+      "coordinates": "",
+      "directions": "One of the ICS PC labs in the Physical Sciences Building."
+    },
+    "ICS PC4": {
+      "full_name": "ICS PC Lab 4",
+      "building": "Physical Sciences Building",
+      "floor": "Various",
+      "type": "Computer Laboratory",
+      "coordinates": "",
+      "directions": "One of the ICS PC labs in the Physical Sciences Building."
+    },
+    "ICS PC5": {
+      "full_name": "ICS PC Lab 5",
+      "building": "Physical Sciences Building",
+      "floor": "Various",
+      "type": "Computer Laboratory",
+      "coordinates": "",
+      "directions": "One of the ICS PC labs in the Physical Sciences Building."
+    },
+    "ICS PC6": {
+      "full_name": "ICS PC Lab 6",
+      "building": "Physical Sciences Building",
+      "floor": "Various",
+      "type": "Computer Laboratory",
+      "coordinates": "",
+      "directions": "One of the ICS PC labs in the Physical Sciences Building."
+    },
+    "ICS PC7": {
+      "full_name": "ICS PC Lab 7",
+      "building": "Physical Sciences Building",
+      "floor": "Various",
+      "type": "Computer Laboratory",
+      "coordinates": "",
+      "directions": "One of the ICS PC labs in the Physical Sciences Building."
+    },
+    "ICS PC8": {
+      "full_name": "ICS PC Lab 8",
+      "building": "Physical Sciences Building",
+      "floor": "Various",
+      "type": "Computer Laboratory",
+      "coordinates": "",
+      "directions": "One of the ICS PC labs in the Physical Sciences Building."
+    },
+    "ICS PC9": {
+      "full_name": "ICS PC Lab 9",
+      "building": "Physical Sciences Building",
+      "floor": "Various",
+      "type": "Computer Laboratory",
+      "coordinates": "",
+      "directions": "One of the ICS PC labs in the Physical Sciences Building."
+    },
+    "MB 100": {
+      "full_name": "Math Building Room 100",
+      "building": "Math Building",
+      "floor": "Ground/1st Floor",
+      "type": "Classroom",
+      "coordinates": "",
+      "directions": "Ground floor of the Math Building (IMSP). The building is behind PhySci, across from St. Therese area."
+    },
+    "MB 101A": {
+      "full_name": "Math Building Room 101A",
+      "building": "Math Building",
+      "floor": "1st Floor",
+      "type": "Classroom",
+      "coordinates": "",
+      "directions": "First floor of the Math Building. Take the shortcut from PhySci through the back (via Nutri/CHE area near UPF)."
+    },
+    "MB 101B": {
+      "full_name": "Math Building Room 101B",
+      "building": "Math Building",
+      "floor": "1st Floor",
+      "type": "Classroom",
+      "coordinates": "",
+      "directions": "First floor of the Math Building, adjacent to 101A."
+    },
+    "MB 102": {
+      "full_name": "Math Building Room 102",
+      "building": "Math Building",
+      "floor": "1st Floor",
+      "type": "Classroom",
+      "coordinates": "",
+      "directions": "First floor of the Math Building."
+    },
+    "MB 103A": {
+      "full_name": "Math Building Room 103A",
+      "building": "Math Building",
+      "floor": "1st Floor",
+      "type": "Classroom",
+      "coordinates": "",
+      "directions": "First floor of the Math Building."
+    },
+    "MB 104": {
+      "full_name": "Math Building Room 104",
+      "building": "Math Building",
+      "floor": "1st Floor",
+      "type": "Classroom",
+      "coordinates": "",
+      "directions": "First floor of the Math Building."
+    },
+    "MB 301": {
+      "full_name": "Math Building Room 301",
+      "building": "Math Building",
+      "floor": "3rd Floor",
+      "type": "Classroom",
+      "coordinates": "",
+      "directions": "Third floor of the Math Building. The first digit (3) indicates the floor number."
+    },
+    "MB 302": {
+      "full_name": "Math Building Room 302",
+      "building": "Math Building",
+      "floor": "3rd Floor",
+      "type": "Classroom",
+      "coordinates": "",
+      "directions": "Third floor of the Math Building."
+    },
+    "MB 303": {
+      "full_name": "Math Building Room 303",
+      "building": "Math Building",
+      "floor": "3rd Floor",
+      "type": "Classroom",
+      "coordinates": "",
+      "directions": "Third floor of the Math Building."
+    },
+    "MB 304": {
+      "full_name": "Math Building Room 304",
+      "building": "Math Building",
+      "floor": "3rd Floor",
+      "type": "Classroom",
+      "coordinates": "",
+      "directions": "Third floor of the Math Building."
+    },
+    "MB 305": {
+      "full_name": "Math Building Room 305",
+      "building": "Math Building",
+      "floor": "3rd Floor",
+      "type": "Classroom",
+      "coordinates": "",
+      "directions": "Third floor of the Math Building."
+    },
+    "MB 307": {
+      "full_name": "Math Building Room 307",
+      "building": "Math Building",
+      "floor": "3rd Floor",
+      "type": "Classroom",
+      "coordinates": "",
+      "directions": "Third floor of the Math Building."
+    },
+    "MB 308": {
+      "full_name": "Math Building Room 308",
+      "building": "Math Building",
+      "floor": "3rd Floor",
+      "type": "Classroom",
+      "coordinates": "",
+      "directions": "Third floor of the Math Building."
+    },
+    "MB 309": {
+      "full_name": "Math Building Room 309",
+      "building": "Math Building",
+      "floor": "3rd Floor",
+      "type": "Classroom",
+      "coordinates": "",
+      "directions": "Third floor of the Math Building."
+    },
+    "MBBLH": {
+      "full_name": "Math Building Big Lecture Hall",
+      "building": "Math Building",
+      "floor": "Ground Floor",
+      "type": "Large Lecture Hall",
+      "coordinates": "",
+      "directions": "The main large lecture hall in the Math Building (IMSP)."
+    },
+    "PSLH A": {
+      "full_name": "Physical Sciences Lecture Hall A",
+      "building": "Physical Sciences Building",
+      "floor": "Ground Floor",
+      "type": "Large Lecture Hall",
+      "coordinates": "",
+      "directions": "Enter the Physical Sciences Building from the main entrance facing Oblation. The lecture halls are on the ground floor and are well-marked."
+    },
+    "PSLH Aa": {
+      "full_name": "Physical Sciences Lecture Hall A (Part A)",
+      "building": "Physical Sciences Building",
+      "floor": "Ground Floor",
+      "type": "Large Lecture Hall (Division)",
+      "coordinates": "",
+      "directions": "A subdivision of PSLH A when the hall is divided. Same location as PSLH A."
+    },
+    "PSLH Ab": {
+      "full_name": "Physical Sciences Lecture Hall A (Part B)",
+      "building": "Physical Sciences Building",
+      "floor": "Ground Floor",
+      "type": "Large Lecture Hall (Division)",
+      "coordinates": "",
+      "directions": "A subdivision of PSLH A when the hall is divided. Same location as PSLH A."
+    },
+    "PSLH B": {
+      "full_name": "Physical Sciences Lecture Hall B",
+      "building": "Physical Sciences Building",
+      "floor": "Ground Floor",
+      "type": "Large Lecture Hall",
+      "coordinates": "",
+      "directions": "Enter the Physical Sciences Building from the main entrance. PSLH B is adjacent to PSLH A on the ground floor."
+    },
+    "PSLH-A": {
+      "full_name": "Physical Sciences Lecture Hall A",
+      "building": "Physical Sciences Building",
+      "floor": "Ground Floor",
+      "type": "Large Lecture Hall",
+      "coordinates": "",
+      "directions": "Same as PSLH A. Enter PhySci from the main entrance facing Oblation."
+    },
+    "PS B-200": {
+      "full_name": "Physical Sciences Building Room B-200",
+      "building": "Physical Sciences Building",
+      "floor": "2nd Floor",
+      "type": "Laboratory/Classroom",
+      "coordinates": "",
+      "directions": "Room B-200 in the Physical Sciences Building, 2nd floor. Rooms here are easy to spot with clear signage."
+    },
+    "PS C-100": {
+      "full_name": "Physical Sciences Building Room C-100",
+      "building": "Physical Sciences Building",
+      "floor": "1st Floor",
+      "type": "Classroom",
+      "coordinates": "",
+      "directions": "Room C-100 in the Physical Sciences Building."
+    },
+    "CAS B05": {
+      "full_name": "CAS Basement Room 05",
+      "building": "CAS Building",
+      "floor": "Basement",
+      "type": "Classroom",
+      "coordinates": "",
+      "directions": "Located in the basement of the CAS Building (behind Oblation, formerly Humanities Building). B = Basement."
+    },
+    "CAS B08": {
+      "full_name": "CAS Basement Room 08",
+      "building": "CAS Building",
+      "floor": "Basement",
+      "type": "Classroom",
+      "coordinates": "",
+      "directions": "Located in the basement of the CAS Building. B = Basement."
+    },
+    "CAS A1 306": {
+      "full_name": "CAS Annex 1 Room 306",
+      "building": "CAS Annex 1",
+      "floor": "3rd Floor",
+      "type": "Classroom",
+      "coordinates": "",
+      "directions": "CAS Annex 1 is the tall building to the left of Oblation, beside OUR. Go to the 3rd floor and find room 306."
+    },
+    "CAS A1 GAL1": {
+      "full_name": "CAS Annex 1 Gallery 1",
+      "building": "CAS Annex 1",
+      "floor": "Ground Floor",
+      "type": "Gallery/Classroom",
+      "coordinates": "",
+      "directions": "Located in CAS Annex 1, ground floor area."
+    },
+    "CAS A2 202": {
+      "full_name": "CAS Annex 2 Room 202",
+      "building": "CAS Annex 2",
+      "floor": "2nd Floor",
+      "type": "Classroom",
+      "coordinates": "",
+      "directions": "CAS Annex 2 is across from the registrar. Room 202 is on the 2nd floor. First digit indicates floor."
+    },
+    "CAS A2 MPH1": {
+      "full_name": "CAS Annex 2 Multi-Purpose Hall 1",
+      "building": "CAS Annex 2",
+      "floor": "1st Floor",
+      "type": "Multi-Purpose Hall",
+      "coordinates": "",
+      "directions": "Located in CAS Annex 2 (across from registrar), first floor. Near the side facing the ruins."
+    },
+    "BS C-125": {
+      "full_name": "Biological Sciences Room C-125",
+      "building": "Biological Sciences Building",
+      "floor": "1st Floor",
+      "type": "Laboratory",
+      "coordinates": "",
+      "directions": "BioSci buildings are in front of CAS A1 and left of SEARCA. Find room C-125 in the complex."
+    },
+    "IBSLH Main": {
+      "full_name": "IBS Lecture Hall Main",
+      "building": "Biological Sciences Building",
+      "floor": "Ground Floor",
+      "type": "Lecture Hall",
+      "coordinates": "",
+      "directions": "The main lecture hall in the Institute of Biological Sciences building."
+    },
+    "ORHS 103": {
+      "full_name": "Old Math Building Room 103 (ORHS)",
+      "building": "Old Math Building",
+      "floor": "1st Floor",
+      "type": "Classroom",
+      "coordinates": "",
+      "directions": "Located in the Old Math Building, which is across from St. Therese church."
+    },
+    "LR1-EB GYM": {
+      "full_name": "Lecture Room 1, E.B. Copeland Gym Wing 2",
+      "building": "E.B. Copeland Gymnasium",
+      "floor": "Upper Floor",
+      "type": "Lecture Room",
+      "coordinates": "",
+      "directions": "Lecture Room 1 in Wing 2 of Copeland Gymnasium. The gym is across from Raymundo Gate. Wing 2 has the lecture rooms."
+    },
+    "Wing B, 3rd FL, Lecture Room 3A": {
+      "full_name": "Copeland Gymnasium Wing B, 3rd Floor, Lecture Room 3A",
+      "building": "E.B. Copeland Gymnasium",
+      "floor": "3rd Floor",
+      "type": "Lecture Room",
+      "coordinates": "",
+      "directions": "Copeland Gym has a 3rd floor. Wing B is towards the parking area at the back of Copeland. HK 11 classes are often held here."
+    },
+    "Annex Lecture Hall": {
+      "full_name": "HFDS Annex Lecture Hall",
+      "building": "HFDS Building",
+      "floor": "Ground Floor",
+      "type": "Lecture Hall",
+      "coordinates": "",
+      "directions": "The Annex Lecture Hall in the HFDS area. You can shortcut from Physical Sciences Building if coming from Chemistry labs."
+    },
+    "ICropS 200 Gonzales Wing 2nd Floor": {
+      "full_name": "ICropS Building Room 200, Gonzales Wing",
+      "building": "ICropS Building",
+      "floor": "2nd Floor",
+      "type": "Classroom",
+      "coordinates": "",
+      "directions": "Located in the Gonzales Wing of the ICropS Building, 2nd floor."
+    }
+  },
+  "room_code_patterns": {
+    "PSLH": {
+      "meaning": "Physical Sciences Lecture Hall",
+      "building": "Physical Sciences Building"
+    },
+    "ICSLH": {
+      "meaning": "Institute of Computer Science Lecture Hall",
+      "building": "Physical Sciences Building"
+    },
+    "ICSMH": {
+      "meaning": "ICS Mega Hall",
+      "building": "Physical Sciences Building"
+    },
+    "ICS PC": {
+      "meaning": "ICS PC Lab",
+      "building": "Physical Sciences Building"
+    },
+    "PSC": {
+      "meaning": "Physical Sciences Computer Lab",
+      "building": "Physical Sciences Building"
+    },
+    "PS": {
+      "meaning": "Physical Sciences",
+      "building": "Physical Sciences Building",
+      "floor_hint": "First number often indicates floor (e.g., B-200 = 2nd floor)"
+    },
+    "CAS A1": {
+      "meaning": "CAS Annex 1",
+      "building": "CAS Annex 1",
+      "floor_hint": "First digit of room number = floor"
+    },
+    "CAS A2": {
+      "meaning": "CAS Annex 2",
+      "building": "CAS Annex 2",
+      "floor_hint": "First digit of room number = floor"
+    },
+    "CAS B": {
+      "meaning": "CAS Basement",
+      "building": "CAS Building",
+      "floor_hint": "B = Basement"
+    },
+    "MB": {
+      "meaning": "Math Building",
+      "building": "Math Building",
+      "floor_hint": "First digit of room number = floor (e.g., 302 = 3rd floor)"
+    },
+    "BS": {
+      "meaning": "Biological Sciences",
+      "building": "Biological Sciences Building"
+    },
+    "IBS": {
+      "meaning": "Institute of Biological Sciences",
+      "building": "Biological Sciences Building"
+    },
+    "IBSLH": {
+      "meaning": "IBS Lecture Hall",
+      "building": "Biological Sciences Building"
+    },
+    "LR": {
+      "meaning": "Lecture Room",
+      "building": "Various (often Copeland Gym)"
+    },
+    "EB GYM": {
+      "meaning": "E.B. Copeland Gymnasium",
+      "building": "E.B. Copeland Gymnasium"
+    },
+    "ORHS": {
+      "meaning": "Old Math Building Room",
+      "building": "Old Math Building"
+    }
+  },
+  "tips": [
+    "Room numbers often encode the floor: first digit = floor number (e.g., 302 = 3rd floor, 101 = 1st floor)",
+    "B prefix usually means Basement (e.g., CAS B05 = CAS Basement Room 05)",
+    "When lost, don't hesitate to ask students or staff - you only need to do it once!",
+    "ICS-related rooms (ICSLH, ICSMH, ICS PC) are all in the Physical Sciences Building",
+    "PSLH = Physical Sciences Lecture Hall, always in PhySci building",
+    "There's a shortcut from PhySci to Math Building through the back (via Nutri/CHE area near UPF)",
+    "Copeland Gym has multiple floors with lecture rooms - Wing B is at the back near parking",
+    "CAS Building is behind Oblation, also called Humanities Building"
+  ]
+}

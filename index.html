@@ -1,0 +1,1606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="description" content="Room TBA - Find any classroom in UPLB. No more asking 'saan ang room?'">
+    <meta name="theme-color" content="#7b2d26">
+    <title>Room TBA - UPLB Room Finder</title>
+    <link rel="icon" type="image/jpeg" href="carillon.jpg">
+    <script src="schedule-renderer.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #fff;
+            color: #1a1a1a;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 24px 16px 40px;
+        }
+
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: #7b2d26;
+            color: #fff;
+            padding: 8px 16px;
+            z-index: 100;
+            text-decoration: none;
+        }
+        .skip-link:focus {
+            top: 0;
+        }
+
+        header {
+            margin-bottom: 32px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .brand-logo {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .disclaimer {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            color: #856404;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .disclaimer a {
+            color: #856404;
+            font-weight: 600;
+        }
+
+        h1 {
+            font-size: clamp(24px, 5vw, 32px);
+            font-weight: 700;
+            color: #7b2d26;
+        }
+
+        .tagline {
+            font-size: clamp(14px, 3vw, 16px);
+            color: #555;
+            font-style: italic;
+            margin-top: 4px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 13px;
+            margin-top: 12px;
+        }
+
+        .search-container {
+            margin-bottom: 24px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 14px 16px;
+            font-size: 16px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .search-input:focus {
+            border-color: #7b2d26;
+            box-shadow: 0 0 0 3px rgba(123, 45, 38, 0.1);
+        }
+
+        .search-input::placeholder {
+            color: #888;
+        }
+
+        .search-mode {
+            display: flex;
+            gap: 16px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .search-mode label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #444;
+        }
+
+        .category-toggle {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+
+        .category-btn {
+            padding: 8px 16px;
+            font-size: 14px;
+            border: 2px solid #ddd;
+            background: #fff;
+            cursor: pointer;
+            border-radius: 6px;
+            color: #444;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .category-btn:hover {
+            border-color: #7b2d26;
+            color: #7b2d26;
+        }
+
+        .category-btn:focus {
+            outline: 2px solid #7b2d26;
+            outline-offset: 2px;
+        }
+
+        .category-btn.active {
+            background: #7b2d26;
+            color: #fff;
+            border-color: #7b2d26;
+        }
+
+        .building-info-panel {
+            background: #f8f5f0;
+            border: 1px solid #e0d5c8;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 16px;
+            display: none;
+        }
+
+        .building-info-panel.visible {
+            display: block;
+        }
+
+        .building-info-panel h3 {
+            font-size: 16px;
+            color: #7b2d26;
+            margin-bottom: 8px;
+        }
+
+        .building-info-panel p {
+            font-size: 14px;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .map-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .map-link {
+            display: inline-block;
+            padding: 8px 16px;
+            background: #4a7c59;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .map-link:hover {
+            background: #3d6b4a;
+            transform: translateY(-1px);
+        }
+
+        .map-link:focus {
+            outline: 3px solid #4a7c59;
+            outline-offset: 2px;
+        }
+
+        .map-container {
+            margin: 12px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #ddd;
+        }
+
+        .map-iframe {
+            width: 100%;
+            height: 200px;
+            border: none;
+        }
+
+        .building-aka {
+            font-size: 14px;
+            font-weight: normal;
+            color: #666;
+        }
+
+        .room-directions {
+            background: #e8f4e8;
+            border-left: 3px solid #4a7c59;
+            padding: 10px 12px;
+            margin-top: 8px;
+            font-size: 13px;
+            color: #2d5a3d;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .filters {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 6px 12px;
+            font-size: 13px;
+            border: 1px solid #ddd;
+            background: #fff;
+            cursor: pointer;
+            border-radius: 4px;
+            color: #444;
+            transition: all 0.2s;
+        }
+
+        .filter-btn:hover {
+            border-color: #7b2d26;
+            color: #7b2d26;
+        }
+
+        .filter-btn:focus {
+            outline: 2px solid #7b2d26;
+            outline-offset: 2px;
+        }
+
+        .filter-btn.active {
+            background: #7b2d26;
+            color: #fff;
+            border-color: #7b2d26;
+        }
+
+        .view-toggle {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .view-btn {
+            padding: 6px 14px;
+            font-size: 13px;
+            border: 1px solid #ddd;
+            background: #fff;
+            cursor: pointer;
+            border-radius: 4px;
+            color: #444;
+            transition: all 0.2s;
+        }
+
+        .view-btn:hover {
+            border-color: #999;
+        }
+
+        .view-btn:focus {
+            outline: 2px solid #7b2d26;
+            outline-offset: 2px;
+        }
+
+        .view-btn.active {
+            background: #333;
+            color: #fff;
+            border-color: #333;
+        }
+
+        .stats {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .results {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .room-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 16px;
+            cursor: pointer;
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+
+        .room-card:hover {
+            border-color: #999;
+        }
+
+        .room-card:focus {
+            outline: 2px solid #7b2d26;
+            outline-offset: 2px;
+        }
+
+        .room-card.expanded {
+            border-color: #7b2d26;
+            box-shadow: 0 2px 8px rgba(123, 45, 38, 0.1);
+        }
+
+        .room-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .room-name {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .room-unit {
+            font-size: 13px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        .room-class-count {
+            font-size: 12px;
+            color: #666;
+            background: #f5f5f5;
+            padding: 4px 10px;
+            border-radius: 4px;
+            white-space: nowrap;
+        }
+
+        .room-details {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #eee;
+            display: none;
+        }
+
+        .room-card.expanded .room-details {
+            display: block;
+        }
+
+        .schedule-canvas-container {
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
+
+        .schedule-canvas-container canvas {
+            display: block;
+            margin: 0 auto;
+        }
+
+        .class-list-header {
+            font-size: 13px;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .class-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .class-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 10px 12px;
+            background: #fafafa;
+            border-radius: 3px;
+            font-size: 14px;
+        }
+
+        .class-info {
+            flex: 1;
+        }
+
+        .class-code {
+            font-weight: 500;
+        }
+
+        .class-title {
+            color: #666;
+            font-size: 13px;
+            margin-top: 2px;
+        }
+
+        .class-section {
+            color: #888;
+            font-size: 12px;
+        }
+
+        .class-schedule {
+            text-align: right;
+            font-size: 13px;
+            color: #444;
+            white-space: nowrap;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .no-results h3 {
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .unit-section {
+            margin-bottom: 32px;
+        }
+
+        .unit-header {
+            font-size: 14px;
+            font-weight: 600;
+            color: #444;
+            padding: 8px 0;
+            margin-bottom: 12px;
+            border-bottom: 2px solid #1a1a1a;
+        }
+
+        .view-toggle {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 24px;
+        }
+
+        .view-btn {
+            padding: 8px 16px;
+            font-size: 13px;
+            border: 1px solid #ddd;
+            background: #fff;
+            cursor: pointer;
+            color: #444;
+        }
+
+        .view-btn:first-child {
+            border-radius: 3px 0 0 3px;
+        }
+
+        .view-btn:last-child {
+            border-radius: 0 3px 3px 0;
+        }
+
+        .view-btn.active {
+            background: #1a1a1a;
+            color: #fff;
+            border-color: #1a1a1a;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        footer {
+            margin-top: 60px;
+            padding: 24px 0;
+            border-top: 1px solid #eee;
+            font-size: 13px;
+            color: #666;
+        }
+
+        footer a {
+            color: #7b2d26;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .footer-credits {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .footer-attribution {
+            font-size: 11px;
+            color: #aaa;
+        }
+
+        .footer-version {
+            font-size: 12px;
+            color: #7b2d26;
+            margin-top: 8px;
+        }
+
+        .footer-version a {
+            color: #7b2d26;
+            text-decoration: none;
+        }
+
+        .footer-version a:hover {
+            text-decoration: underline;
+        }
+
+        .no-schedule {
+            text-align: center;
+            padding: 20px;
+            color: #888;
+            font-size: 13px;
+            background: #f9f9f9;
+            border-radius: 4px;
+            margin-bottom: 16px;
+        }
+
+        .room-info {
+            background: #f8f8f8;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+            font-size: 13px;
+        }
+
+        .room-info-grid {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 8px 12px;
+        }
+
+        .room-info-label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .room-info-value {
+            color: #1a1a1a;
+        }
+
+        .room-directions {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .room-directions-title {
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 6px;
+        }
+
+        .room-directions-text {
+            color: #444;
+            line-height: 1.6;
+        }
+        
+        .room-note {
+            margin-top: 10px;
+            padding: 8px 12px;
+            background: #fff8e1;
+            border-left: 3px solid #ffc107;
+            border-radius: 0 4px 4px 0;
+            font-size: 13px;
+            color: #5d4e37;
+        }
+
+        .course-result {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .course-result:hover {
+            border-color: #999;
+        }
+
+        .course-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .course-code-title {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .course-title {
+            color: #666;
+            font-size: 13px;
+            margin-top: 2px;
+        }
+
+        .course-room-link {
+            font-size: 13px;
+            color: #1a1a1a;
+            background: #f0f0f0;
+            padding: 4px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .course-room-link:hover {
+            background: #e0e0e0;
+        }
+
+        .course-details {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .no-info {
+            color: #888;
+            font-style: italic;
+        }
+
+        .schedule-canvas-container {
+            margin-bottom: 20px;
+            overflow-x: auto;
+            background: #fafafa;
+            border-radius: 4px;
+            padding: 12px;
+        }
+
+        .schedule-canvas-container canvas {
+            display: block;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 16px 12px 32px;
+            }
+
+            .brand-logo {
+                width: 40px;
+                height: 40px;
+            }
+
+            .category-toggle {
+                width: 100%;
+            }
+
+            .category-btn {
+                flex: 1;
+                text-align: center;
+                padding: 10px 8px;
+                font-size: 13px;
+            }
+
+            .room-header {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .room-class-count {
+                align-self: flex-start;
+            }
+
+            .class-item {
+                flex-direction: column;
+                gap: 4px;
+            }
+            
+            .class-schedule {
+                text-align: left;
+            }
+
+            .schedule-canvas-container canvas {
+                width: 100%;
+                height: auto;
+            }
+
+            .room-info-grid {
+                grid-template-columns: 1fr;
+                gap: 4px;
+            }
+
+            .room-info-label {
+                margin-top: 8px;
+            }
+
+            .view-toggle {
+                width: 100%;
+            }
+
+            .view-btn {
+                flex: 1;
+                text-align: center;
+            }
+        }
+
+        @media (prefers-contrast: high) {
+            .filter-btn, .category-btn, .view-btn {
+                border-width: 2px;
+            }
+            .room-card {
+                border-width: 2px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <div class="container">
+        <div class="disclaimer" role="alert">
+            ⚠️ <strong>This app is in active development.</strong> There might be mistakes in room locations and building information. 
+            Please <a href="mailto:semariquit@gmail.com">report any errors</a>!
+        </div>
+        
+        <header>
+            <div class="brand">
+                <img src="carillon.jpg" alt="UPLB Carillon Tower" class="brand-logo">
+                <div>
+                    <h1>Room TBA</h1>
+                    <p class="tagline">"Saan sa UPLB ang ___?" Finally answered.</p>
+                </div>
+            </div>
+            <p class="subtitle">UPLB Room Finder • 2nd Semester AY 2025-2026</p>
+        </header>
+
+        <main id="main-content">
+            <div class="search-container">
+                <label for="searchInput" class="visually-hidden">Search for rooms or courses</label>
+                <input 
+                    type="search" 
+                    class="search-input" 
+                    id="searchInput"
+                    placeholder="Search room code, building, division, or course code (e.g., CMSC 21)..."
+                    aria-describedby="search-help"
+                    autofocus
+                >
+                <span id="search-help" class="visually-hidden">Type to search rooms by name, building, or course code</span>
+                
+                <fieldset class="search-mode">
+                    <legend class="visually-hidden">Search mode</legend>
+                    <label><input type="radio" name="searchMode" value="rooms" checked> Search Rooms</label>
+                    <label><input type="radio" name="searchMode" value="courses"> Search Classes by Course Code</label>
+                </fieldset>
+                
+                <div class="category-toggle" role="group" aria-label="Filter category">
+                    <button class="category-btn active" data-category="building" aria-pressed="true">By Building</button>
+                    <button class="category-btn" data-category="college" aria-pressed="false">By College</button>
+                    <button class="category-btn" data-category="division" aria-pressed="false">By Division</button>
+                </div>
+                
+                <div id="buildingInfoPanel" class="building-info-panel" role="region" aria-label="Building information"></div>
+                
+                <div class="filters" id="unitFilters" role="group" aria-label="Filter options"></div>
+            </div>
+
+            <div class="view-toggle" role="group" aria-label="View mode">
+                <button class="view-btn active" data-view="list" aria-pressed="true">List View</button>
+                <button class="view-btn" data-view="grouped" aria-pressed="false">Grouped View</button>
+            </div>
+
+            <div class="stats" id="stats" aria-live="polite"></div>
+
+            <div class="results" id="results" role="region" aria-label="Search results">
+                <div class="loading" aria-busy="true">Loading room data...</div>
+            </div>
+        </main>
+
+        <footer>
+            <div class="footer-content">
+                <p>Data sourced from <strong>UPLB AMIS</strong>. Last updated: January 2026.</p>
+                <p class="footer-credits">
+                    Developed by <a href="https://stimmie.dev" target="_blank" rel="noopener">Simonee Ezekiel Mariquit</a> • 
+                    <a href="mailto:semariquit@gmail.com">semariquit@gmail.com</a> for feedback or corrections
+                </p>
+                <p class="footer-attribution">
+                    Carillon photo: <a href="https://en.wikipedia.org/wiki/File:University_of_the_Philippines_%28UPLB%29_-_Carillon_Tower_%28Los_Ba%C3%B1os,_Laguna;_2017-02-16%29.jpg" target="_blank" rel="noopener">Wikimedia Commons</a>
+                </p>
+                <p class="footer-version">
+                    <a href="changelog.html">Version 0.0.1</a>
+                </p>
+            </div>
+        </footer>
+    </div>
+
+    <style>
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+    </style>
+
+    <script>
+        let appData = null;
+        let roomInfo = null;
+        let currentView = 'list';
+        let selectedFilter = null;
+        let filterCategory = 'building';
+        let searchMode = 'rooms';
+        let canvasCounter = 0;
+
+        const courseColors = [
+            '#2E7D32', '#1565C0', '#6A1B9A', '#C62828', '#EF6C00',
+            '#00838F', '#4527A0', '#AD1457', '#00695C', '#5D4037',
+            '#37474F', '#1B5E20', '#0D47A1', '#4A148C', '#B71C1C'
+        ];
+
+        function getColorForCourse(courseCode) {
+            let hash = 0;
+            for (let i = 0; i < courseCode.length; i++) {
+                hash = courseCode.charCodeAt(i) + ((hash << 5) - hash);
+            }
+            return courseColors[Math.abs(hash) % courseColors.length];
+        }
+
+        function parseScheduleTime(scheduleStr) {
+            if (!scheduleStr || scheduleStr === 'TBA') return null;
+            
+            const match = scheduleStr.match(/^([MTWThFSa]+)\s+(\d{1,2}):(\d{2})\s*(AM|PM)\s*-\s*(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+            if (!match) return null;
+            
+            let days = match[1];
+            let startHour = parseInt(match[2]);
+            let startMin = parseInt(match[3]);
+            let startPeriod = match[4].toUpperCase();
+            let endHour = parseInt(match[5]);
+            let endMin = parseInt(match[6]);
+            let endPeriod = match[7].toUpperCase();
+            
+            if (startPeriod === 'PM' && startHour !== 12) startHour += 12;
+            if (startPeriod === 'AM' && startHour === 12) startHour = 0;
+            if (endPeriod === 'PM' && endHour !== 12) endHour += 12;
+            if (endPeriod === 'AM' && endHour === 12) endHour = 0;
+            
+            let formattedStartHour = startHour > 12 ? startHour - 12 : (startHour === 0 ? 12 : startHour);
+            let formattedEndHour = endHour > 12 ? endHour - 12 : (endHour === 0 ? 12 : endHour);
+            
+            let startStr = formattedStartHour + (startMin > 0 ? ':' + String(startMin).padStart(2, '0') : '');
+            let endStr = formattedEndHour + (endMin > 0 ? ':' + String(endMin).padStart(2, '0') : '');
+            
+            return {
+                days: days,
+                time: startStr + '-' + endStr
+            };
+        }
+
+        async function loadData() {
+            try {
+                const [appResponse, roomInfoResponse] = await Promise.all([
+                    fetch('app_data.json'),
+                    fetch('room_info.json').catch(() => ({ ok: false }))
+                ]);
+                
+                appData = await appResponse.json();
+                
+                if (roomInfoResponse.ok) {
+                    roomInfo = await roomInfoResponse.json();
+                }
+                
+                initFilters();
+                render();
+            } catch (error) {
+                document.getElementById('results').innerHTML = 
+                    '<div class="no-results"><h3>Error loading data</h3><p>Could not load room data.</p></div>';
+            }
+        }
+
+        function initFilters() {
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.onclick = () => {
+                    document.querySelectorAll('.category-btn').forEach(b => {
+                        b.classList.remove('active');
+                        b.setAttribute('aria-pressed', 'false');
+                    });
+                    btn.classList.add('active');
+                    btn.setAttribute('aria-pressed', 'true');
+                    filterCategory = btn.getAttribute('data-category');
+                    selectedFilter = null;
+                    renderFilterButtons();
+                    updateBuildingInfoPanel();
+                    render();
+                };
+            });
+            
+            renderFilterButtons();
+        }
+        
+        function updateBuildingInfoPanel() {
+            const panel = document.getElementById('buildingInfoPanel');
+            
+            if (filterCategory === 'building' && selectedFilter && appData.buildings[selectedFilter]) {
+                const buildingData = appData.buildings[selectedFilter];
+                if (buildingData.directions || buildingData.osm_link) {
+                    let titleText = selectedFilter;
+                    if (buildingData.aka) {
+                        titleText += ` <span class="building-aka">(${buildingData.aka})</span>`;
+                    }
+                    
+                    let html = `<h3>${titleText}</h3>`;
+                    
+                    if (buildingData.directions) {
+                        html += `<p>${buildingData.directions}</p>`;
+                    }
+                    
+                    if (buildingData.lat && buildingData.lon) {
+                        const mapImageUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${buildingData.lon - 0.002}%2C${buildingData.lat - 0.001}%2C${buildingData.lon + 0.002}%2C${buildingData.lat + 0.001}&layer=mapnik&marker=${buildingData.lat}%2C${buildingData.lon}`;
+                        
+                        html += `
+                            <div class="map-container">
+                                <iframe 
+                                    src="${mapImageUrl}"
+                                    class="map-iframe"
+                                    loading="lazy"
+                                    title="Map showing location of ${selectedFilter}"
+                                ></iframe>
+                            </div>
+                        `;
+                        
+                        const googleMapsLink = `https://www.google.com/maps?q=${buildingData.lat},${buildingData.lon}`;
+                        
+                        html += `
+                            <div class="map-links">
+                                <a href="${googleMapsLink}" 
+                                   target="_blank" 
+                                   rel="noopener" 
+                                   class="map-link"
+                                   aria-label="View ${selectedFilter} on Google Maps">
+                                    View on Google Maps
+                                </a>
+                        `;
+                        
+                        if (buildingData.osm_link) {
+                            html += `
+                                <a href="${buildingData.osm_link}" 
+                                   target="_blank" 
+                                   rel="noopener" 
+                                   class="map-link"
+                                   aria-label="View ${selectedFilter} on OpenStreetMap">
+                                    View on OpenStreetMap
+                                </a>
+                            `;
+                        }
+                        
+                        html += `</div>`;
+                    }
+                    
+                    panel.innerHTML = html;
+                    panel.classList.add('visible');
+                    return;
+                }
+            }
+            
+            panel.classList.remove('visible');
+            panel.innerHTML = '';
+        }
+        
+        function renderFilterButtons() {
+            const filtersContainer = document.getElementById('unitFilters');
+            filtersContainer.innerHTML = '';
+            
+            let items;
+            if (filterCategory === 'building') {
+                items = Object.keys(appData.buildings || {}).sort();
+            } else if (filterCategory === 'college') {
+                items = Object.keys(appData.colleges || {}).sort();
+            } else {
+                items = Object.keys(appData.divisions || {}).sort();
+            }
+            
+            const allBtn = document.createElement('button');
+            allBtn.className = 'filter-btn' + (selectedFilter === null ? ' active' : '');
+            allBtn.textContent = 'All';
+            allBtn.setAttribute('aria-pressed', selectedFilter === null ? 'true' : 'false');
+            allBtn.onclick = () => {
+                selectedFilter = null;
+                document.querySelectorAll('.filter-btn').forEach(b => {
+                    b.classList.remove('active');
+                    b.setAttribute('aria-pressed', 'false');
+                });
+                allBtn.classList.add('active');
+                allBtn.setAttribute('aria-pressed', 'true');
+                updateBuildingInfoPanel();
+                render();
+            };
+            filtersContainer.appendChild(allBtn);
+            
+            items.forEach(item => {
+                const btn = document.createElement('button');
+                btn.className = 'filter-btn' + (selectedFilter === item ? ' active' : '');
+                btn.setAttribute('aria-pressed', selectedFilter === item ? 'true' : 'false');
+                let displayName = item;
+                if (item.includes(' - ')) {
+                    displayName = item.split(' - ')[0];
+                } else if (item.startsWith('Institute of ')) {
+                    displayName = item.replace('Institute of ', '');
+                } else if (item.startsWith('Institute for ')) {
+                    displayName = item.replace('Institute for ', '');
+                } else if (item.startsWith('College of ')) {
+                    displayName = item.replace('College of ', '');
+                } else if (item.startsWith('Department of ')) {
+                    displayName = item.replace('Department of ', 'D. ');
+                } else if (item.endsWith(' Building')) {
+                    displayName = item.replace(' Building', '');
+                }
+                btn.textContent = displayName;
+                btn.title = item;
+                btn.onclick = () => {
+                    selectedFilter = item;
+                    document.querySelectorAll('.filter-btn').forEach(b => {
+                        b.classList.remove('active');
+                        b.setAttribute('aria-pressed', 'false');
+                    });
+                    btn.classList.add('active');
+                    btn.setAttribute('aria-pressed', 'true');
+                    updateBuildingInfoPanel();
+                    render();
+                };
+                filtersContainer.appendChild(btn);
+            });
+        }
+
+        function getFilteredRooms() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+            let rooms = Object.entries(appData.rooms);
+            
+            if (selectedFilter) {
+                if (filterCategory === 'building') {
+                    rooms = rooms.filter(([name, data]) => data.building === selectedFilter);
+                } else if (filterCategory === 'college') {
+                    rooms = rooms.filter(([name, data]) => data.college === selectedFilter);
+                } else {
+                    rooms = rooms.filter(([name, data]) => data.division === selectedFilter);
+                }
+            }
+            
+            if (searchTerm) {
+                rooms = rooms.filter(([name, data]) => {
+                    if (name.toLowerCase().includes(searchTerm)) return true;
+                    
+                    if (data.building && data.building.toLowerCase().includes(searchTerm)) return true;
+                    
+                    if (data.college && data.college.toLowerCase().includes(searchTerm)) return true;
+                    
+                    if (data.division && data.division.toLowerCase().includes(searchTerm)) return true;
+                    
+                    for (const cls of data.classes) {
+                        if (cls.course_code.toLowerCase().includes(searchTerm)) return true;
+                        if (cls.course_title.toLowerCase().includes(searchTerm)) return true;
+                    }
+                    
+                    return false;
+                });
+            }
+            
+            if (!searchTerm.includes('tba') && !searchTerm.includes('online')) {
+                rooms = rooms.filter(([name, data]) => data.building || data.division || data.college);
+            }
+            
+            return rooms;
+        }
+
+        function render() {
+            if (searchMode === 'courses') {
+                renderCourseSearch();
+            } else {
+                renderRoomSearch();
+            }
+        }
+        
+        function renderCourseSearch() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+            const resultsContainer = document.getElementById('results');
+            const statsContainer = document.getElementById('stats');
+            
+            if (!searchTerm || searchTerm.length < 2) {
+                statsContainer.textContent = 'Enter a course code to search (e.g., CMSC 21, CHEM 16)';
+                resultsContainer.innerHTML = `
+                    <div class="no-results">
+                        <h3>Search for classes by course code</h3>
+                        <p>Type a course code like "CMSC 21" or "CHEM" to find all classes and their rooms.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const matchingClasses = [];
+            Object.entries(appData.rooms).forEach(([roomName, roomData]) => {
+                roomData.classes.forEach(cls => {
+                    if (cls.course_code.toLowerCase().includes(searchTerm) ||
+                        cls.course_title.toLowerCase().includes(searchTerm)) {
+                        matchingClasses.push({
+                            ...cls,
+                            room: roomName,
+                            building: roomData.building,
+                            college: roomData.college,
+                            division: roomData.division
+                        });
+                    }
+                });
+            });
+            
+            matchingClasses.sort((a, b) => {
+                const codeCompare = a.course_code.localeCompare(b.course_code);
+                if (codeCompare !== 0) return codeCompare;
+                return a.section.localeCompare(b.section);
+            });
+            
+            statsContainer.textContent = `${matchingClasses.length} classes found for "${searchTerm}"`;
+            
+            if (matchingClasses.length === 0) {
+                resultsContainer.innerHTML = `
+                    <div class="no-results">
+                        <h3>No classes found</h3>
+                        <p>No classes matching "${searchTerm}" were found.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const grouped = {};
+            matchingClasses.forEach(cls => {
+                if (!grouped[cls.course_code]) {
+                    grouped[cls.course_code] = [];
+                }
+                grouped[cls.course_code].push(cls);
+            });
+            
+            let html = '';
+            Object.keys(grouped).sort().forEach(courseCode => {
+                const classes = grouped[courseCode];
+                const title = classes[0].course_title;
+                
+                html += `<div class="unit-section">`;
+                html += `<div class="unit-header">${courseCode} - ${title} (${classes.length} sections)</div>`;
+                
+                classes.forEach(cls => {
+                    html += `
+                        <div class="course-result">
+                            <div class="course-header">
+                                <div>
+                                    <div class="course-code-title">${cls.course_code} ${cls.type ? `(${cls.type})` : ''}</div>
+                                    <div class="course-title">Section ${cls.section}</div>
+                                </div>
+                                <div class="course-room-link" onclick="switchToRoomAndSearch('${cls.room.replace(/'/g, "\\'")}')">
+                                    ${cls.room}
+                                </div>
+                            </div>
+                            <div class="course-details">
+                                <strong>Schedule:</strong> ${cls.schedule.join(', ') || 'TBA'}<br>
+                                <strong>Building:</strong> ${cls.building || 'Unknown'}<br>
+                                <strong>College:</strong> ${cls.college || 'Unknown'}<br>
+                                <strong>Division:</strong> ${cls.division || 'Unknown'}
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += `</div>`;
+            });
+            
+            resultsContainer.innerHTML = html;
+        }
+        
+        function switchToRoomAndSearch(roomName) {
+            document.querySelector('input[name="searchMode"][value="rooms"]').checked = true;
+            searchMode = 'rooms';
+            document.getElementById('searchInput').value = roomName;
+            render();
+        }
+        
+        function renderRoomSearch() {
+            const rooms = getFilteredRooms();
+            const resultsContainer = document.getElementById('results');
+            const statsContainer = document.getElementById('stats');
+            
+            const totalClasses = rooms.reduce((sum, [_, data]) => sum + data.classes.length, 0);
+            statsContainer.textContent = `${rooms.length} rooms found, ${totalClasses} classes this semester`;
+            
+            if (rooms.length === 0) {
+                resultsContainer.innerHTML = `
+                    <div class="no-results">
+                        <h3>No rooms found</h3>
+                        <p>Try a different search term or filter.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            if (currentView === 'grouped') {
+                renderGrouped(rooms, resultsContainer);
+            } else {
+                renderList(rooms, resultsContainer);
+            }
+        }
+
+        function renderList(rooms, container) {
+            rooms.sort((a, b) => a[0].localeCompare(b[0]));
+            
+            container.innerHTML = rooms.map(([name, data]) => createRoomCard(name, data)).join('');
+            attachCardListeners();
+        }
+
+        function renderGrouped(rooms, container) {
+            const grouped = {};
+            rooms.forEach(([name, data]) => {
+                let groupKey;
+                if (filterCategory === 'building') {
+                    groupKey = data.building || 'Unknown Building';
+                } else if (filterCategory === 'college') {
+                    groupKey = data.college || 'Unknown College';
+                } else {
+                    groupKey = data.division || 'Unknown Division';
+                }
+                if (!grouped[groupKey]) {
+                    grouped[groupKey] = [];
+                }
+                grouped[groupKey].push([name, data]);
+            });
+            
+            const sortedGroups = Object.keys(grouped).sort();
+            
+            let html = '';
+            sortedGroups.forEach(group => {
+                const groupRooms = grouped[group].sort((a, b) => a[0].localeCompare(b[0]));
+                html += `
+                    <div class="unit-section">
+                        <div class="unit-header">${group} (${groupRooms.length})</div>
+                        ${groupRooms.map(([name, data]) => createRoomCard(name, data)).join('')}
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+            attachCardListeners();
+        }
+
+        function getRoomInfo(roomName) {
+            let result = null;
+            
+            if (roomInfo && roomInfo.rooms && roomInfo.rooms[roomName]) {
+                result = { ...roomInfo.rooms[roomName] };
+            }
+            
+            if (!result && roomInfo) {
+                for (const [pattern, info] of Object.entries(roomInfo.room_code_patterns || {})) {
+                    if (roomName.startsWith(pattern) || roomName.includes(pattern)) {
+                        result = {
+                            building: info.building,
+                            floor_hint: info.floor_hint,
+                            pattern_meaning: info.meaning
+                        };
+                        break;
+                    }
+                }
+            }
+            
+            if (appData && appData.rooms && appData.rooms[roomName]) {
+                const roomData = appData.rooms[roomName];
+                if (!result) result = {};
+                
+                if (roomData.building && !result.building) {
+                    result.building = roomData.building;
+                }
+                if (roomData.directions) {
+                    result.directions = roomData.directions;
+                }
+                if (roomData.floor) {
+                    result.floor = roomData.floor;
+                }
+                if (roomData.note) {
+                    result.note = roomData.note;
+                }
+            }
+            
+            if (result && result.building && !result.directions && appData && appData.buildings) {
+                const buildingData = appData.buildings[result.building];
+                if (buildingData && buildingData.directions) {
+                    result.building_directions = buildingData.directions;
+                }
+            }
+            
+            return result;
+        }
+        
+        function createRoomCard(name, data) {
+            const classCount = data.classes.length;
+            const classCountText = classCount === 0 ? 'No classes' : 
+                                   classCount === 1 ? '1 class' : `${classCount} classes`;
+            
+            const canvasId = 'schedule-' + (++canvasCounter);
+            const safeRoomName = name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+            
+            const hasSchedule = classCount > 0 && data.classes.some(cls => 
+                cls.schedule && cls.schedule.length > 0 && 
+                cls.schedule.some(s => s && s !== 'TBA' && parseScheduleTime(s))
+            );
+            
+            let detailsHtml = '';
+            
+            const info = getRoomInfo(name);
+            let roomInfoHtml = '';
+            
+            if (info) {
+                roomInfoHtml = `<div class="room-info">`;
+                
+                if (info.full_name || info.pattern_meaning) {
+                    roomInfoHtml += `<div class="room-info-grid">`;
+                    
+                    if (info.full_name) {
+                        roomInfoHtml += `
+                            <div class="room-info-label">Full Name:</div>
+                            <div class="room-info-value">${info.full_name}</div>
+                        `;
+                    }
+                    if (info.building) {
+                        roomInfoHtml += `
+                            <div class="room-info-label">Building:</div>
+                            <div class="room-info-value">${info.building}</div>
+                        `;
+                    }
+                    if (info.floor) {
+                        roomInfoHtml += `
+                            <div class="room-info-label">Floor:</div>
+                            <div class="room-info-value">${info.floor}</div>
+                        `;
+                    }
+                    if (info.floor_hint) {
+                        roomInfoHtml += `
+                            <div class="room-info-label">Floor Hint:</div>
+                            <div class="room-info-value">${info.floor_hint}</div>
+                        `;
+                    }
+                    if (info.type) {
+                        roomInfoHtml += `
+                            <div class="room-info-label">Type:</div>
+                            <div class="room-info-value">${info.type}</div>
+                        `;
+                    }
+                    if (info.coordinates) {
+                        roomInfoHtml += `
+                            <div class="room-info-label">Coordinates:</div>
+                            <div class="room-info-value">${info.coordinates}</div>
+                        `;
+                    }
+                    
+                    roomInfoHtml += `</div>`;
+                }
+                
+                if (info.directions) {
+                    roomInfoHtml += `
+                        <div class="room-directions">
+                            <div class="room-directions-title">📍 Directions</div>
+                            <div class="room-directions-text">${info.directions}</div>
+                        </div>
+                    `;
+                } else if (info.building_directions) {
+                    roomInfoHtml += `
+                        <div class="room-directions">
+                            <div class="room-directions-title">📍 How to Get to ${info.building}</div>
+                            <div class="room-directions-text">${info.building_directions}</div>
+                        </div>
+                    `;
+                } else if (info.building && roomInfo && roomInfo.buildings && roomInfo.buildings[info.building]) {
+                    const buildingInfo = roomInfo.buildings[info.building];
+                    roomInfoHtml += `
+                        <div class="room-directions">
+                            <div class="room-directions-title">📍 How to Get There</div>
+                            <div class="room-directions-text">${buildingInfo.general_directions}</div>
+                        </div>
+                    `;
+                }
+                
+                if (info.note) {
+                    roomInfoHtml += `
+                        <div class="room-note">
+                            <strong>💡 Note:</strong> ${info.note}
+                        </div>
+                    `;
+                }
+                
+                roomInfoHtml += `</div>`;
+            }
+            
+            if (classCount > 0) {
+                let scheduleHtml = '';
+                if (hasSchedule) {
+                    scheduleHtml = `
+                        <div class="schedule-canvas-container">
+                            <canvas id="${canvasId}" width="800" height="450"></canvas>
+                        </div>
+                    `;
+                } else {
+                    scheduleHtml = `<div class="no-schedule">No fixed schedule available for this room</div>`;
+                }
+                
+                detailsHtml = `
+                    <div class="room-details">
+                        ${roomInfoHtml}
+                        ${scheduleHtml}
+                        <div class="class-list-header">Classes in this room</div>
+                        <div class="class-list">
+                            ${data.classes.map(cls => `
+                                <div class="class-item">
+                                    <div class="class-info">
+                                        <div class="class-code">${cls.course_code} ${cls.type ? `(${cls.type})` : ''}</div>
+                                        <div class="class-title">${cls.course_title}</div>
+                                        <div class="class-section">Section ${cls.section}</div>
+                                    </div>
+                                    <div class="class-schedule">${cls.schedule.join('<br>') || 'TBA'}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            } else if (roomInfoHtml) {
+                detailsHtml = `
+                    <div class="room-details">
+                        ${roomInfoHtml}
+                        <div class="no-schedule">No classes scheduled in this room this semester</div>
+                    </div>
+                `;
+            }
+            
+            let locationParts = [];
+            if (data.building) locationParts.push(data.building);
+            if (data.college) locationParts.push(data.college.replace('College of ', ''));
+            if (data.division) {
+                let div = data.division
+                    .replace('Institute of ', '')
+                    .replace('Institute for ', '')
+                    .replace('Department of ', 'D. ');
+                locationParts.push(div);
+            }
+            
+            let locationText = locationParts.length > 0 
+                ? locationParts.join(' • ')
+                : 'Unknown Location';
+            
+            if (data.floor) {
+                locationText += ` (${data.floor})`;
+            }
+            
+            let roomDirectionsHtml = '';
+            if (data.directions) {
+                roomDirectionsHtml = `<div class="room-directions">${data.directions}</div>`;
+            }
+            
+            return `
+                <div class="room-card" data-room="${safeRoomName}" data-canvas="${hasSchedule ? canvasId : ''}" data-has-schedule="${hasSchedule}">
+                    <div class="room-header">
+                        <div>
+                            <div class="room-name">${name}</div>
+                            <div class="room-unit">${locationText}</div>
+                            ${roomDirectionsHtml}
+                        </div>
+                        <div class="room-class-count">${classCountText}</div>
+                    </div>
+                    ${detailsHtml}
+                </div>
+            `;
+        }
+
+        function attachCardListeners() {
+            document.querySelectorAll('.room-card').forEach(card => {
+                card.onclick = () => {
+                    const wasExpanded = card.classList.contains('expanded');
+                    const roomName = card.getAttribute('data-room');
+                    const canvasId = card.getAttribute('data-canvas');
+                    const hasSchedule = card.getAttribute('data-has-schedule') === 'true';
+                    
+                    document.querySelectorAll('.room-card').forEach(c => c.classList.remove('expanded'));
+                    
+                    if (!wasExpanded) {
+                        card.classList.add('expanded');
+                        
+                        if (hasSchedule && canvasId && roomName && appData.rooms[roomName]) {
+                            setTimeout(() => {
+                                drawRoomSchedule(canvasId, appData.rooms[roomName].classes);
+                            }, 50);
+                        }
+                    }
+                };
+            });
+        }
+        
+        function drawRoomSchedule(canvasId, classes) {
+            try {
+                const renderer = new ScheduleRenderer(canvasId, {
+                    width: 800,
+                    height: 450
+                });
+                
+                classes.forEach(cls => {
+                    if (!cls.schedule || cls.schedule.length === 0) return;
+                    
+                    cls.schedule.forEach(schedStr => {
+                        const parsed = parseScheduleTime(schedStr);
+                        if (!parsed) return;
+                        
+                        const color = getColorForCourse(cls.course_code);
+                        const label = cls.course_code + (cls.type ? ' (' + cls.type + ')' : '');
+                        
+                        renderer.addCourse({
+                            day: parsed.days,
+                            time: parsed.time,
+                            courseCode: label,
+                            section: cls.section,
+                            color: color
+                        });
+                    });
+                });
+            } catch (e) {
+                console.error('Failed to draw schedule:', e);
+            }
+        }
+
+        document.getElementById('searchInput').addEventListener('input', render);
+        
+        document.querySelectorAll('input[name="searchMode"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                searchMode = e.target.value;
+                render();
+            });
+        });
+
+        document.querySelectorAll('.view-btn').forEach(btn => {
+            btn.onclick = () => {
+                document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentView = btn.dataset.view;
+                render();
+            };
+        });
+
+        loadData();
+    </script>
+</body>
+</html>
