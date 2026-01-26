@@ -42,7 +42,11 @@ function getColorForCourse(courseCode) {
   return courseColors[Math.abs(hash) % courseColors.length];
 }
 
-
+/**
+ * 
+ * @param {string | undefined} scheduleStr 
+ * @returns 
+ */
 function parseScheduleTime(scheduleStr) {
   if (!scheduleStr || scheduleStr === "TBA") return null;
 
@@ -814,7 +818,9 @@ function drawRoomSchedule(canvasId, classes) {
   }
 }
 
-searchInput.addEventListener("input", render);
+const handleRender = debounce(render, 500);
+
+searchInput.addEventListener("input", handleRender);
 
 document.querySelectorAll('input[name="searchMode"]').forEach((radio) => {
   radio.addEventListener("change", (e) => {
