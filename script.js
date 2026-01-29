@@ -9,7 +9,8 @@ let searchMode = "rooms";
 let canvasCounter = 0;
 
 // DOM Elements
-let searchInput = document.getElementById("searchInput");
+const searchInput = document.getElementById("searchInput");
+const loadingIcon = document.querySelector(".loading-icon");
 
 const courseColors = [
   "#2E7D32",
@@ -325,6 +326,7 @@ function render() {
   } else {
     renderRoomSearch();
   }
+  loadingIcon.classList.remove("visible");
 }
 
 function renderCourseSearch() {
@@ -820,7 +822,11 @@ function drawRoomSchedule(canvasId, classes) {
 
 const handleRender = debounce(render, 500);
 
-searchInput.addEventListener("input", handleRender);
+searchInput.addEventListener("input", () => {
+  loadingIcon.classList.add("visible");
+  handleRender();
+
+});
 
 document.querySelectorAll('input[name="searchMode"]').forEach((radio) => {
   radio.addEventListener("change", (e) => {

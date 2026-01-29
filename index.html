@@ -1,864 +1,1020 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <meta name="description" content="Room TBA - Find any classroom in UPLB. No more asking 'saan ang room?'">
-    <meta name="theme-color" content="#7b2d26">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=5.0"
+    />
+    <meta
+      name="description"
+      content="Room TBA - Find any classroom in UPLB. No more asking 'saan ang room?'"
+    />
+    <meta name="theme-color" content="#7b2d26" />
     <title>Room TBA - UPLB Room Finder</title>
-    <link rel="icon" type="image/jpeg" href="carillon.jpg">
+    <link rel="icon" type="image/jpeg" href="carillon.jpg" />
     <script src="schedule-renderer.js"></script>
     <script src="https://unpkg.com/lodash.debounce@4.0.8/index.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: #fff;
-            color: #1a1a1a;
-            line-height: 1.6;
-            min-height: 100vh;
-        }
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
+          sans-serif;
+        background: #fff;
+        color: #1a1a1a;
+        line-height: 1.6;
+        min-height: 100vh;
+      }
 
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 24px 16px 40px;
+      }
+
+      .skip-link {
+        position: absolute;
+        top: -42px;
+        left: 0;
+        background: #7b2d26;
+        color: #fff;
+        padding: 8px 16px;
+        z-index: 100;
+        text-decoration: none;
+      }
+      .skip-link:focus {
+        top: 0;
+      }
+
+      header {
+        margin-bottom: 32px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 8px;
+      }
+
+      .brand-logo {
+        width: 48px;
+        height: 48px;
+        border-radius: 8px;
+        object-fit: cover;
+      }
+
+      .disclaimer {
+        background: #fff3cd;
+        border: 1px solid #ffc107;
+        color: #856404;
+        padding: 12px 16px;
+        border-radius: 8px;
+        margin-bottom: 16px;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      .disclaimer a {
+        color: #856404;
+        font-weight: 600;
+      }
+
+      h1 {
+        font-size: clamp(24px, 5vw, 32px);
+        font-weight: 700;
+        color: #7b2d26;
+      }
+
+      .tagline {
+        font-size: clamp(14px, 3vw, 16px);
+        color: #555;
+        font-style: italic;
+        margin-top: 4px;
+      }
+
+      .subtitle {
+        color: #666;
+        font-size: 13px;
+        margin-top: 12px;
+      }
+
+      .search-container {
+        margin-bottom: 24px;
+      }
+      
+      .search-input-container {
+        position: relative;
+      }
+
+      .loading-icon {
+        position: absolute;
+        top: 50%;
+        left: .75rem;
+        translate: 0 -50%;
+        visibility: hidden;
+      }
+      .loading-icon circle {
+        fill: #7b2d26;
+        stroke: #7b2d26;
+      }
+      .loading-icon.visible {
+        visibility: visible;
+      }
+
+      .search-input {
+        width: 100%;
+        padding: 14px 16px 14px 36px;
+        font-size: 16px;
+        border: 2px solid #ccc;
+        border-radius: 8px;
+        outline: none;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+      }
+
+      .search-input:focus {
+        border-color: #7b2d26;
+        box-shadow: 0 0 0 3px rgba(123, 45, 38, 0.1);
+      }
+
+      .search-input::placeholder {
+        color: #888;
+      }
+
+      .search-mode {
+        display: flex;
+        gap: 16px;
+        margin-top: 12px;
+        flex-wrap: wrap;
+      }
+
+      .search-mode label {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        color: #444;
+      }
+
+      .category-toggle {
+        display: flex;
+        gap: 8px;
+        margin-top: 16px;
+        flex-wrap: wrap;
+      }
+
+      .category-btn {
+        padding: 8px 16px;
+        font-size: 14px;
+        border: 2px solid #ddd;
+        background: #fff;
+        cursor: pointer;
+        border-radius: 6px;
+        color: #444;
+        font-weight: 500;
+        transition: all 0.2s;
+      }
+
+      .category-btn:hover {
+        border-color: #7b2d26;
+        color: #7b2d26;
+      }
+
+      .category-btn:focus {
+        outline: 2px solid #7b2d26;
+        outline-offset: 2px;
+      }
+
+      .category-btn.active {
+        background: #7b2d26;
+        color: #fff;
+        border-color: #7b2d26;
+      }
+
+      .building-info-panel {
+        background: #f8f5f0;
+        border: 1px solid #e0d5c8;
+        border-radius: 8px;
+        padding: 16px;
+        margin-top: 16px;
+        display: none;
+      }
+
+      .building-info-panel.visible {
+        display: block;
+      }
+
+      .building-info-panel h3 {
+        font-size: 16px;
+        color: #7b2d26;
+        margin-bottom: 8px;
+      }
+
+      .building-info-panel p {
+        font-size: 14px;
+        color: #555;
+        line-height: 1.6;
+      }
+
+      .map-links {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+      }
+
+      .map-link {
+        display: inline-block;
+        padding: 8px 16px;
+        background: #4a7c59;
+        color: white;
+        text-decoration: none;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 500;
+        transition:
+          background 0.2s,
+          transform 0.1s;
+      }
+
+      .map-link:hover {
+        background: #3d6b4a;
+        transform: translateY(-1px);
+      }
+
+      .map-link:focus {
+        outline: 3px solid #4a7c59;
+        outline-offset: 2px;
+      }
+
+      .map-container {
+        margin: 12px 0;
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid #ddd;
+      }
+
+      .map-iframe {
+        width: 100%;
+        height: 200px;
+        border: none;
+      }
+
+      .building-aka {
+        font-size: 14px;
+        font-weight: normal;
+        color: #666;
+      }
+
+      .room-directions {
+        background: #e8f4e8;
+        border-left: 3px solid #4a7c59;
+        padding: 10px 12px;
+        margin-top: 8px;
+        font-size: 13px;
+        color: #2d5a3d;
+        border-radius: 0 4px 4px 0;
+      }
+
+      .filters {
+        display: flex;
+        gap: 8px;
+        margin-top: 12px;
+        flex-wrap: wrap;
+      }
+
+      .filter-btn {
+        padding: 6px 12px;
+        font-size: 13px;
+        border: 1px solid #ddd;
+        background: #fff;
+        cursor: pointer;
+        border-radius: 4px;
+        color: #444;
+        transition: all 0.2s;
+      }
+
+      .filter-btn:hover {
+        border-color: #7b2d26;
+        color: #7b2d26;
+      }
+
+      .filter-btn:focus {
+        outline: 2px solid #7b2d26;
+        outline-offset: 2px;
+      }
+
+      .filter-btn.active {
+        background: #7b2d26;
+        color: #fff;
+        border-color: #7b2d26;
+      }
+
+      .view-toggle {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 16px;
+      }
+
+      .view-btn {
+        padding: 6px 14px;
+        font-size: 13px;
+        border: 1px solid #ddd;
+        background: #fff;
+        cursor: pointer;
+        border-radius: 4px;
+        color: #444;
+        transition: all 0.2s;
+      }
+
+      .view-btn:hover {
+        border-color: #999;
+      }
+
+      .view-btn:focus {
+        outline: 2px solid #7b2d26;
+        outline-offset: 2px;
+      }
+
+      .view-btn.active {
+        background: #333;
+        color: #fff;
+        border-color: #333;
+      }
+
+      .stats {
+        font-size: 13px;
+        color: #666;
+        margin-bottom: 16px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid #eee;
+      }
+
+      .results {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .room-card {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 16px;
+        cursor: pointer;
+        transition:
+          border-color 0.15s,
+          box-shadow 0.15s;
+      }
+
+      .room-card:hover {
+        border-color: #999;
+      }
+
+      .room-card:focus {
+        outline: 2px solid #7b2d26;
+        outline-offset: 2px;
+      }
+
+      .room-card.expanded {
+        border-color: #7b2d26;
+        box-shadow: 0 2px 8px rgba(123, 45, 38, 0.1);
+      }
+
+      .room-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      .room-name {
+        font-weight: 600;
+        font-size: 16px;
+      }
+
+      .room-unit {
+        font-size: 13px;
+        color: #666;
+        margin-top: 4px;
+      }
+
+      .room-class-count {
+        font-size: 12px;
+        color: #666;
+        background: #f5f5f5;
+        padding: 4px 10px;
+        border-radius: 4px;
+        white-space: nowrap;
+      }
+
+      .room-details {
+        margin-top: 16px;
+        padding-top: 16px;
+        border-top: 1px solid #eee;
+        display: none;
+      }
+
+      .room-card.expanded .room-details {
+        display: block;
+      }
+
+      .schedule-canvas-container {
+        margin-bottom: 20px;
+        overflow-x: auto;
+      }
+
+      .schedule-canvas-container canvas {
+        display: block;
+        margin: 0 auto;
+      }
+
+      .class-list-header {
+        font-size: 13px;
+        font-weight: 600;
+        color: #666;
+        margin-bottom: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .class-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .class-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        padding: 10px 12px;
+        background: #fafafa;
+        border-radius: 3px;
+        font-size: 14px;
+      }
+
+      .class-info {
+        flex: 1;
+      }
+
+      .class-code {
+        font-weight: 500;
+      }
+
+      .class-title {
+        color: #666;
+        font-size: 13px;
+        margin-top: 2px;
+      }
+
+      .class-section {
+        color: #888;
+        font-size: 12px;
+      }
+
+      .class-schedule {
+        text-align: right;
+        font-size: 13px;
+        color: #444;
+        white-space: nowrap;
+      }
+
+      .no-results {
+        text-align: center;
+        padding: 60px 20px;
+        color: #666;
+      }
+
+      .no-results h3 {
+        font-weight: 500;
+        margin-bottom: 8px;
+      }
+
+      .unit-section {
+        margin-bottom: 32px;
+      }
+
+      .unit-header {
+        font-size: 14px;
+        font-weight: 600;
+        color: #444;
+        padding: 8px 0;
+        margin-bottom: 12px;
+        border-bottom: 2px solid #1a1a1a;
+      }
+
+      .view-toggle {
+        display: flex;
+        gap: 4px;
+        margin-bottom: 24px;
+      }
+
+      .view-btn {
+        padding: 8px 16px;
+        font-size: 13px;
+        border: 1px solid #ddd;
+        background: #fff;
+        cursor: pointer;
+        color: #444;
+      }
+
+      .view-btn:first-child {
+        border-radius: 3px 0 0 3px;
+      }
+
+      .view-btn:last-child {
+        border-radius: 0 3px 3px 0;
+      }
+
+      .view-btn.active {
+        background: #1a1a1a;
+        color: #fff;
+        border-color: #1a1a1a;
+      }
+
+      .loading {
+        text-align: center;
+        padding: 60px 20px;
+        color: #666;
+      }
+
+      footer {
+        margin-top: 60px;
+        padding: 24px 0;
+        border-top: 1px solid #eee;
+        font-size: 13px;
+        color: #666;
+      }
+
+      footer a {
+        color: #7b2d26;
+        text-decoration: none;
+      }
+
+      footer a:hover {
+        text-decoration: underline;
+      }
+
+      .footer-content {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .footer-credits {
+        font-size: 12px;
+        color: #888;
+      }
+
+      .footer-attribution {
+        font-size: 11px;
+        color: #aaa;
+      }
+
+      .footer-version {
+        font-size: 12px;
+        color: #7b2d26;
+        margin-top: 8px;
+      }
+
+      .footer-version a {
+        color: #7b2d26;
+        text-decoration: none;
+      }
+
+      .footer-version a:hover {
+        text-decoration: underline;
+      }
+
+      .no-schedule {
+        text-align: center;
+        padding: 20px;
+        color: #888;
+        font-size: 13px;
+        background: #f9f9f9;
+        border-radius: 4px;
+        margin-bottom: 16px;
+      }
+
+      .room-info {
+        background: #f8f8f8;
+        border-radius: 8px;
+        padding: 16px;
+        margin-bottom: 16px;
+        font-size: 13px;
+      }
+
+      .room-info-grid {
+        display: grid;
+        grid-template-columns: 120px 1fr;
+        gap: 8px 12px;
+      }
+
+      .room-info-label {
+        color: #666;
+        font-weight: 500;
+      }
+
+      .room-info-value {
+        color: #1a1a1a;
+      }
+
+      .room-directions {
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px solid #e0e0e0;
+      }
+
+      .room-directions-title {
+        font-weight: 600;
+        color: #1a1a1a;
+        margin-bottom: 6px;
+      }
+
+      .room-directions-text {
+        color: #444;
+        line-height: 1.6;
+      }
+
+      .room-note {
+        margin-top: 10px;
+        padding: 8px 12px;
+        background: #fff8e1;
+        border-left: 3px solid #ffc107;
+        border-radius: 0 4px 4px 0;
+        font-size: 13px;
+        color: #5d4e37;
+      }
+
+      .course-result {
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 16px;
+        margin-bottom: 12px;
+      }
+
+      .course-result:hover {
+        border-color: #999;
+      }
+
+      .course-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 8px;
+      }
+
+      .course-code-title {
+        font-weight: 600;
+        font-size: 16px;
+      }
+
+      .course-title {
+        color: #666;
+        font-size: 13px;
+        margin-top: 2px;
+      }
+
+      .course-room-link {
+        font-size: 13px;
+        color: #1a1a1a;
+        background: #f0f0f0;
+        padding: 4px 10px;
+        border-radius: 3px;
+        cursor: pointer;
+      }
+
+      .course-room-link:hover {
+        background: #e0e0e0;
+      }
+
+      .course-details {
+        font-size: 13px;
+        color: #666;
+      }
+
+      .no-info {
+        color: #888;
+        font-style: italic;
+      }
+
+      .schedule-canvas-container {
+        margin-bottom: 20px;
+        overflow-x: auto;
+        background: #fafafa;
+        border-radius: 4px;
+        padding: 12px;
+      }
+
+      .schedule-canvas-container canvas {
+        display: block;
+        margin: 0 auto;
+      }
+
+      @media (max-width: 600px) {
         .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 24px 16px 40px;
-        }
-
-        .skip-link {
-            position: absolute;
-            top: -42px;
-            left: 0;
-            background: #7b2d26;
-            color: #fff;
-            padding: 8px 16px;
-            z-index: 100;
-            text-decoration: none;
-        }
-        .skip-link:focus {
-            top: 0;
-        }
-
-        header {
-            margin-bottom: 32px;
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 8px;
+          padding: 16px 12px 32px;
         }
 
         .brand-logo {
-            width: 48px;
-            height: 48px;
-            border-radius: 8px;
-            object-fit: cover;
-        }
-
-        .disclaimer {
-            background: #fff3cd;
-            border: 1px solid #ffc107;
-            color: #856404;
-            padding: 12px 16px;
-            border-radius: 8px;
-            margin-bottom: 16px;
-            font-size: 14px;
-            line-height: 1.5;
-        }
-
-        .disclaimer a {
-            color: #856404;
-            font-weight: 600;
-        }
-
-        h1 {
-            font-size: clamp(24px, 5vw, 32px);
-            font-weight: 700;
-            color: #7b2d26;
-        }
-
-        .tagline {
-            font-size: clamp(14px, 3vw, 16px);
-            color: #555;
-            font-style: italic;
-            margin-top: 4px;
-        }
-
-        .subtitle {
-            color: #666;
-            font-size: 13px;
-            margin-top: 12px;
-        }
-
-        .search-container {
-            margin-bottom: 24px;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 14px 16px;
-            font-size: 16px;
-            border: 2px solid #ccc;
-            border-radius: 8px;
-            outline: none;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-
-        .search-input:focus {
-            border-color: #7b2d26;
-            box-shadow: 0 0 0 3px rgba(123, 45, 38, 0.1);
-        }
-
-        .search-input::placeholder {
-            color: #888;
-        }
-
-        .search-mode {
-            display: flex;
-            gap: 16px;
-            margin-top: 12px;
-            flex-wrap: wrap;
-        }
-
-        .search-mode label {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            color: #444;
+          width: 40px;
+          height: 40px;
         }
 
         .category-toggle {
-            display: flex;
-            gap: 8px;
-            margin-top: 16px;
-            flex-wrap: wrap;
+          width: 100%;
         }
 
         .category-btn {
-            padding: 8px 16px;
-            font-size: 14px;
-            border: 2px solid #ddd;
-            background: #fff;
-            cursor: pointer;
-            border-radius: 6px;
-            color: #444;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-
-        .category-btn:hover {
-            border-color: #7b2d26;
-            color: #7b2d26;
-        }
-
-        .category-btn:focus {
-            outline: 2px solid #7b2d26;
-            outline-offset: 2px;
-        }
-
-        .category-btn.active {
-            background: #7b2d26;
-            color: #fff;
-            border-color: #7b2d26;
-        }
-
-        .building-info-panel {
-            background: #f8f5f0;
-            border: 1px solid #e0d5c8;
-            border-radius: 8px;
-            padding: 16px;
-            margin-top: 16px;
-            display: none;
-        }
-
-        .building-info-panel.visible {
-            display: block;
-        }
-
-        .building-info-panel h3 {
-            font-size: 16px;
-            color: #7b2d26;
-            margin-bottom: 8px;
-        }
-
-        .building-info-panel p {
-            font-size: 14px;
-            color: #555;
-            line-height: 1.6;
-        }
-
-        .map-links {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-top: 10px;
-        }
-
-        .map-link {
-            display: inline-block;
-            padding: 8px 16px;
-            background: #4a7c59;
-            color: white;
-            text-decoration: none;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 500;
-            transition: background 0.2s, transform 0.1s;
-        }
-
-        .map-link:hover {
-            background: #3d6b4a;
-            transform: translateY(-1px);
-        }
-
-        .map-link:focus {
-            outline: 3px solid #4a7c59;
-            outline-offset: 2px;
-        }
-
-        .map-container {
-            margin: 12px 0;
-            border-radius: 8px;
-            overflow: hidden;
-            border: 1px solid #ddd;
-        }
-
-        .map-iframe {
-            width: 100%;
-            height: 200px;
-            border: none;
-        }
-
-        .building-aka {
-            font-size: 14px;
-            font-weight: normal;
-            color: #666;
-        }
-
-        .room-directions {
-            background: #e8f4e8;
-            border-left: 3px solid #4a7c59;
-            padding: 10px 12px;
-            margin-top: 8px;
-            font-size: 13px;
-            color: #2d5a3d;
-            border-radius: 0 4px 4px 0;
-        }
-
-        .filters {
-            display: flex;
-            gap: 8px;
-            margin-top: 12px;
-            flex-wrap: wrap;
-        }
-
-        .filter-btn {
-            padding: 6px 12px;
-            font-size: 13px;
-            border: 1px solid #ddd;
-            background: #fff;
-            cursor: pointer;
-            border-radius: 4px;
-            color: #444;
-            transition: all 0.2s;
-        }
-
-        .filter-btn:hover {
-            border-color: #7b2d26;
-            color: #7b2d26;
-        }
-
-        .filter-btn:focus {
-            outline: 2px solid #7b2d26;
-            outline-offset: 2px;
-        }
-
-        .filter-btn.active {
-            background: #7b2d26;
-            color: #fff;
-            border-color: #7b2d26;
-        }
-
-        .view-toggle {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 16px;
-        }
-
-        .view-btn {
-            padding: 6px 14px;
-            font-size: 13px;
-            border: 1px solid #ddd;
-            background: #fff;
-            cursor: pointer;
-            border-radius: 4px;
-            color: #444;
-            transition: all 0.2s;
-        }
-
-        .view-btn:hover {
-            border-color: #999;
-        }
-
-        .view-btn:focus {
-            outline: 2px solid #7b2d26;
-            outline-offset: 2px;
-        }
-
-        .view-btn.active {
-            background: #333;
-            color: #fff;
-            border-color: #333;
-        }
-
-        .stats {
-            font-size: 13px;
-            color: #666;
-            margin-bottom: 16px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .results {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .room-card {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 16px;
-            cursor: pointer;
-            transition: border-color 0.15s, box-shadow 0.15s;
-        }
-
-        .room-card:hover {
-            border-color: #999;
-        }
-
-        .room-card:focus {
-            outline: 2px solid #7b2d26;
-            outline-offset: 2px;
-        }
-
-        .room-card.expanded {
-            border-color: #7b2d26;
-            box-shadow: 0 2px 8px rgba(123, 45, 38, 0.1);
+          flex: 1;
+          text-align: center;
+          padding: 10px 8px;
+          font-size: 13px;
         }
 
         .room-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 12px;
-        }
-
-        .room-name {
-            font-weight: 600;
-            font-size: 16px;
-        }
-
-        .room-unit {
-            font-size: 13px;
-            color: #666;
-            margin-top: 4px;
+          flex-direction: column;
+          gap: 8px;
         }
 
         .room-class-count {
-            font-size: 12px;
-            color: #666;
-            background: #f5f5f5;
-            padding: 4px 10px;
-            border-radius: 4px;
-            white-space: nowrap;
-        }
-
-        .room-details {
-            margin-top: 16px;
-            padding-top: 16px;
-            border-top: 1px solid #eee;
-            display: none;
-        }
-
-        .room-card.expanded .room-details {
-            display: block;
-        }
-
-        .schedule-canvas-container {
-            margin-bottom: 20px;
-            overflow-x: auto;
-        }
-
-        .schedule-canvas-container canvas {
-            display: block;
-            margin: 0 auto;
-        }
-
-        .class-list-header {
-            font-size: 13px;
-            font-weight: 600;
-            color: #666;
-            margin-bottom: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .class-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
+          align-self: flex-start;
         }
 
         .class-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            padding: 10px 12px;
-            background: #fafafa;
-            border-radius: 3px;
-            font-size: 14px;
-        }
-
-        .class-info {
-            flex: 1;
-        }
-
-        .class-code {
-            font-weight: 500;
-        }
-
-        .class-title {
-            color: #666;
-            font-size: 13px;
-            margin-top: 2px;
-        }
-
-        .class-section {
-            color: #888;
-            font-size: 12px;
+          flex-direction: column;
+          gap: 4px;
         }
 
         .class-schedule {
-            text-align: right;
-            font-size: 13px;
-            color: #444;
-            white-space: nowrap;
-        }
-
-        .no-results {
-            text-align: center;
-            padding: 60px 20px;
-            color: #666;
-        }
-
-        .no-results h3 {
-            font-weight: 500;
-            margin-bottom: 8px;
-        }
-
-        .unit-section {
-            margin-bottom: 32px;
-        }
-
-        .unit-header {
-            font-size: 14px;
-            font-weight: 600;
-            color: #444;
-            padding: 8px 0;
-            margin-bottom: 12px;
-            border-bottom: 2px solid #1a1a1a;
-        }
-
-        .view-toggle {
-            display: flex;
-            gap: 4px;
-            margin-bottom: 24px;
-        }
-
-        .view-btn {
-            padding: 8px 16px;
-            font-size: 13px;
-            border: 1px solid #ddd;
-            background: #fff;
-            cursor: pointer;
-            color: #444;
-        }
-
-        .view-btn:first-child {
-            border-radius: 3px 0 0 3px;
-        }
-
-        .view-btn:last-child {
-            border-radius: 0 3px 3px 0;
-        }
-
-        .view-btn.active {
-            background: #1a1a1a;
-            color: #fff;
-            border-color: #1a1a1a;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 60px 20px;
-            color: #666;
-        }
-
-        footer {
-            margin-top: 60px;
-            padding: 24px 0;
-            border-top: 1px solid #eee;
-            font-size: 13px;
-            color: #666;
-        }
-
-        footer a {
-            color: #7b2d26;
-            text-decoration: none;
-        }
-
-        footer a:hover {
-            text-decoration: underline;
-        }
-
-        .footer-content {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .footer-credits {
-            font-size: 12px;
-            color: #888;
-        }
-
-        .footer-attribution {
-            font-size: 11px;
-            color: #aaa;
-        }
-
-        .footer-version {
-            font-size: 12px;
-            color: #7b2d26;
-            margin-top: 8px;
-        }
-
-        .footer-version a {
-            color: #7b2d26;
-            text-decoration: none;
-        }
-
-        .footer-version a:hover {
-            text-decoration: underline;
-        }
-
-        .no-schedule {
-            text-align: center;
-            padding: 20px;
-            color: #888;
-            font-size: 13px;
-            background: #f9f9f9;
-            border-radius: 4px;
-            margin-bottom: 16px;
-        }
-
-        .room-info {
-            background: #f8f8f8;
-            border-radius: 8px;
-            padding: 16px;
-            margin-bottom: 16px;
-            font-size: 13px;
-        }
-
-        .room-info-grid {
-            display: grid;
-            grid-template-columns: 120px 1fr;
-            gap: 8px 12px;
-        }
-
-        .room-info-label {
-            color: #666;
-            font-weight: 500;
-        }
-
-        .room-info-value {
-            color: #1a1a1a;
-        }
-
-        .room-directions {
-            margin-top: 12px;
-            padding-top: 12px;
-            border-top: 1px solid #e0e0e0;
-        }
-
-        .room-directions-title {
-            font-weight: 600;
-            color: #1a1a1a;
-            margin-bottom: 6px;
-        }
-
-        .room-directions-text {
-            color: #444;
-            line-height: 1.6;
-        }
-        
-        .room-note {
-            margin-top: 10px;
-            padding: 8px 12px;
-            background: #fff8e1;
-            border-left: 3px solid #ffc107;
-            border-radius: 0 4px 4px 0;
-            font-size: 13px;
-            color: #5d4e37;
-        }
-
-        .course-result {
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            padding: 16px;
-            margin-bottom: 12px;
-        }
-
-        .course-result:hover {
-            border-color: #999;
-        }
-
-        .course-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 8px;
-        }
-
-        .course-code-title {
-            font-weight: 600;
-            font-size: 16px;
-        }
-
-        .course-title {
-            color: #666;
-            font-size: 13px;
-            margin-top: 2px;
-        }
-
-        .course-room-link {
-            font-size: 13px;
-            color: #1a1a1a;
-            background: #f0f0f0;
-            padding: 4px 10px;
-            border-radius: 3px;
-            cursor: pointer;
-        }
-
-        .course-room-link:hover {
-            background: #e0e0e0;
-        }
-
-        .course-details {
-            font-size: 13px;
-            color: #666;
-        }
-
-        .no-info {
-            color: #888;
-            font-style: italic;
-        }
-
-        .schedule-canvas-container {
-            margin-bottom: 20px;
-            overflow-x: auto;
-            background: #fafafa;
-            border-radius: 4px;
-            padding: 12px;
+          text-align: left;
         }
 
         .schedule-canvas-container canvas {
-            display: block;
-            margin: 0 auto;
+          width: 100%;
+          height: auto;
         }
 
-        @media (max-width: 600px) {
-            .container {
-                padding: 16px 12px 32px;
-            }
-
-            .brand-logo {
-                width: 40px;
-                height: 40px;
-            }
-
-            .category-toggle {
-                width: 100%;
-            }
-
-            .category-btn {
-                flex: 1;
-                text-align: center;
-                padding: 10px 8px;
-                font-size: 13px;
-            }
-
-            .room-header {
-                flex-direction: column;
-                gap: 8px;
-            }
-
-            .room-class-count {
-                align-self: flex-start;
-            }
-
-            .class-item {
-                flex-direction: column;
-                gap: 4px;
-            }
-            
-            .class-schedule {
-                text-align: left;
-            }
-
-            .schedule-canvas-container canvas {
-                width: 100%;
-                height: auto;
-            }
-
-            .room-info-grid {
-                grid-template-columns: 1fr;
-                gap: 4px;
-            }
-
-            .room-info-label {
-                margin-top: 8px;
-            }
-
-            .view-toggle {
-                width: 100%;
-            }
-
-            .view-btn {
-                flex: 1;
-                text-align: center;
-            }
+        .room-info-grid {
+          grid-template-columns: 1fr;
+          gap: 4px;
         }
 
-        @media (prefers-contrast: high) {
-            .filter-btn, .category-btn, .view-btn {
-                border-width: 2px;
-            }
-            .room-card {
-                border-width: 2px;
-            }
+        .room-info-label {
+          margin-top: 8px;
         }
 
-        @media (prefers-reduced-motion: reduce) {
-            * {
-                transition: none !important;
-            }
+        .view-toggle {
+          width: 100%;
         }
+
+        .view-btn {
+          flex: 1;
+          text-align: center;
+        }
+      }
+
+      @media (prefers-contrast: high) {
+        .filter-btn,
+        .category-btn,
+        .view-btn {
+          border-width: 2px;
+        }
+        .room-card {
+          border-width: 2px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          transition: none !important;
+        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
-    
+
     <div class="container">
-        <div class="disclaimer" role="alert">
-            ⚠️ <strong>This app is in active development.</strong> There might be mistakes in room locations and building information. 
-            Please <a href="mailto:semariquit@gmail.com">report any errors</a>!
+      <div class="disclaimer" role="alert">
+        ⚠️ <strong>This app is in active development.</strong> There might be
+        mistakes in room locations and building information. Please
+        <a href="mailto:semariquit@gmail.com">report any errors</a>!
+      </div>
+
+      <header>
+        <div class="brand">
+          <img
+            src="carillon.jpg"
+            alt="UPLB Carillon Tower"
+            class="brand-logo"
+          />
+          <div>
+            <h1>Room TBA</h1>
+            <p class="tagline">"Saan sa UPLB ang ___?" Finally answered.</p>
+          </div>
         </div>
-        
-        <header>
-            <div class="brand">
-                <img src="carillon.jpg" alt="UPLB Carillon Tower" class="brand-logo">
-                <div>
-                    <h1>Room TBA</h1>
-                    <p class="tagline">"Saan sa UPLB ang ___?" Finally answered.</p>
-                </div>
-            </div>
-            <p class="subtitle">UPLB Room Finder • 2nd Semester AY 2025-2026</p>
-        </header>
+        <p class="subtitle">UPLB Room Finder • 2nd Semester AY 2025-2026</p>
+      </header>
 
-        <main id="main-content">
-            <div class="search-container">
-                <label for="searchInput" class="visually-hidden">Search for rooms or courses</label>
-                <input 
-                    type="search" 
-                    class="search-input" 
-                    id="searchInput"
-                    placeholder="Search room code, building, division, or course code (e.g., CMSC 21)..."
-                    aria-describedby="search-help"
-                    autofocus
-                >
-                <span id="search-help" class="visually-hidden">Type to search rooms by name, building, or course code</span>
-                
-                <fieldset class="search-mode">
-                    <legend class="visually-hidden">Search mode</legend>
-                    <label><input type="radio" name="searchMode" value="rooms" checked> Search Rooms</label>
-                    <label><input type="radio" name="searchMode" value="courses"> Search Classes by Course Code</label>
-                </fieldset>
-                
-                <div class="category-toggle" role="group" aria-label="Filter category">
-                    <button class="category-btn active" data-category="building" aria-pressed="true">By Building</button>
-                    <button class="category-btn" data-category="college" aria-pressed="false">By College</button>
-                    <button class="category-btn" data-category="division" aria-pressed="false">By Division</button>
-                </div>
-                
-                <div id="buildingInfoPanel" class="building-info-panel" role="region" aria-label="Building information"></div>
-                
-                <div class="filters" id="unitFilters" role="group" aria-label="Filter options"></div>
-            </div>
+      <main id="main-content">
+        <div class="search-container">
+          <label for="searchInput" class="visually-hidden"
+            >Search for rooms or courses</label
+          >
+          <div class="search-input-container">
+            <input
+              type="search"
+              class="search-input"
+              id="searchInput"
+              placeholder="Search room code, building, division, or course code (e.g., CMSC 21)..."
+              aria-describedby="search-help"
+              autofocus
+            />
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="20" height="20" class="loading-icon">
+            <circle
+              stroke-width="17"
+              r="15"
+              cx="40"
+              cy="65"
+            >
+              <animate
+                attributeName="cy"
+                calcMode="spline"
+                dur="0.8"
+                values="65;135;65;"
+                keySplines=".5 0 .5 1;.5 0 .5 1"
+                repeatCount="indefinite"
+                begin="-.4"
+              ></animate>
+            </circle>
+            <circle
+              stroke-width="17"
+              r="15"
+              cx="100"
+              cy="65"
+            >
+              <animate
+                attributeName="cy"
+                calcMode="spline"
+                dur="0.8"
+                values="65;135;65;"
+                keySplines=".5 0 .5 1;.5 0 .5 1"
+                repeatCount="indefinite"
+                begin="-.2"
+              ></animate>
+            </circle>
+            <circle
+              stroke-width="17"
+              r="15"
+              cx="160"
+              cy="65"
+            >
+              <animate
+                attributeName="cy"
+                calcMode="spline"
+                dur="0.8"
+                values="65;135;65;"
+                keySplines=".5 0 .5 1;.5 0 .5 1"
+                repeatCount="indefinite"
+                begin="0"
+              ></animate>
+            </circle>
+          </svg> 
+          </div>
+          <span id="search-help" class="visually-hidden"
+            >Type to search rooms by name, building, or course code</span
+          >
 
-            <div class="view-toggle" role="group" aria-label="View mode">
-                <button class="view-btn active" data-view="list" aria-pressed="true">List View</button>
-                <button class="view-btn" data-view="grouped" aria-pressed="false">Grouped View</button>
-            </div>
+          <fieldset class="search-mode">
+            <legend class="visually-hidden">Search mode</legend>
+            <label
+              ><input type="radio" name="searchMode" value="rooms" checked />
+              Search Rooms</label
+            >
+            <label
+              ><input type="radio" name="searchMode" value="courses" /> Search
+              Classes by Course Code</label
+            >
+          </fieldset>
 
-            <div class="stats" id="stats" aria-live="polite"></div>
+          <div
+            class="category-toggle"
+            role="group"
+            aria-label="Filter category"
+          >
+            <button
+              class="category-btn active"
+              data-category="building"
+              aria-pressed="true"
+            >
+              By Building
+            </button>
+            <button
+              class="category-btn"
+              data-category="college"
+              aria-pressed="false"
+            >
+              By College
+            </button>
+            <button
+              class="category-btn"
+              data-category="division"
+              aria-pressed="false"
+            >
+              By Division
+            </button>
+          </div>
 
-            <div class="results" id="results" role="region" aria-label="Search results">
-                <div class="loading" aria-busy="true">Loading room data...</div>
-            </div>
-        </main>
+          <div
+            id="buildingInfoPanel"
+            class="building-info-panel"
+            role="region"
+            aria-label="Building information"
+          ></div>
 
-        <footer>
-            <div class="footer-content">
-                <p>Data sourced from <strong>UPLB AMIS</strong>. Last updated: January 2026.</p>
-                <p class="footer-credits">
-                    Developed by <a href="https://stimmie.dev" target="_blank" rel="noopener">Simonee Ezekiel Mariquit</a> • 
-                    <a href="mailto:semariquit@gmail.com">semariquit@gmail.com</a> for feedback or corrections
-                </p>
-                <p class="footer-attribution">
-                    Carillon photo: <a href="https://en.wikipedia.org/wiki/File:University_of_the_Philippines_%28UPLB%29_-_Carillon_Tower_%28Los_Ba%C3%B1os,_Laguna;_2017-02-16%29.jpg" target="_blank" rel="noopener">Wikimedia Commons</a>
-                </p>
-                <p class="footer-version">
-                    <a href="changelog.html">Version 0.0.1</a>
-                </p>
-            </div>
-        </footer>
+          <div
+            class="filters"
+            id="unitFilters"
+            role="group"
+            aria-label="Filter options"
+          ></div>
+        </div>
+
+        <div class="view-toggle" role="group" aria-label="View mode">
+          <button class="view-btn active" data-view="list" aria-pressed="true">
+            List View
+          </button>
+          <button class="view-btn" data-view="grouped" aria-pressed="false">
+            Grouped View
+          </button>
+        </div>
+
+        <div class="stats" id="stats" aria-live="polite"></div>
+
+        <div
+          class="results"
+          id="results"
+          role="region"
+          aria-label="Search results"
+        >
+          <div class="loading" aria-busy="true">Loading room data...</div>
+        </div>
+      </main>
+
+      <footer>
+        <div class="footer-content">
+          <p>
+            Data sourced from <strong>UPLB AMIS</strong>. Last updated: January
+            2026.
+          </p>
+          <p class="footer-credits">
+            Developed by
+            <a href="https://stimmie.dev" target="_blank" rel="noopener"
+              >Simonee Ezekiel Mariquit</a
+            >
+            • <a href="mailto:semariquit@gmail.com">semariquit@gmail.com</a> for
+            feedback or corrections
+          </p>
+          <p class="footer-attribution">
+            Carillon photo:
+            <a
+              href="https://en.wikipedia.org/wiki/File:University_of_the_Philippines_%28UPLB%29_-_Carillon_Tower_%28Los_Ba%C3%B1os,_Laguna;_2017-02-16%29.jpg"
+              target="_blank"
+              rel="noopener"
+              >Wikimedia Commons</a
+            >
+          </p>
+          <p class="footer-version">
+            <a href="changelog.html">Version 0.0.1</a>
+          </p>
+        </div>
+      </footer>
     </div>
 
     <style>
-        .visually-hidden {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border: 0;
-        }
+      .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
     </style>
 
     <script src="script.js"></script>
-</body>
+  </body>
 </html>
