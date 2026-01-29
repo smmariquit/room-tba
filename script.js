@@ -797,6 +797,7 @@ function drawRoomSchedule(canvasId, classes) {
     });
 
     classes.forEach((cls) => {
+      console.log(classes);
       if (!cls.schedule || cls.schedule.length === 0) return;
 
       cls.schedule.forEach((schedStr) => {
@@ -813,7 +814,7 @@ function drawRoomSchedule(canvasId, classes) {
           section: cls.section,
           color: color,
         });
-      });x
+      });
     });
   } catch (e) {
     console.error("Failed to draw schedule:", e);
