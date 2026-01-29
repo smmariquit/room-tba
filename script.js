@@ -1,5 +1,7 @@
 "use strict";
 
+const MAX_DISPLAY = 20;
+
 let appData = null;
 let roomInfo = null;
 let currentView = "list";
@@ -8,9 +10,22 @@ let filterCategory = "building";
 let searchMode = "rooms";
 let canvasCounter = 0;
 
+/**
+ * @type {number}
+ */
+let paginateMax = 0;
+
+/**
+ * @type {number}
+ */
+let displayI = 0;
+
 // DOM Elements
 const searchInput = document.getElementById("searchInput");
 const loadingIcon = document.querySelector(".loading-icon");
+const indexDecreaseButton = document.querySelector("#page-down");
+const indexIncreaseButton = document.querySelector("#page-up");
+const indexDisplay = document.querySelector("#index-display");
 
 const courseColors = [
   "#2E7D32",
@@ -31,8 +46,8 @@ const courseColors = [
 ];
 
 /**
- * 
- * @param {string} courseCode 
+ *
+ * @param {string} courseCode
  * @returns {string}
  */
 function getColorForCourse(courseCode) {
@@ -44,9 +59,9 @@ function getColorForCourse(courseCode) {
 }
 
 /**
- * 
- * @param {string | undefined} scheduleStr 
- * @returns 
+ *
+ * @param {string | undefined} scheduleStr
+ * @returns
  */
 function parseScheduleTime(scheduleStr) {
   if (!scheduleStr || scheduleStr === "TBA") return null;
@@ -273,10 +288,7 @@ function renderFilterButtons() {
 }
 
 function getFilteredRooms() {
-  const searchTerm = document
-    .getElementById("searchInput")
-    .value.toLowerCase()
-    .trim();
+  const searchTerm = searchInput.value.toLowerCase().trim();
   let rooms = Object.entries(appData.rooms);
 
   if (selectedFilter) {
@@ -316,7 +328,7 @@ function getFilteredRooms() {
       ([name, data]) => data.building || data.division || data.college,
     );
   }
-
+  paginateMax = Math.floor((rooms.length - 1) / MAX_DISPLAY) + 1;
   return rooms;
 }
 
@@ -327,13 +339,18 @@ function render() {
     renderRoomSearch();
   }
   loadingIcon.classList.remove("visible");
+
+  if (displayI === paginateMax - 1) indexIncreaseButton.disabled = true;
+  else indexIncreaseButton.disabled = false;
+
+  if (displayI === 0) indexDecreaseButton.disabled = true;
+  else indexDecreaseButton.disabled = false;
+
+  indexDisplay.textContent = `${displayI + 1} of ${paginateMax}`;
 }
 
 function renderCourseSearch() {
-  const searchTerm = document
-    .getElementById("searchInput")
-    .value.toLowerCase()
-    .trim();
+  const searchTerm = searchInput.value.toLowerCase().trim();
   const resultsContainer = document.getElementById("results");
   const statsContainer = document.getElementById("stats");
 
@@ -432,8 +449,8 @@ function renderCourseSearch() {
 }
 
 /**
- * 
- * @param {string} roomName 
+ *
+ * @param {string} roomName
  */
 function switchToRoomAndSearch(roomName) {
   document.querySelector('input[name="searchMode"][value="rooms"]').checked =
@@ -463,11 +480,16 @@ function renderRoomSearch() {
                 `;
     return;
   }
-
   if (currentView === "grouped") {
-    renderGrouped(rooms, resultsContainer);
+    renderGrouped(
+      rooms.slice(displayI * MAX_DISPLAY, (displayI + 1) * MAX_DISPLAY),
+      resultsContainer,
+    );
   } else {
-    renderList(rooms, resultsContainer);
+    renderList(
+      rooms.slice(displayI * MAX_DISPLAY, (displayI + 1) * MAX_DISPLAY),
+      resultsContainer,
+    );
   }
 }
 
@@ -797,7 +819,6 @@ function drawRoomSchedule(canvasId, classes) {
     });
 
     classes.forEach((cls) => {
-      console.log(classes);
       if (!cls.schedule || cls.schedule.length === 0) return;
 
       cls.schedule.forEach((schedStr) => {
@@ -823,11 +844,41 @@ function drawRoomSchedule(canvasId, classes) {
 
 const handleRender = debounce(render, 500);
 
+/**
+ *
+ * @param {"increment" | "decrement"} type
+ * @returns {EventListener}
+ */
+function handlePagination(type) {
+  return function (e) {
+    if (type === "increment" && displayI < paginateMax - 1) displayI++;
+    else if (type === "decrement" && displayI > 0) displayI--;
+    else {
+      e.currentTarget.disabled = true;
+      return;
+    }
+    console.log();
+
+    render();
+
+    window.scrollTo({
+      top:
+        window.scrollY +
+        document.querySelector(".stats").getBoundingClientRect().top,
+      behavior: "smooth",
+    });
+  };
+}
+
 searchInput.addEventListener("input", () => {
   loadingIcon.classList.add("visible");
+  displayI = 0;
+  indexDisplay.textContent = displayI + 1;
   handleRender();
-
 });
+
+indexDecreaseButton.addEventListener("click", handlePagination("decrement"));
+indexIncreaseButton.addEventListener("click", handlePagination("increment"));
 
 document.querySelectorAll('input[name="searchMode"]').forEach((radio) => {
   radio.addEventListener("change", (e) => {

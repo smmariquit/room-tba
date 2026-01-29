@@ -108,7 +108,7 @@
       .search-container {
         margin-bottom: 24px;
       }
-      
+
       .search-input-container {
         position: relative;
       }
@@ -116,7 +116,7 @@
       .loading-icon {
         position: absolute;
         top: 50%;
-        left: .75rem;
+        left: 0.75rem;
         translate: 0 -50%;
         visibility: hidden;
       }
@@ -720,6 +720,40 @@
         margin: 0 auto;
       }
 
+      .paginator-container {
+        display: flex;
+        justify-content: center;
+      }
+      .paginator {
+        display: flex;
+        margin-top: 1rem;
+        align-items: stretch;
+        overflow: hidden;
+        border-radius: 0.75rem;
+      }
+      .paginator > button {
+        border: none;
+        outline: none;
+        background: #ac3d33;
+        color: white;
+        padding: 0.5rem 0.75rem;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        &:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+          background: #7b2d26;
+        }
+        &:hover {
+          background: #7b2d26;
+        }
+      }
+      #index-display {
+        padding: 0 0.75rem;
+        display: flex;
+        align-items: center;
+      }
+
       @media (max-width: 600px) {
         .container {
           padding: 16px 12px 32px;
@@ -840,56 +874,47 @@
               aria-describedby="search-help"
               autofocus
             />
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="20" height="20" class="loading-icon">
-            <circle
-              stroke-width="17"
-              r="15"
-              cx="40"
-              cy="65"
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 200 200"
+              width="20"
+              height="20"
+              class="loading-icon"
             >
-              <animate
-                attributeName="cy"
-                calcMode="spline"
-                dur="0.8"
-                values="65;135;65;"
-                keySplines=".5 0 .5 1;.5 0 .5 1"
-                repeatCount="indefinite"
-                begin="-.4"
-              ></animate>
-            </circle>
-            <circle
-              stroke-width="17"
-              r="15"
-              cx="100"
-              cy="65"
-            >
-              <animate
-                attributeName="cy"
-                calcMode="spline"
-                dur="0.8"
-                values="65;135;65;"
-                keySplines=".5 0 .5 1;.5 0 .5 1"
-                repeatCount="indefinite"
-                begin="-.2"
-              ></animate>
-            </circle>
-            <circle
-              stroke-width="17"
-              r="15"
-              cx="160"
-              cy="65"
-            >
-              <animate
-                attributeName="cy"
-                calcMode="spline"
-                dur="0.8"
-                values="65;135;65;"
-                keySplines=".5 0 .5 1;.5 0 .5 1"
-                repeatCount="indefinite"
-                begin="0"
-              ></animate>
-            </circle>
-          </svg> 
+              <circle stroke-width="17" r="15" cx="40" cy="65">
+                <animate
+                  attributeName="cy"
+                  calcMode="spline"
+                  dur="0.8"
+                  values="65;135;65;"
+                  keySplines=".5 0 .5 1;.5 0 .5 1"
+                  repeatCount="indefinite"
+                  begin="-.4"
+                ></animate>
+              </circle>
+              <circle stroke-width="17" r="15" cx="100" cy="65">
+                <animate
+                  attributeName="cy"
+                  calcMode="spline"
+                  dur="0.8"
+                  values="65;135;65;"
+                  keySplines=".5 0 .5 1;.5 0 .5 1"
+                  repeatCount="indefinite"
+                  begin="-.2"
+                ></animate>
+              </circle>
+              <circle stroke-width="17" r="15" cx="160" cy="65">
+                <animate
+                  attributeName="cy"
+                  calcMode="spline"
+                  dur="0.8"
+                  values="65;135;65;"
+                  keySplines=".5 0 .5 1;.5 0 .5 1"
+                  repeatCount="indefinite"
+                  begin="0"
+                ></animate>
+              </circle>
+            </svg>
           </div>
           <span id="search-help" class="visually-hidden"
             >Type to search rooms by name, building, or course code</span
@@ -968,6 +993,44 @@
           aria-label="Search results"
         >
           <div class="loading" aria-busy="true">Loading room data...</div>
+        </div>
+
+        <div class="paginator-container">
+          <div class="paginator">
+            <button id="page-down">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="feather feather-chevron-left"
+              >
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+            </button>
+            <div id="index-display"></div>
+            <button id="page-up">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="feather feather-chevron-right"
+              >
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </button>
+          </div>
         </div>
       </main>
 
