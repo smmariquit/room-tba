@@ -17,7 +17,7 @@
       "directions": "Near the CAFS cluster, behind the Soils Building. Look for the ABC signage.",
       "lat": 14.160037897818123,
       "lon": 121.24452978338535,
-      "osm_link": "https://www.openstreetmap.org/?mlat=14.160037897818123&mlon=121.24452978338535#map=18/14.160037897818123/121.24452978338535"
+      "osm_link": "https://www.openstreetmap.org/?mlat=14.160418&mlon=121.245675#map=18/14.161221/121.246694"
     },
     "AFBED Building": {
       "rooms": [
@@ -36,7 +36,7 @@
       "lon": 121.248,
       "osm_link": "https://www.openstreetmap.org/?mlat=14.1625&mlon=121.248#map=18/14.1625/121.248"
     },
-    "Animal Science Building": {
+    "Agricultural Systems Institute Building": {
       "rooms": [
         "ASI 231",
         "ASI 233",
@@ -55,7 +55,7 @@
         "ASI B-138",
         "ASI Training Room",
         "ASR 1",
-        "ASR3",
+        "ASR 3",
         "ASILH B125"
       ],
       "directions": "In the CAFS area, past the crop science buildings. Look for the animal husbandry facilities nearby.",
@@ -124,7 +124,7 @@
         "ASLH 2",
         "ASLH1",
         "ASLH2",
-        "ASLH3",
+        "ASLH 3",
         "B-100",
         "B-201",
         "B101a",
@@ -600,10 +600,9 @@
         "ICROPS 201",
         "ICROPS 202",
         "ICROPS 302",
-        "ICROPS 302 MORPH LAB",
-        "iLab"
+        "ICROPS 302 MORPH LAB"
       ],
-      "directions": "Institute of Crop Science building. In the CAFS cluster. The iLab here is for Institute of Crop Science, NOT ICS (Computer Science)!",
+      "directions": "Institute of Crop Science building. In the CAFS cluster.",
       "lat": 14.160418508015592,
       "lon": 121.24579971346282,
       "osm_link": "https://www.openstreetmap.org/?mlat=14.160418508015592&mlon=121.24579971346282#map=18/14.160418508015592/121.24579971346282"
@@ -878,9 +877,9 @@
       "ASLH 2",
       "ASLH1",
       "ASLH2",
-      "ASLH3",
+      "ASLH 3",
       "ASR 1",
-      "ASR3",
+      "ASR 3",
       "Animal Health Lab",
       "Animal Health Laboratory",
       "Animal Nutrition Lecture Room",
@@ -1393,7 +1392,7 @@
     ]
   },
   "divisions": {
-    "Animal Science Institute": [
+    "Agricultural Systems Institute": [
       "237",
       "A-115",
       "ANLR",
@@ -1415,7 +1414,7 @@
       "ASI Training Room",
       "ASILH B125",
       "ASLH1",
-      "ASLH3",
+      "ASLH 3",
       "B-100",
       "IAS-LGIL",
       "ICROPS 200",
@@ -1782,7 +1781,7 @@
       "ASLH 2",
       "ASLH2",
       "ASR 1",
-      "ASR3",
+      "ASR 3",
       "Animal Health Lab",
       "Animal Health Laboratory",
       "Animal Nutrition Lecture Room",
@@ -1802,7 +1801,8 @@
       "MSLR 1",
       "MSLR 2",
       "Poultry Lab B",
-      "Room 24 - Fronda Hall"
+      "Room 24 - Fronda Hall",
+      "iLab"
     ],
     "Institute of Biological Sciences": [
       "BS A-137",
@@ -1906,8 +1906,7 @@
       "PHTRC 106",
       "PTCF Conf. Rm",
       "PTCF LAB",
-      "PTCF Lec 1",
-      "iLab"
+      "PTCF Lec 1"
     ],
     "Institute of Food Science and Technology": [
       "ADSC LH3 (IAS-CVM Building)",
@@ -3724,6 +3723,7 @@
       "building": "CAFS Building",
       "college": "College of Agriculture and Food Science",
       "division": "Institute of Crop Science",
+      "directions": "Located at the first building on the left side after passing the Animal Husbandry Arch.",
       "classes": [
         {
           "course_code": "AGRI 171",
@@ -3737,9 +3737,10 @@
       ]
     },
     "ASI 231": {
-      "building": "Animal Science Building",
+      "building": "Agricultural Systems Institute Building",
       "college": "College of Agriculture and Food Science",
       "division": "Animal Science Institute",
+      "directions": "Enter right hallway after reaching ICropS. It is found on the second floor.",
       "classes": [
         {
           "course_code": "AGRI 51",
@@ -3762,9 +3763,10 @@
       ]
     },
     "ASI 233": {
-      "building": "Animal Science Building",
+      "building": "Agricultural Systems Institute Building",
       "college": "College of Agriculture and Food Science",
-      "division": "Animal Science Institute",
+      "division": "Agricultural Systems Institute",
+      "directions": "Enter right hallway after reaching ICropS. It is found on the second floor.",
       "classes": [
         {
           "course_code": "AGRI 51",
@@ -3850,9 +3852,10 @@
       ]
     },
     "ASI 235": {
-      "building": "Animal Science Building",
+      "building": "Agricultural Systems Institute Building",
       "college": "College of Agriculture and Food Science",
-      "division": "Animal Science Institute",
+      "division": "Agricultural Systems Institute",
+      "directions": "Enter right hallway after reaching ICropS. It is found on the second floor.",
       "classes": [
         {
           "course_code": "AGRI 51",
@@ -3884,9 +3887,10 @@
       ]
     },
     "ASI 237": {
-      "building": "Animal Science Building",
+      "building": "Agricultural Systems Institute Building",
       "college": "College of Agriculture and Food Science",
-      "division": "Animal Science Institute",
+      "division": "Agricultural Systems Institute",
+      "directions": "Enter right hallway after reaching ICropS. It is found on the second floor.",
       "classes": [
         {
           "course_code": "AGRI 51",
@@ -3954,9 +3958,10 @@
       ]
     },
     "ASI 238A": {
-      "building": "Animal Science Building",
+      "building": "Agricultural Systems Institute Building",
       "college": "College of Agriculture and Food Science",
-      "division": "Animal Science Institute",
+      "division": "Agricultural Systems Institute",
+      "directions": "Enter right hallway after reaching ICropS. It is found on the second floor.",
       "classes": [
         {
           "course_code": "SOIL 142",
@@ -4015,9 +4020,10 @@
       ]
     },
     "ASI 238B": {
-      "building": "Animal Science Building",
+      "building": "Agricultural Systems Institute Building",
       "college": "College of Agriculture and Food Science",
-      "division": "Animal Science Institute",
+      "division": "Agricultural Systems Institute",
+      "directions": "Enter right hallway after reaching ICropS. It is found on the second floor.",
       "classes": [
         {
           "course_code": "SOIL 221",
@@ -4049,9 +4055,10 @@
       ]
     },
     "ASI 240": {
-      "building": "Animal Science Building",
+      "building": "Agricultural Systems Institute Building",
       "college": "College of Agriculture and Food Science",
-      "division": "Animal Science Institute",
+      "division": "Agricultural Systems Institute",
+      "directions": "Enter right hallway after reaching ICropS. It is found on the second floor.",
       "classes": [
         {
           "course_code": "SOIL 199",
@@ -4074,9 +4081,10 @@
       ]
     },
     "ASI 333": {
-      "building": "Animal Science Building",
+      "building": "Agricultural Systems Institute Building",
       "college": "College of Agriculture and Food Science",
-      "division": "Animal Science Institute",
+      "division": "Agricultural Systems Institute",
+      "directions": "Enter right hallway after reaching ICropS. It is found on the third floor.",
       "classes": [
         {
           "course_code": "SOIL 110",
@@ -4153,9 +4161,10 @@
       ]
     },
     "ASI 336": {
-      "building": "Animal Science Building",
+      "building": "Agricultural Systems Institute Building",
       "college": "College of Agriculture and Food Science",
-      "division": "Animal Science Institute",
+      "division": "Agricultural Systems Institute",
+      "directions": "Enter right hallway after reaching ICropS. It is found on the third floor.",
       "classes": [
         {
           "course_code": "SOIL 151",
@@ -4169,9 +4178,10 @@
       ]
     },
     "ASI A-104": {
-      "building": "Animal Science Building",
+      "building": "Agricultural Systems Institute Building",
       "college": "College of Agriculture and Food Science",
-      "division": "Animal Science Institute",
+      "division": "Agricultural Systems Institute",
+      "directions": "Agriculture Systems Institute (ASI) building is found right across the CEAT building and beside ICropS. To reach wing A, walk straight past the garden walkway.",
       "classes": [
         {
           "course_code": "ASYS 120",
@@ -4239,9 +4249,10 @@
       ]
     },
     "ASI A-119": {
-      "building": "Animal Science Building",
+      "building": "Agricultural Systems Institute Building",
       "college": "College of Agriculture and Food Science",
-      "division": "Animal Science Institute",
+      "division": "Agricultural Systems Institute",
+      "directions": "Agriculture Systems Institute (ASI) building is found right across the CEAT building and beside ICropS. To reach wing A, walk straight past the garden walkway.",
       "classes": [
         {
           "course_code": "AGRI 161",
@@ -4300,9 +4311,10 @@
       ]
     },
     "ASI B-126": {
-      "building": "Animal Science Building",
+      "building": "Agricultural Systems Institute Building",
       "college": "College of Agriculture and Food Science",
-      "division": "Animal Science Institute",
+      "division": "Agricultural Systems Institute",
+      "directions": "Agriculture Systems Institute (ASI) building is found right across the CEAT building and beside ICropS. Wing B is the first corner when you enter ASI.",
       "classes": [
         {
           "course_code": "AERS 154",
@@ -4406,9 +4418,10 @@
       ]
     },
     "ASI B-126 / ASI 333": {
-      "building": "Animal Science Building",
+      "building": "Agricultural Systems Institute Building",
       "college": "College of Agriculture and Food Science",
-      "division": "Animal Science Institute",
+      "division": "Agricultural Systems Institute",
+      "directions": "Agriculture Systems Institute (ASI) building is found right across the CEAT building and beside ICropS. Wing B is the first corner when you enter ASI.",
       "classes": [
         {
           "course_code": "AGRI 195",
@@ -4431,9 +4444,10 @@
       ]
     },
     "ASI B-127": {
-      "building": "Animal Science Building",
+      "building": "Agricultural Systems Institute Building",
       "college": "College of Agriculture and Food Science",
-      "division": "Animal Science Institute",
+      "division": "Agricultural Systems Institute",
+      "directions": "Agriculture Systems Institute (ASI) building is found right across the CEAT building and beside ICropS. Wing B is the first corner when you enter ASI.",
       "classes": [
         {
           "course_code": "AGRI 61",
@@ -4492,9 +4506,10 @@
       ]
     },
     "ASI B-138": {
-      "building": "Animal Science Building",
+      "building": "Agricultural Systems Institute Building",
       "college": "College of Agriculture and Food Science",
-      "division": "Animal Science Institute",
+      "division": "Agricultural Systems Institute",
+      "directions": "Agriculture Systems Institute (ASI) building is found right across the CEAT building and beside ICropS. Wing B is the first corner when you enter ASI.",
       "classes": [
         {
           "course_code": "AGRI 61",
@@ -4544,9 +4559,9 @@
       ]
     },
     "ASI Training Room": {
-      "building": "Animal Science Building",
+      "building": "Agricultural Systems Institute Building",
       "college": "College of Agriculture and Food Science",
-      "division": "Animal Science Institute",
+      "division": "Agricultural Systems Institute",
       "classes": [
         {
           "course_code": "AGRI 61",
@@ -4560,9 +4575,9 @@
       ]
     },
     "ASILH B125": {
-      "building": "Animal Science Building",
+      "building": "Agricultural Systems Institute Building",
       "college": "College of Agriculture and Food Science",
-      "division": "Animal Science Institute",
+      "division": "Agricultural Systems Institute",
       "classes": [
         {
           "course_code": "AGRI 51",
@@ -4615,6 +4630,7 @@
       "building": "CAFS Building",
       "college": "College of Agriculture and Food Science",
       "division": "Institute of Animal Science",
+      "directions": "Located at the first building on the left side after passing the Animal Husbandry Arch.",
       "classes": [
         {
           "course_code": "AGRI 21",
@@ -4649,6 +4665,7 @@
       "building": "CAFS Building",
       "college": "College of Agriculture and Food Science",
       "division": "Institute of Animal Science",
+      "directions": "Located at the first building on the left side after passing the Animal Husbandry Arch.",
       "classes": [
         {
           "course_code": "AGRI 22",
@@ -4673,7 +4690,7 @@
     "ASLH1": {
       "building": "CAFS Building",
       "college": "College of Agriculture and Food Science",
-      "division": "Animal Science Institute",
+      "division": "Agricultural Systems Institute",
       "classes": [
         {
           "course_code": "AGRI 11",
@@ -4689,7 +4706,7 @@
     "ASLH2": {
       "building": "CAFS Building",
       "college": "College of Agriculture and Food Science",
-      "division": "Institute of Animal Science",
+      "division": "Agricultural Systems Institute",
       "classes": [
         {
           "course_code": "AGRI 22",
@@ -4711,10 +4728,11 @@
         }
       ]
     },
-    "ASLH3": {
+    "ASLH 3": {
       "building": "CAFS Building",
       "college": "College of Agriculture and Food Science",
-      "division": "Animal Science Institute",
+      "division": "Agricultural Systems Institute",
+      "directions": "After reaching the IAS-CVM communal building, walk straight and turn right.",
       "classes": [
         {
           "course_code": "AGRI 199",
@@ -4782,9 +4800,10 @@
       ]
     },
     "ASR 1": {
-      "building": "Animal Science Building",
+      "building": "Agricultural Systems Institute Building",
       "college": "College of Agriculture and Food Science",
-      "division": "Institute of Animal Science",
+      "division": "Agricultural Systems Institute",
+      "directions": "Located at the first building on the left side after passing the Animal Husbandry Arch.",
       "classes": [
         {
           "course_code": "AGRI 21",
@@ -4860,10 +4879,11 @@
         }
       ]
     },
-    "ASR3": {
-      "building": "Animal Science Building",
+    "ASR 3": {
+      "building": "Agricultural Systems Institute Building",
       "college": "College of Agriculture and Food Science",
-      "division": "Institute of Animal Science",
+      "division": "Agricultural Systems Institute",
+      "directions": "Located at the first building on the left side after passing the Animal Husbandry Arch.",
       "classes": [
         {
           "course_code": "AGRI 22",
@@ -25210,6 +25230,7 @@
       "building": "CAFS Building",
       "college": "College of Agriculture and Food Science",
       "division": "Institute of Crop Science",
+      "directions": "FCN or Fruit Crops Nursery is found across the Senior Social Garden, past PHTRC/CEAT.",
       "classes": [
         {
           "course_code": "AGRI 111",
@@ -26804,6 +26825,7 @@
       "building": "CVM Building",
       "college": "College of Agriculture and Food Science",
       "division": "Institute of Animal Science",
+      "direction": "After reaching the IAS-CVM communal building, walk straight and turn right.",
       "classes": [
         {
           "course_code": "AGRI 21",
@@ -26883,6 +26905,7 @@
       "building": "CVM Building",
       "college": "College of Agriculture and Food Science",
       "division": "Institute of Animal Science",
+      "direction": "After reaching the IAS-CVM communal building, walk straight and turn right.",
       "classes": [
         {
           "course_code": "AGRI 21",
@@ -35967,6 +35990,7 @@
       "building": "CAFS Building",
       "college": "College of Agriculture and Food Science",
       "division": "Animal Science Institute",
+      "directions": "FCN or Fruit Crops Nursery is found across the Senior Social Garden, past PHTRC/CEAT.",
       "classes": [
         {
           "course_code": "AGRI 195",
@@ -44423,9 +44447,9 @@
       ]
     },
     "iLab": {
-      "building": "ICropS Building",
+      "building": "Agricultural and Biological Chemistry Building",
       "college": "College of Agriculture and Food Science",
-      "division": "Institute of Crop Science",
+      "division": "Institute of Animal Science",
       "classes": [
         {
           "course_code": "ANSC 144",
@@ -44465,7 +44489,7 @@
         }
       ],
       "note": "This is Institute of Crop Science, NOT ICS (Computer Science)!",
-      "directions": "This is the Institute of Crop Science (ICropS) lab, NOT Institute of Computer Science (ICS)! Located in the ICropS building in the CAFS area."
+      "directions": "This is the Institute of Crop Science (ICropS) lab, NOT Institute of Computer Science (ICS)! After entering Villegas Hall in IAS, walk straight past the stairs."
     }
   }
 }
