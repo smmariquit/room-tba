@@ -245,6 +245,7 @@ function renderFilterButtons() {
     allBtn.classList.add("active");
     allBtn.setAttribute("aria-pressed", "true");
     updateBuildingInfoPanel();
+    displayI = 0;
     render();
   };
   filtersContainer.appendChild(allBtn);
@@ -281,6 +282,7 @@ function renderFilterButtons() {
       btn.classList.add("active");
       btn.setAttribute("aria-pressed", "true");
       updateBuildingInfoPanel();
+      displayI = 0;
       render();
     };
     filtersContainer.appendChild(btn);
