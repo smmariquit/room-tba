@@ -1,4 +1,4 @@
-/* import Database from "bun:sqlite";
+import Database from "bun:sqlite";
 import { drizzle } from "drizzle-orm/bun-sqlite";
 import {
   buildingsTable,
@@ -6,12 +6,13 @@ import {
   collegesTable,
   divisionsTable,
   roomsTable,
-} from "./drizzle/schema";
+} from "../drizzle/schema";
 import { getTableColumns, eq } from "drizzle-orm";
 const client = new Database("../data/info.db");
 import appData from "../data/app_data.json";
-const db = drizzle({ client }); */
+const db = drizzle({ client });
 
+console.log(await db.select().from(roomsTable))
 /* 
 
 ===========================================================
