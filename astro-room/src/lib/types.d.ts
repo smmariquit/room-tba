@@ -29,3 +29,17 @@ export type AppData = {
     };
   };
 };
+
+type RoomData = {
+    id: number;
+    code: string;
+    directions: string | null;
+    building: {
+        name: string;
+        lat: number | null;
+        lon: number | null;
+        direction: string | null;
+    } | null;
+    collegeName: string | null;
+    divisionName: string | null;
+};

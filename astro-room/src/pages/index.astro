@@ -2,10 +2,34 @@
 import { Rooms } from "../components/Rooms.tsx";
 
 import { db } from "../lib/db.ts";
-import { roomsTable } from "../../drizzle/schema";
+import { buildingsTable, collegesTable, divisionsTable, roomsTable } from "../../drizzle/schema";
+import Entry from "../components/Entry.svelte";
+import Layout from "../layouts/Layout.astro";
+import { eq, getTableColumns } from "drizzle-orm";
 
-const data = await db.select().from(roomsTable);
+const data = await db
+  .select({
+    id: roomsTable.id,
+    code: roomsTable.room_code,
+    directions: roomsTable.directions,
+    building: {
+      name: buildingsTable.building_name,
+      lat: buildingsTable.lat,
+      lon: buildingsTable.lon,
+      direction: buildingsTable.directions
+    },
+    collegeName: collegesTable.college_name,
+    divisionName: divisionsTable.division_name
+  })
+  .from(roomsTable)
+  .leftJoin(buildingsTable, eq(buildingsTable.id, roomsTable.building_id))
+  .leftJoin(divisionsTable, eq(divisionsTable.id, roomsTable.division_id))
+  .leftJoin(collegesTable, eq(collegesTable.id, roomsTable.college_id));
+
+  // .leftJoin(buildingsTable)
 // console.log(data);
 ---
-
-<Rooms rooms={data} client:load />
+<Layout>
+  <Entry rooms={data} client:load/>
+</Layout>
+<!-- <Rooms rooms={data} client:load /> -->
