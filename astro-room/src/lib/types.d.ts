@@ -31,15 +31,25 @@ export type AppData = {
 };
 
 type RoomData = {
-    id: number;
-    code: string;
+  id: number;
+  code: string;
+  directions: string | null;
+  building: {
+    name: string;
+    lat: number | null;
+    lon: number | null;
     directions: string | null;
-    building: {
-        name: string;
-        lat: number | null;
-        lon: number | null;
-        direction: string | null;
-    } | null;
-    collegeName: string | null;
-    divisionName: string | null;
+  } | null;
+  collegeName: string | null;
+  divisionName: string | null;
+};
+
+type ClassMapValue = {
+  courseCode: string;
+  roomCode: string | null;
+  section: string;
+  type: string;
+  schedule: string;
+  directions: string | null;
+  courseTitle: string;
 };

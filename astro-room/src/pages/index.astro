@@ -2,12 +2,12 @@
 import { Rooms } from "../components/Rooms.tsx";
 
 import { db } from "../lib/db.ts";
-import { buildingsTable, collegesTable, divisionsTable, roomsTable } from "../../drizzle/schema";
+import { buildingsTable, classesTable, collegesTable, divisionsTable, roomsTable } from "../../drizzle/schema";
 import Entry from "../components/Entry.svelte";
 import Layout from "../layouts/Layout.astro";
 import { eq, getTableColumns } from "drizzle-orm";
 
-const data = await db
+const rooms = await db
   .select({
     id: roomsTable.id,
     code: roomsTable.room_code,
@@ -16,20 +16,39 @@ const data = await db
       name: buildingsTable.building_name,
       lat: buildingsTable.lat,
       lon: buildingsTable.lon,
-      direction: buildingsTable.directions
+      directions: buildingsTable.directions
     },
     collegeName: collegesTable.college_name,
-    divisionName: divisionsTable.division_name
+    divisionName: divisionsTable.division_name,
   })
   .from(roomsTable)
   .leftJoin(buildingsTable, eq(buildingsTable.id, roomsTable.building_id))
   .leftJoin(divisionsTable, eq(divisionsTable.id, roomsTable.division_id))
-  .leftJoin(collegesTable, eq(collegesTable.id, roomsTable.college_id));
+  .leftJoin(collegesTable, eq(collegesTable.id, roomsTable.college_id))
 
-  // .leftJoin(buildingsTable)
-// console.log(data);
+const classes = await db
+  .select({
+    courseCode: classesTable.course_code,
+    roomCode: roomsTable.room_code,
+    section: classesTable.section,
+    type: classesTable.type,
+    schedule: classesTable.schedule,
+    directions: roomsTable.directions,
+    courseTitle: classesTable.course_title
+  })
+  .from(classesTable)
+  .leftJoin(roomsTable, eq(roomsTable.id, classesTable.room_id))
+
+const classesDict = new Map<string, typeof classes[number][]>()
+classes.forEach(classData => {
+  const roomCode = classData.roomCode ?? "No room";
+  if (!classesDict.has(roomCode)) {
+    classesDict.set(roomCode, [classData])
+  } else {
+    classesDict.get(roomCode)?.push(classData)
+  }
+})
 ---
 <Layout>
-  <Entry rooms={data} client:load/>
+  <Entry rooms={rooms} classesMap={classesDict} client:load/>
 </Layout>
-<!-- <Rooms rooms={data} client:load /> -->
