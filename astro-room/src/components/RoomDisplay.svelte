@@ -11,10 +11,7 @@
   const { room, searchInput, classes }: Props = $props();
   const pattern = $derived(new RegExp(`(${searchInput})`, "gi"));
   function highlightSearch(original: string, pattern: RegExp): string {
-    return original.replaceAll(
-      pattern,
-      (substr) => `<mark><strong>${substr}</strong></mark>`,
-    );
+    return original.replaceAll(pattern, (substr) => `<mark>${substr}</mark>`);
   }
 
   function openRoomData(
@@ -22,6 +19,7 @@
   ) {
     currentRoomStore.updateClasses(classes);
     currentRoomStore.updateRoom(room);
+    currentRoomStore.openModal();
   }
 </script>
 

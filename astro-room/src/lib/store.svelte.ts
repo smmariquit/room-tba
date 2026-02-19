@@ -1,7 +1,7 @@
 import type { ClassMapValue, RoomData } from "./types";
 
 class RoomStore {
-  private _currentRoomStore: {
+  currentRoomStore: {
     roomData: RoomData | null;
     classesData: ClassMapValue[];
     open:boolean;
@@ -11,33 +11,21 @@ class RoomStore {
     open: false
   })
   
-  public updateRoom(roomData: RoomData) {
-    this._currentRoomStore.roomData = roomData;
+  updateRoom = (roomData: RoomData) => {
+    this.currentRoomStore.roomData = roomData;
   }
 
-  public updateClasses(classesData: ClassMapValue[]) {
-    this._currentRoomStore.classesData = classesData;
+  updateClasses = (classesData: ClassMapValue[]) => {
+    this.currentRoomStore.classesData = classesData;
   }
 
-  public openModal() {
-    this._currentRoomStore.open = true;
+  openModal = () => {
+    this.currentRoomStore.open = true;
   }
-  public closeModal() {
-    this._currentRoomStore.open = false;
+  closeModal = () => {
+    this.currentRoomStore.open = false;
   }
-  
-  public get roomData() {
-    return this._currentRoomStore.roomData
-  }
-
-  public get classesData() {
-    return this._currentRoomStore.classesData
-  }
-  
-  
-  public get open() : boolean {
-    return this._currentRoomStore.open
-  }
+    
   
 }
 

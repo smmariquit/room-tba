@@ -3,6 +3,8 @@
   import { onMount } from "svelte";
   import { debounce } from "es-toolkit/function";
   import type { ClassMapValue, RoomData } from "../lib/types";
+  import { currentRoomStore } from "../lib/store.svelte";
+  import ModalRender from "./ModalRender.svelte";
 
   type Props = {
     rooms: RoomData[];
@@ -45,6 +47,8 @@
       ev.preventDefault();
       searchElement.focus();
     }
+    if (ev.key === "Escape" && currentRoomStore.currentRoomStore.open)
+      currentRoomStore.closeModal();
   }
 
   function findRooms(searchTerm: string) {
@@ -72,10 +76,13 @@
       behavior: "smooth",
     });
   }
-  $effect(() => {});
+  $inspect(currentRoomStore.currentRoomStore.open);
 </script>
 
 <main>
+  {#if currentRoomStore.currentRoomStore.open}
+    <ModalRender />
+  {/if}
   <div id="header">
     <input
       type="search"
