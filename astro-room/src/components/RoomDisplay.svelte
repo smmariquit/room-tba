@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { currentRoomStore } from "../lib/store.svelte";
   import type { RoomData, ClassMapValue } from "../lib/types";
 
   type Props = {
@@ -19,7 +20,8 @@
   function openRoomData(
     event: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement },
   ) {
-    throw new Error("Function not implemented.");
+    currentRoomStore.updateClasses(classes);
+    currentRoomStore.updateRoom(room);
   }
 </script>
 
