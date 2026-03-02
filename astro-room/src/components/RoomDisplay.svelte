@@ -9,7 +9,7 @@
   };
 
   const { room, searchInput, classes }: Props = $props();
-  const pattern = $derived(new RegExp(`(${searchInput})`, "gi"));
+  const pattern = $derived(new RegExp(`(${searchInput.trim()})`, "gi"));
   function highlightSearch(original: string, pattern: RegExp): string {
     return original.replaceAll(pattern, (substr) => `<mark>${substr}</mark>`);
   }
@@ -26,7 +26,9 @@
 <button class="room-data" onclick={openRoomData}>
   <div class="room-data__header">
     <h3>{@html highlightSearch(room.code, pattern)}</h3>
-    <div class="class-count">{classes.length} classes</div>
+    <div class="class-count">
+      {classes.length} class{classes.length > 1 ? "es" : ""}
+    </div>
   </div>
   <p class="subheading">
     {@html highlightSearch(room.building?.name ?? "No building", pattern)} • {@html highlightSearch(
@@ -78,5 +80,6 @@
     padding: 0.25rem 0.5rem;
     font-size: 0.875rem;
     margin: 0.25rem;
+    flex: 0 0 auto;
   }
 </style>
