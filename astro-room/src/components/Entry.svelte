@@ -31,6 +31,19 @@
   }, 500);
 
   onMount(() => {
+    const params = new URLSearchParams(window.location.search);
+    const paramsQuery = params.get("s");
+    if (paramsQuery != null) {
+      const searchString = paramsQuery.toLowerCase();
+      roomsResult = rooms.filter(
+        ({ divisionName, collegeName, building, code }) =>
+          code.toLowerCase().includes(searchString) ||
+          collegeName?.toLowerCase().includes(searchString) ||
+          divisionName?.toLowerCase().includes(searchString) ||
+          building?.name.toLowerCase().includes(searchString),
+      );
+    }
+
     window.addEventListener("keydown", windowKeyDown);
     return () => {
       window.removeEventListener("keydown", windowKeyDown);
@@ -52,7 +65,7 @@
   }
 
   function findRooms(searchTerm: string) {
-    searchTerm = searchTerm.toLowerCase();
+    searchTerm = searchTerm.toLowerCase().trim();
 
     return searchInput !== ""
       ? rooms.filter(
@@ -76,7 +89,6 @@
       behavior: "smooth",
     });
   }
-  $inspect(currentRoomStore.currentRoomStore.open);
 </script>
 
 <main>
