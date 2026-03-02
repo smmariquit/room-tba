@@ -1,3 +1,8 @@
+---
+import { pwaInfo } from "virtual:pwa-info"
+import ReloadPrompt from "../components/ReloadPrompt.astro"
+---
+
 <!doctype html>
 <html lang="en">
 	<head>
@@ -7,9 +12,11 @@
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
 		<title>Room TBA - Searching utility for finding rooms around UPLB</title>
+		{ pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} /> }
 	</head>
 	<body>
 		<slot />
+		<ReloadPrompt />
 	</body>
 </html>
 
