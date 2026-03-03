@@ -24,6 +24,7 @@ class RoomStore {
   }
   closeModal = () => {
     this.currentRoomStore.open = false;
+    this.currentRoomStore.roomData = null;
   }
     
   
