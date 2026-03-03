@@ -2,6 +2,7 @@
   import { currentRoomStore } from "../lib/store.svelte";
   import { fade, fly } from "svelte/transition";
   import ScheduleRender from "./ScheduleRender.svelte";
+  import Classes from "./Classes.svelte";
 
   const { currentRoomStore: roomStore, closeModal } = currentRoomStore;
   const lat = $derived(roomStore.roomData?.building?.lat || null);
@@ -65,14 +66,6 @@
       </div>
       <div class="room-modal__info">
         <hr />
-        <div class="room-modal__schedule">
-          <h3>Schedule for this semester</h3>
-          <ScheduleRender
-            roomCode={roomStore.roomData?.code ?? ""}
-            classes={roomStore.classesData}
-          />
-        </div>
-        <hr />
         <div class="building-note">
           <h3>How to get to {roomStore.roomData?.building?.name}</h3>
           <p class="building-note__directions">
@@ -91,6 +84,15 @@
             ></iframe>
           </div>
         {/if}
+        <hr />
+        <div class="room-modal__schedule">
+          <h3>Classes in this room</h3>
+          <ScheduleRender
+            roomCode={roomStore.roomData?.code ?? ""}
+            classes={roomStore.classesData}
+          />
+          <Classes classes={roomStore.classesData} />
+        </div>
       </div>
     </div>
   </div>
@@ -140,7 +142,7 @@
     flex: 0 1 1024px;
     height: 90%;
     background-color: white;
-    z-index: 3;
+    z-index: 100;
     border-radius: 1rem;
     padding: 1.5rem;
     display: flex;

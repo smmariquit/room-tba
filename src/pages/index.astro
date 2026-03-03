@@ -1,3 +1,9 @@
+---
+import { pwaInfo } from "virtual:pwa-info"
+import ReloadPrompt from "../components/ReloadPrompt.astro"
+
+---
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -16,6 +22,7 @@
     <script src="/schedule-renderer.js" is:raw></script>
     <script src="https://unpkg.com/lodash.debounce@4.0.8/index.js" is:raw></script>
     <link rel="stylesheet" href="/style.css">
+    {pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />}
   </head>
   <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -259,7 +266,9 @@
         border: 0;
       }
     </style>
+    <ReloadPrompt />
 
     <script src="/script.js" is:raw></script>
+  
   </body>
 </html>
