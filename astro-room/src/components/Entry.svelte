@@ -34,6 +34,7 @@
     const params = new URLSearchParams(window.location.search);
     const paramsQuery = params.get("s");
     if (paramsQuery != null) {
+      searchInput = paramsQuery;
       const searchString = paramsQuery.toLowerCase();
       roomsResult = rooms.filter(
         ({ divisionName, collegeName, building, code }) =>
@@ -92,13 +93,12 @@
 </script>
 
 <main>
-  {#if currentRoomStore.currentRoomStore.open}
-    <ModalRender />
-  {/if}
+  <ModalRender />
   <div id="header">
     <input
       type="search"
       bind:this={searchElement}
+      value={searchInput}
       oninput={handleInput}
       placeholder="Search room code, building, division, or course code (e.g., CMSC 21)"
     />
@@ -182,5 +182,6 @@
       "Open Sans",
       "Helvetica Neue",
       sans-serif;
+    box-sizing: border-box;
   }
 </style>
