@@ -19,6 +19,7 @@
   const { rooms, classesMap }: Props = $props();
   let searchElement: HTMLInputElement | null = $state(null);
   let searchInput: string = $state("");
+  let typing: boolean = $state(false);
   let paginateOffset: number = $state(0);
   let roomsResult: Props["rooms"] = $state([]);
   const maxPaginateOffset: number = $derived(
@@ -29,7 +30,7 @@
     const url = new URL(window.location.href);
     url.searchParams.set("s", inputValue);
     window.history.replaceState({}, "", url);
-
+    typing = false;
     searchInput = inputValue;
     roomsResult = findRooms(inputValue);
     paginateOffset = 0;
@@ -90,6 +91,7 @@
   function handleInput(
     event: Event & { currentTarget: EventTarget & HTMLInputElement },
   ) {
+    typing = true;
     debounceSearch(event.currentTarget.value);
   }
   function scrollToTop() {
@@ -106,19 +108,68 @@
   <a href="mailto:semariquit@gmail.com"><strong>report any errors!</strong></a>
 </Banner>
 <main>
-  <header>
-    <h2>Room TBA</h2>
-    <p>"Saan sa UPLB ang ___?" Finally answered.</p>
-  </header>
-  <ModalRender />
   <div id="header">
-    <input
-      type="search"
-      bind:this={searchElement}
-      value={searchInput}
-      oninput={handleInput}
-      placeholder="Search room code, building, division, or course code (e.g., CMSC 21)"
-    />
+    <div class="heading">
+      <img src="/carillon.jpg" alt="A tall antique building" />
+      <div>
+        <h2>Room TBA</h2>
+        <p>"Saan sa UPLB ang ___?" Finally answered.</p>
+      </div>
+    </div>
+    <label for="search">
+      <input
+        type="search"
+        id="search"
+        bind:this={searchElement}
+        value={searchInput}
+        class={typing ? "typing" : ""}
+        oninput={handleInput}
+        placeholder="Search room code, building, division, or course code (e.g., CMSC 21)"
+      />
+      {#if typing}
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 200 200"
+          width="20"
+          height="20"
+          class="loading-icon"
+        >
+          <circle stroke-width="17" r="15" cx="40" cy="65">
+            <animate
+              attributeName="cy"
+              calcMode="spline"
+              dur="0.8"
+              values="65;135;65;"
+              keySplines=".5 0 .5 1;.5 0 .5 1"
+              repeatCount="indefinite"
+              begin="-.4"
+            ></animate>
+          </circle>
+          <circle stroke-width="17" r="15" cx="100" cy="65">
+            <animate
+              attributeName="cy"
+              calcMode="spline"
+              dur="0.8"
+              values="65;135;65;"
+              keySplines=".5 0 .5 1;.5 0 .5 1"
+              repeatCount="indefinite"
+              begin="-.2"
+            ></animate>
+          </circle>
+          <circle stroke-width="17" r="15" cx="160" cy="65">
+            <animate
+              attributeName="cy"
+              calcMode="spline"
+              dur="0.8"
+              values="65;135;65;"
+              keySplines=".5 0 .5 1;.5 0 .5 1"
+              repeatCount="indefinite"
+              begin="0"
+            ></animate>
+          </circle>
+        </svg>
+      {/if}
+    </label>
   </div>
 
   <div class="room-container">
@@ -150,11 +201,40 @@
       >
     </div>
   {/if}
+  <ModalRender />
 </main>
 
 <style>
-  header {
+  #header {
     margin-block: 1rem;
+  }
+  .heading {
+    display: flex;
+    margin-bottom: 0.5rem;
+    gap: 1rem;
+    align-items: center;
+    > img {
+      border-radius: 0.5rem;
+      width: 48px;
+      height: 48px;
+      object-fit: cover;
+    }
+
+    > div * {
+      margin-block: 0.5rem;
+    }
+  }
+  label[for="search"] {
+    position: relative;
+    svg {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      translate: 0 -50%;
+      fill: #7b2d26;
+      stroke: #7b2d26;
+      visibility: visible;
+    }
   }
   :global(a) {
     color: unset;
@@ -175,6 +255,7 @@
     font-size: 1rem;
     border: 2px solid hsl(0, 0%, 90%);
     border-radius: 0.5rem;
+    padding-left: 2.5rem;
     transition: all 0.175s;
     outline: none;
     &:hover {
