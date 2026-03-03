@@ -105,8 +105,8 @@ function parseScheduleTime(scheduleStr) {
 async function loadData() {
   try {
     const [appResponse, roomInfoResponse] = await Promise.all([
-      fetch("app_data.json"),
-      fetch("room_info.json").catch(() => ({ ok: false })),
+      fetch("/app_data.json"),
+      fetch("/room_info.json").catch(() => ({ ok: false })),
     ]);
 
     appData = await appResponse.json();

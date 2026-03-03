@@ -1,0 +1,1 @@
+ALTER TABLE `classes` ADD `term_id` integer;
