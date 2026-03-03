@@ -21,15 +21,12 @@
   );
   $effect(() => {
     classes.forEach((sectionClass) => {
-      const schedule: string[] = JSON.parse(
-        JSON.stringify([sectionClass.schedule]),
-      );
-
+      const schedule: string[] = sectionClass.schedule.split(",");
       if (schedule.length === 0) return;
       schedule.forEach((schedStr) => {
         const parsed = parseScheduleTime(schedStr);
         if (!parsed) {
-          console.error("unexpected pasrsing of schedule time");
+          console.error("unexpected parsing of schedule time");
           return;
         }
         const color = getColorForCourse(sectionClass.courseCode);
