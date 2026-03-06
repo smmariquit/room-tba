@@ -1,8 +1,8 @@
 import type { ClassMapValue, RoomData } from "./types";
 
 interface IModalStore {
-  open:boolean;
-  type: "room-details" | "filters" | null
+  open: boolean;
+  type: "room-details" | "filters" | null;
 }
 
 interface IRoomStore {
@@ -17,22 +17,25 @@ interface IFilterStore {
 }
 
 class ModalStore {
-  modalStore: IModalStore = $state({
-    open:false,
-    type: null
-  })
+  private _modalStore: IModalStore = $state({
+    open: false,
+    type: null,
+  });
+
+  open = $derived(this._modalStore.open);
+  type = $derived(this._modalStore.type);
 
   openModal = (type: IModalStore["type"]) => {
-    this.modalStore.open = true;
-    this.modalStore.type = type;
-  }
+    this._modalStore.open = true;
+    this._modalStore.type = type;
+  };
 
   closeModal = () => {
-    this.modalStore = {
+    this._modalStore = {
       open: false,
-      type: null
-    }
-  }
+      type: null,
+    };
+  };
 }
 
 class RoomStore {
@@ -50,7 +53,6 @@ class RoomStore {
     this.roomStore.classesData = classesData;
   };
 }
-
 
 class FilterStore {
   filterStore: IFilterStore = $state({
@@ -79,3 +81,4 @@ class FilterStore {
 
 export const filterStore = new FilterStore();
 export const currentRoomStore = new RoomStore();
+export const modalStore = new ModalStore();
