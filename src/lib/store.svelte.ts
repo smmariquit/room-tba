@@ -1,16 +1,38 @@
 import type { ClassMapValue, RoomData } from "./types";
 
+interface IModalStore {
+  open:boolean;
+  type: "room-details" | "filters" | null
+}
+
 interface IRoomStore {
   roomData: RoomData | null;
   classesData: ClassMapValue[];
-  open: boolean;
 }
 
 interface IFilterStore {
-  open: boolean;
   buildingName: string | null;
   collegeName: string | null;
   divisionName: string | null;
+}
+
+class ModalStore {
+  modalStore: IModalStore = $state({
+    open:false,
+    type: null
+  })
+
+  openModal = (type: IModalStore["type"]) => {
+    this.modalStore.open = true;
+    this.modalStore.type = type;
+  }
+
+  closeModal = () => {
+    this.modalStore = {
+      open: false,
+      type: null
+    }
+  }
 }
 
 class RoomStore {
@@ -27,32 +49,16 @@ class RoomStore {
   updateClasses = (classesData: ClassMapValue[]) => {
     this.roomStore.classesData = classesData;
   };
-
-  openModal = () => {
-    this.roomStore.open = true;
-  };
-  closeModal = () => {
-    this.roomStore.open = false;
-    this.roomStore.roomData = null;
-  };
 }
 
-export const currentRoomStore = new RoomStore();
 
 class FilterStore {
   filterStore: IFilterStore = $state({
-    open: false,
     buildingName: null,
     collegeName: null,
     divisionName: null,
   });
 
-  openModal = () => {
-    this.filterStore.open = true
-  }
-  closeModal = () => {
-    this.filterStore.open = false
-  }
   setBuilding = (buildingName: string) => {
     this.filterStore.buildingName = buildingName;
   };
@@ -64,7 +70,6 @@ class FilterStore {
   };
   resetFilter = () => {
     this.filterStore = {
-      ...this.filterStore,
       buildingName: null,
       collegeName: null,
       divisionName: null,
@@ -73,3 +78,4 @@ class FilterStore {
 }
 
 export const filterStore = new FilterStore();
+export const currentRoomStore = new RoomStore();
