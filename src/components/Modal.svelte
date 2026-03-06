@@ -1,20 +1,20 @@
 <script lang="ts">
-  import { currentRoomStore } from "../lib/store.svelte";
+  import { currentRoomStore, modalStore } from "../lib/store.svelte";
   import { fade, fly } from "svelte/transition";
   import ScheduleRender from "./ScheduleRender.svelte";
   import Classes from "./Classes.svelte";
 
-  const { roomStore: roomStore, closeModal } = currentRoomStore;
+  const roomStore = currentRoomStore;
   const lat = $derived(roomStore.roomData?.building?.lat || null);
   const lon = $derived(roomStore.roomData?.building?.lon || null);
 </script>
 
-{#if roomStore.open}
+{#if modalStore.open}
   <div class="modal-set">
     <!-- svelte-ignore a11y_consider_explicit_label -->
     <button
       class="overlay"
-      onclick={() => closeModal()}
+      onclick={() => modalStore.closeModal()}
       transition:fade={{ duration: 100 }}
     ></button>
     <div
@@ -48,7 +48,10 @@
             {roomStore.roomData?.directions ?? ""}
           </p>
         </div>
-        <button onclick={() => closeModal()} aria-label="close-modal">
+        <button
+          onclick={() => modalStore.closeModal()}
+          aria-label="close-modal"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"

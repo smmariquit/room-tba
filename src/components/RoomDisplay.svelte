@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { currentRoomStore } from "../lib/store.svelte";
+  import { currentRoomStore, modalStore } from "../lib/store.svelte";
   import type { RoomData, ClassMapValue } from "../lib/types";
 
   type Props = {
@@ -19,7 +19,7 @@
   ) {
     currentRoomStore.updateClasses(classes);
     currentRoomStore.updateRoom(room);
-    currentRoomStore.openModal();
+    modalStore.openModal("room-details");
   }
 </script>
 

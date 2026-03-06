@@ -39,39 +39,45 @@ class ModalStore {
 }
 
 class RoomStore {
-  roomStore: IRoomStore = $state({
+  private _roomStore: IRoomStore = $state({
     roomData: null,
     classesData: [],
-    open: false,
   });
 
+  roomData = $derived(this._roomStore.roomData);
+  classesData = $derived(this._roomStore.classesData);
+
   updateRoom = (roomData: RoomData) => {
-    this.roomStore.roomData = roomData;
+    this._roomStore.roomData = roomData;
   };
 
   updateClasses = (classesData: ClassMapValue[]) => {
-    this.roomStore.classesData = classesData;
+    this._roomStore.classesData = classesData;
   };
 }
 
 class FilterStore {
-  filterStore: IFilterStore = $state({
+  private _filterStore: IFilterStore = $state({
     buildingName: null,
     collegeName: null,
     divisionName: null,
   });
 
+  buildingName = $derived(this._filterStore.buildingName);
+  collegeName = $derived(this._filterStore.collegeName);
+  divisionName = $derived(this._filterStore.divisionName);
+
   setBuilding = (buildingName: string) => {
-    this.filterStore.buildingName = buildingName;
+    this._filterStore.buildingName = buildingName;
   };
   setCollege = (collegeName: string) => {
-    this.filterStore.collegeName = collegeName;
+    this._filterStore.collegeName = collegeName;
   };
   setDivision = (divisionName: string) => {
-    this.filterStore.divisionName = divisionName;
+    this._filterStore.divisionName = divisionName;
   };
   resetFilter = () => {
-    this.filterStore = {
+    this._filterStore = {
       buildingName: null,
       collegeName: null,
       divisionName: null,
