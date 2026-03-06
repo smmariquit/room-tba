@@ -44,6 +44,14 @@ type RoomData = {
   divisionName: string | null;
 };
 
+export type buildingData = {
+  id: number;
+  building_name: string;
+  lat: number | null;
+  lon: number | null;
+  directions: string | null;
+};
+
 type ClassMapValue = {
   courseCode: string;
   roomCode: string | null;

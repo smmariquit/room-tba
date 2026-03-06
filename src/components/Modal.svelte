@@ -4,7 +4,7 @@
   import ScheduleRender from "./ScheduleRender.svelte";
   import Classes from "./Classes.svelte";
 
-  const { currentRoomStore: roomStore, closeModal } = currentRoomStore;
+  const { roomStore: roomStore, closeModal } = currentRoomStore;
   const lat = $derived(roomStore.roomData?.building?.lat || null);
   const lon = $derived(roomStore.roomData?.building?.lon || null);
 </script>

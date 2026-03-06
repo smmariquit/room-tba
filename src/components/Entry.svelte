@@ -2,13 +2,14 @@
   import RoomDisplay from "./RoomDisplay.svelte";
   import { onMount } from "svelte";
   import { debounce } from "es-toolkit/function";
-  import type { ClassMapValue, RoomData } from "../lib/types";
-  import { currentRoomStore } from "../lib/store.svelte";
-  import ModalRender from "./ModalRender.svelte";
+  import type { buildingData, ClassMapValue, RoomData } from "../lib/types";
+  import { currentRoomStore, filterStore } from "../lib/store.svelte";
   import Banner from "./Banner.svelte";
+  import Modal from "./Modal.svelte";
 
   type Props = {
     rooms: RoomData[];
+    buildings: buildingData[];
     classesMap: Map<string, ClassMapValue[]>;
   };
 
@@ -16,7 +17,8 @@
     Math.floor((arrLength - 1) / divisor) + 1;
 
   const MAX_DISPLAY_RESULT = 20;
-  const { rooms, classesMap }: Props = $props();
+
+  const { rooms, classesMap, buildings }: Props = $props();
   let searchElement: HTMLInputElement | null = $state(null);
   let searchInput: string = $state("");
   let typing: boolean = $state(false);
@@ -70,7 +72,7 @@
       ev.preventDefault();
       searchElement.focus();
     }
-    if (ev.key === "Escape" && currentRoomStore.currentRoomStore.open)
+    if (ev.key === "Escape" && currentRoomStore.roomStore.open)
       currentRoomStore.closeModal();
   }
 
@@ -170,6 +172,23 @@
         </svg>
       {/if}
     </label>
+    <button onclick={() => filterStore.openModal()}
+      ><svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="lucide lucide-list-filter-icon lucide-list-filter"
+        ><path d="M2 5h20" /><path d="M6 12h12" /><path d="M9 19h6" /></svg
+      >Filter</button
+    >
+    <div>{roomsResult.length} rooms found</div>
+    <hr />
   </div>
 
   <div class="room-container">
@@ -201,7 +220,7 @@
       >
     </div>
   {/if}
-  <ModalRender />
+  <Modal />
 </main>
 
 <style>
