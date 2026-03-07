@@ -57,7 +57,7 @@
   }
   .modal-content {
     flex: 0 1 1024px;
-    height: 90%;
+    max-height: 90vh;
     background-color: white;
     z-index: 100;
     border-radius: 1rem;

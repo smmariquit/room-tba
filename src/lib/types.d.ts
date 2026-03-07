@@ -52,7 +52,6 @@ type BuildingData = {
   directions: string | null;
 };
 
-
 type ClassMapValue = {
   courseCode: string;
   roomCode: string | null;
@@ -64,11 +63,19 @@ type ClassMapValue = {
 };
 
 type CollegeData = {
-    id: number;
-    college_name: string;
-}
+  id: number;
+  college_name: string;
+};
 
 type DivisionData = {
-    id: number;
-    division_name: string;
+  id: number;
+  division_name: string;
+};
+
+interface IFilterStore {
+  type: "building" | "college" | "division" | null;
+  filter: string | null;
+  buildings: BuildingData[];
+  colleges: CollegeData[];
+  divisions: DivisionData[];
 }

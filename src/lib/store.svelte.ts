@@ -4,6 +4,7 @@ import type {
   RoomData,
   CollegeData,
   DivisionData,
+  IFilterStore,
 } from "./types";
 
 interface IModalStore {
@@ -14,15 +15,6 @@ interface IModalStore {
 interface IRoomStore {
   roomData: RoomData | null;
   classesData: ClassMapValue[];
-}
-
-interface IFilterStore {
-  buildingName: string | null;
-  collegeName: string | null;
-  divisionName: string | null;
-  buildings: BuildingData[];
-  colleges: CollegeData[];
-  divisions: DivisionData[];
 }
 
 class ModalStore {
@@ -67,18 +59,16 @@ class RoomStore {
 
 class FilterStore {
   private _filterStore: IFilterStore = $state({
-    buildingName: null,
-    collegeName: null,
-    divisionName: null,
+    filter: null,
+    type: null,
     buildings: [],
     colleges: [],
     divisions: [],
   });
 
   filterData = $derived({
-    buildingName: this._filterStore.buildingName,
-    collegeName: this._filterStore.collegeName,
-    divisionName: this._filterStore.divisionName,
+    type: this._filterStore.type,
+    filter: this._filterStore.filter
   });
 
   getData = () => ({
@@ -87,15 +77,10 @@ class FilterStore {
     divisions: this._filterStore.divisions,
   });
 
-  setBuilding = (buildingName: string) => {
-    this._filterStore.buildingName = buildingName;
-  };
-  setCollege = (collegeName: string) => {
-    this._filterStore.collegeName = collegeName;
-  };
-  setDivision = (divisionName: string) => {
-    this._filterStore.divisionName = divisionName;
-  };
+  setFilter = (type: IFilterStore["type"], filter: string | null) => {
+    this._filterStore.type = type;
+    this._filterStore.filter = filter;
+  }
 
   setData = ([buildings, colleges, divisions]: [
     BuildingData[],
@@ -110,9 +95,8 @@ class FilterStore {
   resetFilter = () => {
     this._filterStore = {
       ...this._filterStore,
-      buildingName: null,
-      collegeName: null,
-      divisionName: null,
+      filter: null,
+      type: null
     };
   };
 }
