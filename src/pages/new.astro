@@ -40,6 +40,8 @@ const classes = await db
   .leftJoin(roomsTable, eq(roomsTable.id, classesTable.room_id));
 
 const buildings = await db.select().from(buildingsTable);
+const colleges = await db.select().from(collegesTable);
+const divisions = await db.select().from(divisionsTable);
 
 const classesDict = new Map<string, typeof classes[number][]>()
 classes.forEach(classData => {
@@ -52,5 +54,6 @@ classes.forEach(classData => {
 })
 ---
 <Layout>
-  <Entry rooms={rooms} classesMap={classesDict} buildings={buildings} client:load/>
+  <Entry rooms={rooms} classesMap={classesDict} buildings={buildings}
+  colleges={colleges} divisions={divisions} client:load/>
 </Layout>

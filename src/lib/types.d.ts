@@ -44,13 +44,14 @@ type RoomData = {
   divisionName: string | null;
 };
 
-export type buildingData = {
+type BuildingData = {
   id: number;
   building_name: string;
   lat: number | null;
   lon: number | null;
   directions: string | null;
 };
+
 
 type ClassMapValue = {
   courseCode: string;
@@ -61,3 +62,13 @@ type ClassMapValue = {
   directions: string | null;
   courseTitle: string;
 };
+
+type CollegeData = {
+    id: number;
+    college_name: string;
+}
+
+type DivisionData = {
+    id: number;
+    division_name: string;
+}

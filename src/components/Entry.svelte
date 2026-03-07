@@ -2,14 +2,22 @@
   import RoomDisplay from "./RoomDisplay.svelte";
   import { onMount } from "svelte";
   import { debounce } from "es-toolkit/function";
-  import type { buildingData, ClassMapValue, RoomData } from "../lib/types";
-  import { currentRoomStore, filterStore } from "../lib/store.svelte";
+  import type {
+    BuildingData,
+    ClassMapValue,
+    CollegeData,
+    DivisionData,
+    RoomData,
+  } from "../lib/types";
+  import { filterStore, modalStore } from "../lib/store.svelte";
   import Banner from "./Banner.svelte";
   import Modal from "./Modal.svelte";
 
   type Props = {
     rooms: RoomData[];
-    buildings: buildingData[];
+    buildings: BuildingData[];
+    colleges: CollegeData[];
+    divisions: DivisionData[];
     classesMap: Map<string, ClassMapValue[]>;
   };
 
@@ -18,7 +26,7 @@
 
   const MAX_DISPLAY_RESULT = 20;
 
-  const { rooms, classesMap, buildings }: Props = $props();
+  const { rooms, classesMap, buildings, divisions, colleges }: Props = $props();
   let searchElement: HTMLInputElement | null = $state(null);
   let searchInput: string = $state("");
   let typing: boolean = $state(false);
@@ -34,7 +42,7 @@
     window.history.replaceState({}, "", url);
     typing = false;
     searchInput = inputValue;
-    roomsResult = findRooms(inputValue);
+    roomsResult = findRooms(inputValue, filterStore.filterData);
     paginateOffset = 0;
   }, 500);
 
@@ -56,6 +64,7 @@
           : [];
     }
 
+    filterStore.setData([buildings, colleges, divisions]);
     window.addEventListener("keydown", windowKeyDown);
     return () => {
       window.removeEventListener("keydown", windowKeyDown);
@@ -72,12 +81,35 @@
       ev.preventDefault();
       searchElement.focus();
     }
-    if (ev.key === "Escape" && currentRoomStore.roomStore.open)
-      currentRoomStore.closeModal();
+    if (ev.key === "Escape" && modalStore.open) modalStore.closeModal();
   }
 
-  function findRooms(searchTerm: string) {
+  function findRooms(
+    searchTerm: string,
+    {
+      buildingName,
+      collegeName,
+      divisionName,
+    }: {
+      buildingName: string | null;
+      collegeName: string | null;
+      divisionName: string | null;
+    },
+  ) {
     searchTerm = searchTerm.toLowerCase().trim();
+    let filteredRoom = [];
+    if (buildingName !== null)
+      filteredRoom = rooms.filter((room) =>
+        room.building?.name.includes(buildingName),
+      );
+    if (collegeName !== null)
+      filteredRoom = rooms.filter((room) =>
+        room.collegeName?.includes(collegeName),
+      );
+    if (divisionName !== null)
+      filteredRoom = rooms.filter((room) =>
+        room.divisionName?.includes(divisionName),
+      );
 
     return searchInput !== ""
       ? rooms.filter(
@@ -172,7 +204,7 @@
         </svg>
       {/if}
     </label>
-    <button onclick={() => filterStore.openModal()}
+    <button onclick={() => modalStore.openModal("filters")}
       ><svg
         xmlns="http://www.w3.org/2000/svg"
         width="24"
