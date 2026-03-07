@@ -7,6 +7,7 @@
     ClassMapValue,
     CollegeData,
     DivisionData,
+    IFilterStore,
     RoomData,
   } from "../lib/types";
   import { filterStore, modalStore } from "../lib/store.svelte";
@@ -36,15 +37,21 @@
     computeMaxPaginate(roomsResult.length, MAX_DISPLAY_RESULT),
   );
 
-  const debounceSearch = debounce((inputValue: string) => {
-    const url = new URL(window.location.href);
-    url.searchParams.set("s", inputValue);
-    window.history.replaceState({}, "", url);
-    typing = false;
-    searchInput = inputValue;
-    roomsResult = findRooms(inputValue, filterStore.filterData);
-    paginateOffset = 0;
-  }, 500);
+  const debounceSearch = debounce(
+    (inputValue: string, filterData: typeof filterStore.filterData) => {
+      const url = new URL(window.location.href);
+      url.searchParams.set("s", inputValue);
+      window.history.replaceState({}, "", url);
+      typing = false;
+      roomsResult = findRooms(inputValue, filterData);
+      paginateOffset = 0;
+    },
+    500,
+  );
+
+  $effect(() => {
+    debounceSearch(searchInput, filterStore.filterData);
+  });
 
   onMount(() => {
     const params = new URLSearchParams(window.location.search);
@@ -86,33 +93,34 @@
 
   function findRooms(
     searchTerm: string,
-    {
-      buildingName,
-      collegeName,
-      divisionName,
-    }: {
-      buildingName: string | null;
-      collegeName: string | null;
-      divisionName: string | null;
-    },
+    { type, filter }: Pick<IFilterStore, "filter" | "type">,
   ) {
     searchTerm = searchTerm.toLowerCase().trim();
-    let filteredRoom = [];
-    if (buildingName !== null)
-      filteredRoom = rooms.filter((room) =>
-        room.building?.name.includes(buildingName),
-      );
-    if (collegeName !== null)
-      filteredRoom = rooms.filter((room) =>
-        room.collegeName?.includes(collegeName),
-      );
-    if (divisionName !== null)
-      filteredRoom = rooms.filter((room) =>
-        room.divisionName?.includes(divisionName),
-      );
+    let filterSearch: RoomData[] = rooms;
+
+    if (filter !== null)
+      switch (type) {
+        case "building":
+          filterSearch = rooms.filter((room) =>
+            room.building?.name.includes(filter),
+          );
+          break;
+        case "college":
+          filterSearch = rooms.filter((room) =>
+            room.collegeName?.includes(filter),
+          );
+          break;
+        case "division":
+          filterSearch = rooms.filter((room) =>
+            room.divisionName?.includes(filter),
+          );
+          console.log(filterSearch.length);
+        default:
+          break;
+      }
 
     return searchInput !== ""
-      ? rooms.filter(
+      ? filterSearch.filter(
           ({ divisionName, collegeName, building, code }) =>
             code.toLowerCase().includes(searchTerm) ||
             collegeName?.toLowerCase().includes(searchTerm) ||
@@ -126,7 +134,6 @@
     event: Event & { currentTarget: EventTarget & HTMLInputElement },
   ) {
     typing = true;
-    debounceSearch(event.currentTarget.value);
   }
   function scrollToTop() {
     window.scrollTo({
@@ -155,7 +162,7 @@
         type="search"
         id="search"
         bind:this={searchElement}
-        value={searchInput}
+        bind:value={searchInput}
         class={typing ? "typing" : ""}
         oninput={handleInput}
         placeholder="Search room code, building, division, or course code (e.g., CMSC 21)"
