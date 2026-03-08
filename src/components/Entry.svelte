@@ -22,9 +22,6 @@
     classesMap: Map<string, ClassMapValue[]>;
   };
 
-  const computeMaxPaginate = (arrLength: number, divisor: number) =>
-    Math.floor((arrLength - 1) / divisor) + 1;
-
   const MAX_DISPLAY_RESULT = 20;
 
   const { rooms, classesMap, buildings, divisions, colleges }: Props = $props();
@@ -34,25 +31,8 @@
   let paginateOffset: number = $state(0);
   let roomsResult: Props["rooms"] = $state([]);
   const maxPaginateOffset: number = $derived(
-    computeMaxPaginate(roomsResult.length, MAX_DISPLAY_RESULT),
+    Math.floor((roomsResult.length - 1) / MAX_DISPLAY_RESULT) + 1,
   );
-
-  const debounceSearch = debounce(
-    (inputValue: string, filterData: typeof filterStore.filterData) => {
-      const url = new URL(window.location.href);
-      url.searchParams.set("s", inputValue);
-      window.history.replaceState({}, "", url);
-      typing = false;
-      roomsResult = findRooms(inputValue, filterData);
-      paginateOffset = 0;
-    },
-    500,
-  );
-
-  $effect(() => {
-    debounceSearch(searchInput, filterStore.filterData);
-  });
-
   onMount(() => {
     const params = new URLSearchParams(window.location.search);
     const paramsQuery = params.get("s");
@@ -78,6 +58,25 @@
     };
   });
 
+  const debounceSearch = debounce(
+    (inputValue: string, filterData: typeof filterStore.filterData) => {
+      typing = false;
+      roomsResult = findRooms(rooms, inputValue, filterData);
+      paginateOffset = 0;
+      const url = new URL(window.location.href);
+
+      if (inputValue === "") url.searchParams.delete("s");
+      else url.searchParams.set("s", inputValue);
+
+      window.history.replaceState({}, "", url);
+    },
+    500,
+  );
+
+  $effect(() => {
+    debounceSearch(searchInput, filterStore.filterData);
+  });
+
   function windowKeyDown(ev: KeyboardEvent) {
     if (
       ev.key === "k" &&
@@ -88,39 +87,33 @@
       ev.preventDefault();
       searchElement.focus();
     }
-    if (ev.key === "Escape" && modalStore.open) modalStore.closeModal();
+    if (ev.key === "Escape") modalStore.closeModal();
   }
 
   function findRooms(
+    rooms: RoomData[],
     searchTerm: string,
     { type, filter }: Pick<IFilterStore, "filter" | "type">,
   ) {
     searchTerm = searchTerm.toLowerCase().trim();
-    let filterSearch: RoomData[] = rooms;
 
     if (filter !== null)
       switch (type) {
         case "building":
-          filterSearch = rooms.filter((room) =>
-            room.building?.name.includes(filter),
-          );
+          rooms = rooms.filter((room) => room.building?.name.includes(filter));
           break;
         case "college":
-          filterSearch = rooms.filter((room) =>
-            room.collegeName?.includes(filter),
-          );
+          rooms = rooms.filter((room) => room.collegeName?.includes(filter));
           break;
         case "division":
-          filterSearch = rooms.filter((room) =>
-            room.divisionName?.includes(filter),
-          );
-          console.log(filterSearch.length);
+          rooms = rooms.filter((room) => room.divisionName?.includes(filter));
+          console.log(rooms.length);
         default:
           break;
       }
 
     return searchInput !== ""
-      ? filterSearch.filter(
+      ? rooms.filter(
           ({ divisionName, collegeName, building, code }) =>
             code.toLowerCase().includes(searchTerm) ||
             collegeName?.toLowerCase().includes(searchTerm) ||
@@ -157,7 +150,7 @@
         <p>"Saan sa UPLB ang ___?" Finally answered.</p>
       </div>
     </div>
-    <label for="search">
+    <div class="search-container">
       <input
         type="search"
         id="search"
@@ -210,23 +203,27 @@
           </circle>
         </svg>
       {/if}
-    </label>
-    <button onclick={() => modalStore.openModal("filters")}
-      ><svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        class="lucide lucide-list-filter-icon lucide-list-filter"
-        ><path d="M2 5h20" /><path d="M6 12h12" /><path d="M9 19h6" /></svg
-      >Filter</button
-    >
-    <div>{roomsResult.length} rooms found</div>
+    </div>
+    <div>
+      <button onclick={() => modalStore.openModal("filters")} type="button"
+        ><svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="lucide lucide-list-filter-icon lucide-list-filter"
+          ><path d="M2 5h20" /><path d="M6 12h12" /><path d="M9 19h6" /></svg
+        >Filter</button
+      >
+      {#if searchInput !== "" && !typing}
+        <div>{roomsResult.length} rooms found</div>
+      {/if}
+    </div>
     <hr />
   </div>
 
@@ -282,7 +279,7 @@
       margin-block: 0.5rem;
     }
   }
-  label[for="search"] {
+  div.search-container {
     position: relative;
     svg {
       position: absolute;
