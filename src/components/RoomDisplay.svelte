@@ -11,7 +11,9 @@
   const { room, searchInput, classes }: Props = $props();
   const pattern = $derived(new RegExp(`(${searchInput.trim()})`, "gi"));
   function highlightSearch(original: string, pattern: RegExp): string {
-    return original.replaceAll(pattern, (substr) => `<mark>${substr}</mark>`);
+    return searchInput.length < 2
+      ? original
+      : original.replaceAll(pattern, (substr) => `<mark>${substr}</mark>`);
   }
 
   function openRoomData(
@@ -55,6 +57,7 @@
     padding: 1.5rem 1.5rem;
     border: 1px solid hsl(0, 0%, 80%);
     border-radius: 0.5rem;
+    transition: all 0.125s;
     &:hover {
       border-color: hsl(0, 0%, 40%);
     }

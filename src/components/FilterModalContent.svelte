@@ -1,50 +1,98 @@
 <script lang="ts">
-  import { filterStore } from "../lib/store.svelte";
+  import { filterStore, modalStore } from "../lib/store.svelte";
+  import type { IFilterStore } from "../lib/types";
 
   const { buildings, colleges, divisions } = filterStore.getData();
   let type: "buildings" | "colleges" | "divisions" = $state("buildings");
   $inspect(filterStore.filterData.filter);
+
+  function filterButtonClick(
+    filter_type: IFilterStore["type"],
+    filter_name: string,
+  ) {
+    return (
+      e: MouseEvent & {
+        currentTarget: EventTarget & HTMLButtonElement;
+      },
+    ) => {
+      filterStore.setFilter(filter_type, filter_name);
+      modalStore.closeModal();
+    };
+  }
 </script>
 
 <div class="filters-wrap">
-  <button onclick={() => (type = "buildings")}>Buildings</button>
-  <button onclick={() => (type = "colleges")}>Colleges</button>
-  <button onclick={() => (type = "divisions")}>Divisions</button>
-  {#if type === "buildings"}
-    <h2>Buildings</h2>
-    <div class="filters">
+  <div class="filter-controls">
+    <button
+      class:active={type === "buildings"}
+      onclick={() => (type = "buildings")}>Buildings</button
+    >
+    <button
+      class:active={type === "colleges"}
+      onclick={() => (type = "colleges")}>Colleges</button
+    >
+    <button
+      class:active={type === "divisions"}
+      onclick={() => (type = "divisions")}>Divisions</button
+    >
+  </div>
+  <div class="filters">
+    {#if type === "buildings"}
       {#each buildings as { building_name }}
-        <div>{building_name.replace(" Building", "")}</div>
+        <button
+          class="filter-button"
+          onclick={filterButtonClick("building", building_name)}
+          >{building_name.replace(" Building", "")}</button
+        >
       {/each}
-    </div>
-  {:else if type === "colleges"}
-    <h2>Colleges</h2>
-    <div class="filters">
+    {:else if type === "colleges"}
       {#each colleges as { college_name }}
-        <div>{college_name.replace("College of ", "")}</div>
+        <button
+          class="filter-button"
+          onclick={filterButtonClick("college", college_name)}
+          >{college_name.replace("College of ", "")}</button
+        >
       {/each}
-    </div>
-  {:else}
-    <h2>Divisions</h2>
-    <div class="filters">
+    {:else}
       {#each divisions as { division_name }}
         <button
-          onclick={() => filterStore.setFilter("division", division_name)}
+          class="filter-button"
+          onclick={filterButtonClick("division", division_name)}
         >
           {division_name.replace(/(Department\ of |Institute\ of)/, "")}
         </button>
       {/each}
-    </div>
-  {/if}
+    {/if}
+  </div>
 </div>
 
 <style>
   .filters {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem 1rem;
+    gap: 0.5rem;
+  }
+  .filter-controls {
+    margin-bottom: 1rem;
+    button.active {
+      border-color: transparent;
+      background-color: hsl(5, 53%, 32%);
+      color: white;
+    }
   }
   .filters-wrap {
     overflow-y: auto;
+    button {
+      all: unset;
+      font-size: 0.875rem;
+      padding: 0.5rem 1rem;
+      border-radius: 0.25rem;
+      border: 1px solid hsl(0, 0%, 83%);
+      transition: all 0.125s;
+      &:hover:not(.active) {
+        border-color: hsl(5, 53%, 32%);
+        color: hsl(5, 53%, 32%);
+      }
+    }
   }
 </style>

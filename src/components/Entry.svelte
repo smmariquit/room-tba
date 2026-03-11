@@ -29,9 +29,15 @@
   let searchInput: string = $state("");
   let typing: boolean = $state(false);
   let paginateOffset: number = $state(0);
-  let roomsResult: Props["rooms"] = $state([]);
+  let roomsResult: Props["rooms"] = $state(rooms);
   const maxPaginateOffset: number = $derived(
     Math.floor((roomsResult.length - 1) / MAX_DISPLAY_RESULT) + 1,
+  );
+  const paginatedRooms = $derived(
+    roomsResult.slice(
+      paginateOffset * MAX_DISPLAY_RESULT,
+      (paginateOffset + 1) * MAX_DISPLAY_RESULT,
+    ),
   );
   onMount(() => {
     const params = new URLSearchParams(window.location.search);
@@ -107,8 +113,6 @@
           break;
         case "division":
           rooms = rooms.filter((room) => room.divisionName?.includes(filter));
-          console.log(rooms.length);
-        default:
           break;
       }
 
@@ -120,7 +124,7 @@
             divisionName?.toLowerCase().includes(searchTerm) ||
             building?.name.toLowerCase().includes(searchTerm),
         )
-      : [];
+      : rooms;
   }
 
   function handleInput(
@@ -205,21 +209,40 @@
       {/if}
     </div>
     <div>
-      <button onclick={() => modalStore.openModal("filters")} type="button"
-        ><svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="lucide lucide-list-filter-icon lucide-list-filter"
-          ><path d="M2 5h20" /><path d="M6 12h12" /><path d="M9 19h6" /></svg
-        >Filter</button
-      >
+      <div class="search-buttons">
+        <button onclick={() => modalStore.openModal("filters")} type="button"
+          ><svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-list-filter-icon lucide-list-filter"
+            ><path d="M2 5h20" /><path d="M6 12h12" /><path d="M9 19h6" /></svg
+          >Filter</button
+        >
+        {#if filterStore.filterData.filter !== null}
+          <button onclick={() => filterStore.resetFilter()} type="button"
+            >{filterStore.filterData.filter}<svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-x-icon lucide-x"
+              ><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg
+            ></button
+          >
+        {/if}
+      </div>
       {#if searchInput !== "" && !typing}
         <div>{roomsResult.length} rooms found</div>
       {/if}
@@ -228,7 +251,7 @@
   </div>
 
   <div class="room-container">
-    {#each roomsResult.slice(paginateOffset * MAX_DISPLAY_RESULT, (paginateOffset + 1) * MAX_DISPLAY_RESULT) as room}
+    {#each paginatedRooms as room}
       <RoomDisplay
         {room}
         {searchInput}
@@ -239,11 +262,25 @@
 
   {#if roomsResult.length > 20}
     <div class="pagination-controls">
+      <!-- svelte-ignore a11y_consider_explicit_label -->
       <button
         onclick={() => {
           paginateOffset > 0 && paginateOffset--;
           scrollToTop();
-        }}>&LeftAngleBracket;</button
+        }}
+        ><svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="lucide lucide-chevron-left-icon lucide-chevron-left"
+          ><path d="m15 18-6-6 6-6" /></svg
+        ></button
       >
       <div>
         {paginateOffset + 1} of {maxPaginateOffset}
@@ -252,7 +289,20 @@
         onclick={() => {
           paginateOffset + 1 < maxPaginateOffset && paginateOffset++;
           scrollToTop();
-        }}>&RightAngleBracket;</button
+        }}
+        ><svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="lucide lucide-chevron-right-icon lucide-chevron-right"
+          ><path d="m9 18 6-6-6-6" /></svg
+        ></button
       >
     </div>
   {/if}
@@ -291,6 +341,26 @@
       visibility: visible;
     }
   }
+
+  div.search-buttons {
+    margin-top: 0.5rem;
+    display: flex;
+    gap: 1rem;
+    button {
+      all: unset;
+      padding: 0.5rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.125s;
+      border-radius: 0.5rem;
+      border: 1px solid hsl(0, 0%, 87%);
+      &:hover {
+        color: hsl(5, 53%, 32%);
+        border-color: hsl(5, 53%, 32%);
+      }
+    }
+  }
   :global(a) {
     color: unset;
   }
@@ -327,6 +397,22 @@
   }
   .pagination-controls {
     display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 1rem 0;
+    button {
+      all: unset;
+      padding: 0.5rem;
+      display: flex;
+      justify-content: center;
+      background-color: hsl(5, 53%, 32%);
+      border-radius: 1rem;
+      color: white;
+      &:active {
+        background-color: hsl(5, 53%, 20%);
+      }
+    }
   }
   :global(*) {
     margin: unset;
