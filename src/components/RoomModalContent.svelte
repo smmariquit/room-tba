@@ -135,6 +135,7 @@
     overflow-x: hidden;
     scrollbar-width: thin;
     flex: 1;
+    padding: 0 0.5rem;
     border-radius: 0.75rem;
     margin-top: 0.5rem;
   }

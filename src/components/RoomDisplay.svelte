@@ -59,7 +59,11 @@
     border-radius: 0.5rem;
     transition: all 0.125s;
     &:hover {
-      border-color: hsl(0, 0%, 40%);
+      border-color: hsl(5, 53%, 32%);
+      background-color: hsl(5, 53%, 92%);
+      .class-count {
+        background-color: hsl(5, 53%, 95%);
+      }
     }
     h3 {
       font-weight: 600;
@@ -76,13 +80,13 @@
     :global(mark) {
       background-color: hsl(5, 53%, 90%);
     }
-  }
-  .class-count {
-    background: hsl(0, 0%, 95%);
-    border-radius: 0.25rem;
-    padding: 0.25rem 0.5rem;
-    font-size: 0.875rem;
-    margin: 0.25rem;
-    flex: 0 0 auto;
+    .class-count {
+      background: hsl(0, 0%, 95%);
+      border-radius: 0.25rem;
+      padding: 0.25rem 0.5rem;
+      font-size: 0.875rem;
+      margin: 0.25rem;
+      flex: 0 0 auto;
+    }
   }
 </style>

@@ -4,7 +4,6 @@
 
   const { buildings, colleges, divisions } = filterStore.getData();
   let type: "buildings" | "colleges" | "divisions" = $state("buildings");
-  $inspect(filterStore.filterData.filter);
 
   function filterButtonClick(
     filter_type: IFilterStore["type"],
