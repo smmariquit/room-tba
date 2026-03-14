@@ -57,13 +57,18 @@
   }
   .modal-content {
     flex: 0 1 1024px;
-    max-height: 90vh;
+    max-height: 90dvh;
     background-color: white;
     z-index: 100;
     border-radius: 1rem;
     padding: 1.5rem;
     display: flex;
     flex-flow: column nowrap;
+  }
+  @media only screen and (max-width: 500px) {
+    .modal-content {
+      padding: 1rem;
+    }
   }
   .overlay {
     all: unset;
