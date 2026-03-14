@@ -9,8 +9,8 @@
     DivisionData,
     IFilterStore,
     RoomData,
-  } from "../lib/types";
-  import { filterStore, modalStore } from "../lib/store.svelte";
+  } from "../../lib/types";
+  import { filterStore, modalStore } from "../../lib/store.svelte";
   import Banner from "./Banner.svelte";
   import Modal from "./Modal.svelte";
 

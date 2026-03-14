@@ -3,8 +3,8 @@
     getColorForCourse,
     parseScheduleTime,
     ScheduleRenderer,
-  } from "../lib/schedule-renderer";
-  import type { ClassMapValue } from "../lib/types";
+  } from "../../lib/schedule-renderer";
+  import type { ClassMapValue } from "../../lib/types";
 
   interface Props {
     roomCode: string;

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { currentRoomStore, modalStore } from "../lib/store.svelte";
+  import { currentRoomStore, modalStore } from "../../lib/store.svelte";
   import type { RoomData, ClassMapValue } from "../lib/types";
 
   type Props = {

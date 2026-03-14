@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { filterStore, modalStore } from "../lib/store.svelte";
-  import type { IFilterStore } from "../lib/types";
+  import { filterStore, modalStore } from "../../lib/store.svelte";
+  import type { IFilterStore } from "../../lib/types";
 
   const { buildings, colleges, divisions } = filterStore.getData();
   let type: "buildings" | "colleges" | "divisions" = $state("buildings");

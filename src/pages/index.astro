@@ -1,11 +1,10 @@
 ---
-import { Rooms } from "../components/Rooms.tsx";
 
 import { db } from "../lib/db.ts";
 import { buildingsTable, classesTable, collegesTable, divisionsTable, roomsTable } from "../../drizzle/schema";
-import Entry from "../components/Entry.svelte";
+import Entry from "../components/svelte/Entry.svelte";
 import Layout from "../layouts/Layout.astro";
-import { eq, getTableColumns } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 
 const rooms = await db
   .select({

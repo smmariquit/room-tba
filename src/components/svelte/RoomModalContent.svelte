@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { modalStore, currentRoomStore } from "../lib/store.svelte";
+  import { modalStore, currentRoomStore } from "../../lib/store.svelte";
   import Classes from "./Classes.svelte";
   import ScheduleRender from "./ScheduleRender.svelte";
 
