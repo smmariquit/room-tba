@@ -5,6 +5,13 @@ import svelte from "@astrojs/svelte";
 import AstroPWA from "@vite-pwa/astro";
 // https://astro.build/config
 export default defineConfig({
+  vite: {
+    build: {
+      rollupOptions: {
+        external: ["es-toolkit"]
+      }
+    }
+  },
   integrations: [
     react(),
     svelte(),
