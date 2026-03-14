@@ -1,46 +1,44 @@
-# Astro Starter Kit: Basics
+# Room TBA - UPLB Room Finder
 
-```sh
-bun create astro@latest -- --template basics
+A web app to help UPLB students find rooms on campus. "Saan sa UPLB ang ___?" Finally answered.
+
+## Features
+
+- Search rooms by name, building, college, division, or course code
+- Filter rooms by Building, College, or Division
+- View room schedules with visual timetable display
+- Building information with directions and OpenStreetMap integration
+- Room-specific directions for commonly asked-about rooms
+- Mobile-responsive design with accessibility features
+
+## Data Source
+
+Data is sourced from UPLB AMIS for 2nd Semester AY 2025-2026.
+
+## Development
+
+To run locally, open `index.html` in a browser or run a local server:
+```
+python -m http.server 8080
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Files
 
-## 🚀 Project Structure
+- `index.html` - Main web app
+- `schedule-renderer.js` - Schedule rendering logic
+- `app_data.json` - Processed data for the web app (buildings, rooms, classes)
+- `changelog.html` - Version history
 
-Inside of your Astro project, you'll see the following folders and files:
+## License
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
-```
+MIT
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+## Author
 
-## 🧞 Commands
+Developed by [Simonee Ezekiel Mariquit](https://stimmie.dev)
 
-All commands are run from the root of the project, from a terminal:
+## Contributors
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `bun install`             | Installs dependencies                            |
-| `bun dev`             | Starts local dev server at `localhost:4321`      |
-| `bun build`           | Build your production site to `./dist/`          |
-| `bun preview`         | Preview your build locally, before deploying     |
-| `bun astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `bun astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+- **Niño Anthony Marmeto** - Helped with Electrical Engineering building information
+- **Rosh Almario** - Helped with Institute of Chemistry room directions
+- **Ken Ramiscal** - Helped with Developing the UI and offline support

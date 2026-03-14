@@ -244,7 +244,7 @@
         {/if}
       </div>
       {#if searchInput !== "" && !typing}
-        <div>{roomsResult.length} rooms found</div>
+        <div class="rooms-found">{roomsResult.length} rooms found</div>
       {/if}
     </div>
     <hr />
@@ -371,6 +371,11 @@
   }
   #header {
     margin-bottom: 1rem;
+  }
+  .rooms-found {
+    color: hsl(0, 0%, 30%);
+    margin: 0.5rem 0;
+    font-size: 0.875rem;
   }
   input[type="search"] {
     display: block;

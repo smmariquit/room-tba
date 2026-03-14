@@ -1,0 +1,36 @@
+---
+interface Props {
+  name: string;
+  img_url?: string;
+  gh_url?: string;
+  img_alt?: string;
+}
+const { name, img_url, gh_url, img_alt } = Astro.props;
+---
+
+<a class="contributor-profile" href={gh_url} target="_blank">
+  <img src={img_url ?? "/profile.svg"} alt={img_alt} />
+  <div>{name}</div>
+</a>
+
+<style>
+  img {
+    width:2.5rem;
+    aspect-ratio: 1/1;
+    border:1px solid #aaa;
+    border-radius:2rem;
+  }
+  .contributor-profile {
+    display:flex;
+    font-size:.875rem;
+    gap:.5rem;
+    align-items:center;
+    font-weight:600;
+  }
+  a[href] {
+    text-decoration: none;
+    &:hover {
+      color: hsl(5, 53%, 32%);
+    }
+  }
+</style>
