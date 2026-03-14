@@ -143,7 +143,9 @@
 <Banner
   >⚠️ <strong>This app is in active development.</strong> There might be
   mistakes in room locations and building information. Please
-  <a href="mailto:semariquit@gmail.com"><strong>report any errors!</strong></a>
+  <a href="https://forms.gle/nVUMuuZgfW1HgXc98"
+    ><strong>report any errors!</strong></a
+  >
 </Banner>
 <main>
   <div id="header">
