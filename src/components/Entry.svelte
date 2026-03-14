@@ -268,6 +268,7 @@
           paginateOffset > 0 && paginateOffset--;
           scrollToTop();
         }}
+        disabled={paginateOffset === 0}
         ><svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -290,6 +291,7 @@
           paginateOffset + 1 < maxPaginateOffset && paginateOffset++;
           scrollToTop();
         }}
+        disabled={paginateOffset === maxPaginateOffset - 1}
         ><svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -365,9 +367,6 @@
     color: unset;
   }
   main {
-    padding: 2rem;
-    max-width: 64rem;
-    margin-inline: auto;
     margin-top: 3rem;
   }
   #header {
@@ -411,6 +410,10 @@
       color: white;
       &:active {
         background-color: hsl(5, 53%, 20%);
+      }
+      &:disabled {
+        opacity: 0.5;
+        pointer-events: none;
       }
     }
   }
