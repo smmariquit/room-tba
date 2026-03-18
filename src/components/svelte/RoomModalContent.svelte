@@ -23,9 +23,15 @@
       {currentRoomStore.roomData?.collegeName} •
       {currentRoomStore.roomData?.divisionName}
     </p>
-    <p class="room-modal__directions">
-      {currentRoomStore.roomData?.directions ?? ""}
-    </p>
+    {#if currentRoomStore.roomData?.directions}
+      <p class="room-modal__directions">
+        {currentRoomStore.roomData.directions}
+      </p>
+    {:else}
+      <p class="room-modal__directions no-directions">
+        No directions? <a href="https://docs.google.com/forms/d/e/1FAIpQLSdius5C7OyC1klraq71fFwWPZNvNk_iDLFyhCNir_ccC07Q7Q/viewform?usp=dialog" target="_blank" rel="noreferrer"><strong>Contribute to room-tba</strong></a>
+      </p>
+    {/if}
   </div>
   <button onclick={() => modalStore.closeModal()} aria-label="close-modal">
     <svg
@@ -47,9 +53,15 @@
   <hr />
   <div class="building-note">
     <h3>How to get to {currentRoomStore.roomData?.building?.name}</h3>
-    <p class="building-note__directions">
-      {currentRoomStore.roomData?.building?.directions}
-    </p>
+    {#if currentRoomStore.roomData?.building?.directions}
+      <p class="building-note__directions">
+        {currentRoomStore.roomData.building.directions}
+      </p>
+    {:else}
+      <p class="building-note__directions no-directions">
+        No directions? <a href="https://docs.google.com/forms/d/e/1FAIpQLSdius5C7OyC1klraq71fFwWPZNvNk_iDLFyhCNir_ccC07Q7Q/viewform?usp=dialog" target="_blank" rel="noreferrer"><strong>Contribute to room-tba</strong></a>
+      </p>
+    {/if}
   </div>
   {#if lat !== null && lon !== null}
     <div class="map-container">
