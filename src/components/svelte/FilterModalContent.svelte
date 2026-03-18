@@ -24,7 +24,8 @@
   <div class="filter-controls">
     <button
       class:active={type === "buildings"}
-      onclick={() => (type = "buildings")}>Buildings</button
+      onclick={() => (type = "buildings")}
+      id="building-button">Buildings</button
     >
     <button
       class:active={type === "colleges"}
@@ -88,7 +89,8 @@
       border-radius: 0.25rem;
       border: 1px solid hsl(0, 0%, 83%);
       transition: all 0.125s;
-      &:hover:not(.active) {
+      &:hover:not(.active),
+      &:focus:not(.active) {
         border-color: hsl(5, 53%, 32%);
         color: hsl(5, 53%, 32%);
       }

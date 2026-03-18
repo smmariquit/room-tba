@@ -45,7 +45,9 @@
     </p>
   {:else}
     <p class="directions no-directions">
-      No directions? <a href="https://docs.google.com/forms/d/e/1FAIpQLSdius5C7OyC1klraq71fFwWPZNvNk_iDLFyhCNir_ccC07Q7Q/viewform?usp=dialog" target="_blank" rel="noreferrer"><strong>Contribute to room-tba</strong></a>
+      No directions? <a href="/contribute" target="_blank" rel="noreferrer"
+        ><strong>Contribute to room-tba</strong></a
+      >
     </p>
   {/if}
 </button>
@@ -64,7 +66,8 @@
     border: 1px solid hsl(0, 0%, 80%);
     border-radius: 0.5rem;
     transition: all 0.125s;
-    &:hover {
+    &:hover,
+    &:focus {
       border-color: hsl(5, 53%, 32%);
       background-color: hsl(5, 53%, 92%);
       .class-count {
@@ -93,6 +96,18 @@
       font-size: 0.875rem;
       margin: 0.25rem;
       flex: 0 0 auto;
+    }
+    .no-directions a {
+      color: hsl(5, 53%, 32%);
+      outline: none;
+      transition: all 0.2s;
+      padding: 0.125rem 0.25rem;
+      &:focus {
+        background-color: hsl(5, 53%, 32%);
+        color: white;
+        border-radius: 4px;
+        text-decoration: none;
+      }
     }
   }
 </style>

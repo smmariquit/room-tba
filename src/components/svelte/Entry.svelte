@@ -153,7 +153,7 @@
     ><strong>report any errors!</strong></a
   >
 </Banner>
-<main>
+<main id="main-content">
   <div id="header">
     <div class="heading">
       <img src="/carillon.jpg" alt="A tall antique building" />
@@ -218,7 +218,10 @@
     </div>
     <div>
       <div class="search-buttons">
-        <button onclick={() => modalStore.openModal("filters")} type="button"
+        <a
+          onclick={() => modalStore.openModal("filters")}
+          type="button"
+          href="#building-button"
           ><svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -231,7 +234,7 @@
             stroke-linejoin="round"
             class="lucide lucide-list-filter-icon lucide-list-filter"
             ><path d="M2 5h20" /><path d="M6 12h12" /><path d="M9 19h6" /></svg
-          >Filter</button
+          >Filter</a
         >
         {#if filterStore.filterData.filter !== null}
           <button onclick={() => filterStore.resetFilter()} type="button"
@@ -356,7 +359,8 @@
     margin-top: 0.5rem;
     display: flex;
     gap: 1rem;
-    button {
+    button,
+    a {
       all: unset;
       padding: 0.5rem 1rem;
       display: flex;
@@ -365,9 +369,14 @@
       transition: all 0.125s;
       border-radius: 0.5rem;
       border: 1px solid hsl(0, 0%, 87%);
-      &:hover {
+      &:hover,
+      &:focus {
         color: hsl(5, 53%, 32%);
         border-color: hsl(5, 53%, 32%);
+      }
+      &:focus {
+        outline: 2px solid hsl(5, 53%, 32%);
+        outline-offset: 3px;
       }
     }
   }
