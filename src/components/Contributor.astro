@@ -9,8 +9,7 @@ const { name, img_url, gh_url, img_alt } = Astro.props;
 ---
 
 <a class="contributor-profile" href={gh_url} target="_blank">
-  <img src={img_url ?? "/profile.svg"} alt={img_alt} />
-  <div>{name}</div>
+  <img src={img_url ?? "/profile.svg"} alt={img_alt} title={name} />
 </a>
 
 <style>

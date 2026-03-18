@@ -11,8 +11,14 @@ export default defineConfig({
     AstroPWA({
       registerType: "autoUpdate",
       workbox: {
-        globPatterns: ["**/*.{js,css,html,ico,png,svg,webmanifest,json}"],
+        globPatterns: ["**/*.{js,css,html,ico,png,svg,webmanifest,json,jpg}"],
       },
+      devOptions: {
+        enabled: true
+      }
     }),
   ],
+  redirects: {
+    "/contribute": "https://forms.gle/nVUMuuZgfW1HgXc98"
+  }
 });

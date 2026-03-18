@@ -56,7 +56,13 @@
             )
           : [];
     }
-
+    $effect(() => {
+      if (modalStore.open) {
+        document.body.style.overflow = "hidden";
+      } else {
+        document.body.style.overflow = "visible";
+      }
+    });
     filterStore.setData([buildings, colleges, divisions]);
     window.addEventListener("keydown", windowKeyDown);
     return () => {
