@@ -51,6 +51,13 @@ classes.forEach(classData => {
     classesDict.get(roomCode)?.push(classData)
   }
 })
+
+rooms.sort((a, b) => {
+  const countA = classesDict.get(a.code)?.length ?? 0;
+  const countB = classesDict.get(b.code)?.length ?? 0;
+  return countB - countA;
+});
+
 ---
 <Layout>
   <Entry rooms={rooms} classesMap={classesDict} buildings={buildings}
