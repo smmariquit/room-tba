@@ -1,6 +1,6 @@
 <script lang="ts">
   import { currentRoomStore, modalStore } from "../../lib/store.svelte";
-  import type { RoomData, ClassMapValue } from "../lib/types";
+  import type { RoomData, ClassMapValue } from "../../lib/types";
 
   type Props = {
     room: RoomData;
@@ -22,6 +22,8 @@
     currentRoomStore.updateClasses(classes);
     currentRoomStore.updateRoom(room);
     modalStore.openModal("room-details");
+    window.location.hash = "#modal-content";
+    // window.history.pushState();
   }
 </script>
 
@@ -45,7 +47,8 @@
     </p>
   {:else}
     <p class="directions no-directions">
-      No directions? <a href="/contribute" target="_blank" rel="noreferrer"
+      <em>No directions?</em>
+      <a href="/contribute" target="_blank" rel="noreferrer"
         ><strong>Contribute to room-tba</strong></a
       >
     </p>
@@ -97,16 +100,19 @@
       margin: 0.25rem;
       flex: 0 0 auto;
     }
-    .no-directions a {
-      color: hsl(5, 53%, 32%);
-      outline: none;
-      transition: all 0.2s;
-      padding: 0.125rem 0.25rem;
-      &:focus {
-        background-color: hsl(5, 53%, 32%);
-        color: white;
-        border-radius: 4px;
-        text-decoration: none;
+    .no-directions {
+      color: hsl(0, 0%, 60%);
+      a {
+        color: hsl(5, 53%, 32%);
+        outline: none;
+        transition: all 0.2s;
+        padding: 0.125rem 0.25rem;
+        &:focus {
+          background-color: hsl(5, 53%, 32%);
+          color: white;
+          border-radius: 4px;
+          text-decoration: none;
+        }
       }
     }
   }

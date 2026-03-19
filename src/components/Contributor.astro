@@ -1,4 +1,6 @@
 ---
+import { divide } from "es-toolkit/compat";
+
 interface Props {
   name: string;
   img_url?: string;
@@ -8,23 +10,35 @@ interface Props {
 const { name, img_url, gh_url, img_alt } = Astro.props;
 ---
 
-<a class="contributor-profile" href={gh_url} target="_blank">
-  <img src={img_url ?? "/profile.svg"} alt={img_alt} title={name} />
-</a>
+{
+  gh_url ? (
+    <a
+      class="contributor-profile tooltip"
+      href={gh_url ?? "about:blank"}
+      target="_blank"
+    >
+      <img src={img_url ?? "/profile.svg"} alt={img_alt} title={name} />
+    </a>
+  ) : (
+    <div class="contributor-profile tooltip">
+      <img src={img_url ?? "/profile.svg"} alt={img_alt} title={name} />
+    </div>
+  )
+}
 
 <style>
   img {
-    width:2.5rem;
+    width: 2.5rem;
     aspect-ratio: 1/1;
-    border:1px solid #aaa;
-    border-radius:2rem;
+    border: 1px solid #aaa;
+    border-radius: 2rem;
   }
   .contributor-profile {
-    display:flex;
-    font-size:.875rem;
-    gap:.5rem;
-    align-items:center;
-    font-weight:600;
+    display: flex;
+    font-size: 0.875rem;
+    gap: 0.5rem;
+    align-items: center;
+    font-weight: 600;
   }
   a[href] {
     text-decoration: none;
