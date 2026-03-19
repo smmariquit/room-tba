@@ -1,4 +1,5 @@
 ---
+import { contributors } from "../constants/contributors";
 import Contributor from "./Contributor.astro";
 ---
 
@@ -32,24 +33,7 @@ import Contributor from "./Contributor.astro";
   <div class="contributor-infos">
     <h3>Contributors</h3>
     <div class="contributor-profiles">
-      <Contributor
-        name={"Simonee Ezekiel Mariquit"}
-        gh_url="https://github.com/smmariquit"
-        img_alt="Amogus"
-        img_url="https://avatars.githubusercontent.com/u/137183321?v=4"
-      />
-      <Contributor
-        name={"Ken Daniele Ramiscal"}
-        gh_url="https://github.com/Kenramiscal1106"
-        img_alt="Student in a blue background"
-        img_url="https://avatars.githubusercontent.com/u/89060408?v=4"
-      />
-      <Contributor
-        name={"Niño Anthony Marmeto"}
-      />
-      <Contributor
-        name={"Rosh Almario"}
-      />
+      {contributors.map((contributor) => <Contributor {...contributor} />)}
     </div>
   </div>
 </footer>
@@ -58,11 +42,11 @@ import Contributor from "./Contributor.astro";
   .contributor-infos {
     display: flex;
     flex-direction: column;
-    gap: .5rem;
+    gap: 0.5rem;
   }
   .contributor-profiles {
     display: flex;
-    flex-wrap:wrap;
+    flex-wrap: wrap;
     gap: 0.5rem;
   }
   .data-updated {
@@ -71,16 +55,15 @@ import Contributor from "./Contributor.astro";
     }
   }
   .website-version {
-    display:flex;
+    display: flex;
     align-items: center;
-    gap:.25rem;
+    gap: 0.25rem;
   }
   .website-data {
-    display:flex;
-    align-items:center;
-    gap:1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
     font-size: 0.875rem;
-
   }
   footer {
     display: flex;
@@ -89,7 +72,12 @@ import Contributor from "./Contributor.astro";
 
     h3 {
       font-size: 1.125rem;
-      font-weight:600;
+      font-weight: 600;
+    }
+  }
+  @media screen and (max-width: 768px) {
+    .contributor-profiles {
+      flex-direction: column;
     }
   }
 </style>

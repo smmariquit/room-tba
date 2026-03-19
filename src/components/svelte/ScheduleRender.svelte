@@ -26,7 +26,6 @@
       schedule.forEach((schedStr) => {
         const parsed = parseScheduleTime(schedStr);
         if (!parsed) {
-          console.error("unexpected parsing of schedule time");
           return;
         }
         const color = getColorForCourse(sectionClass.courseCode);

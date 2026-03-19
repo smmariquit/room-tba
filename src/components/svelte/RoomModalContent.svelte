@@ -29,7 +29,11 @@
       </p>
     {:else}
       <p class="room-modal__directions no-directions">
-        No directions? <a href="https://docs.google.com/forms/d/e/1FAIpQLSdius5C7OyC1klraq71fFwWPZNvNk_iDLFyhCNir_ccC07Q7Q/viewform?usp=dialog" target="_blank" rel="noreferrer"><strong>Contribute to room-tba</strong></a>
+        No directions? <a
+          href="https://docs.google.com/forms/d/e/1FAIpQLSdius5C7OyC1klraq71fFwWPZNvNk_iDLFyhCNir_ccC07Q7Q/viewform?usp=dialog"
+          target="_blank"
+          rel="noreferrer"><strong>Contribute to room-tba</strong></a
+        >
       </p>
     {/if}
   </div>
@@ -59,7 +63,11 @@
       </p>
     {:else}
       <p class="building-note__directions no-directions">
-        No directions? <a href="https://docs.google.com/forms/d/e/1FAIpQLSdius5C7OyC1klraq71fFwWPZNvNk_iDLFyhCNir_ccC07Q7Q/viewform?usp=dialog" target="_blank" rel="noreferrer"><strong>Contribute to room-tba</strong></a>
+        No directions? <a
+          href="https://docs.google.com/forms/d/e/1FAIpQLSdius5C7OyC1klraq71fFwWPZNvNk_iDLFyhCNir_ccC07Q7Q/viewform?usp=dialog"
+          target="_blank"
+          rel="noreferrer"><strong>Contribute to room-tba</strong></a
+        >
       </p>
     {/if}
   </div>

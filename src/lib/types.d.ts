@@ -79,3 +79,9 @@ interface IFilterStore {
   colleges: CollegeData[];
   divisions: DivisionData[];
 }
+
+interface ContributorInfo {
+  name: string;
+  href?: string;
+  img_alt?: string;
+}
