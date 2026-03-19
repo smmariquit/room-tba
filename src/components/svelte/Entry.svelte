@@ -129,9 +129,9 @@
             collegeName?.toLowerCase().includes(searchTerm) ||
             divisionName?.toLowerCase().includes(searchTerm) ||
             building?.name.toLowerCase().includes(searchTerm) ||
-            classesMap.get(code)?.some(
-              (c) => c.courseCode.toLowerCase().includes(searchTerm)
-            ),
+            classesMap
+              .get(code)
+              ?.some((c) => c.courseCode.toLowerCase().includes(searchTerm)),
         )
       : rooms;
   }
@@ -373,11 +373,11 @@
       border-radius: 0.5rem;
       border: 1px solid hsl(0, 0%, 87%);
       &:hover,
-      &:focus {
+      &:focus-visible {
         color: hsl(5, 53%, 32%);
         border-color: hsl(5, 53%, 32%);
       }
-      &:focus {
+      &:focus-visible {
         outline: 2px solid hsl(5, 53%, 32%);
         outline-offset: 3px;
       }
@@ -426,7 +426,6 @@
     gap: 0.5rem;
     margin: 1rem 0;
     button {
-      all: unset;
       padding: 0.5rem;
       display: flex;
       justify-content: center;

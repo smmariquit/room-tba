@@ -48,7 +48,7 @@
       border 0.15s,
       background-color 0.1s;
     &:hover,
-    &:focus {
+    &:focus-visible {
       border: 1px solid hsl(5, 53%, 32%);
       background-color: hsl(5, 53%, 90%);
     }
