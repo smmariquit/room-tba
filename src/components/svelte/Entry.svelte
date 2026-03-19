@@ -56,18 +56,23 @@
             )
           : [];
     }
-    $effect(() => {
-      if (modalStore.open) {
-        document.body.style.overflow = "hidden";
-      } else {
-        document.body.style.overflow = "visible";
-      }
-    });
     filterStore.setData([buildings, colleges, divisions]);
     window.addEventListener("keydown", windowKeyDown);
     return () => {
       window.removeEventListener("keydown", windowKeyDown);
     };
+  });
+
+  $effect(() => {
+    if (modalStore.open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "visible";
+    }
+  });
+
+  $effect(() => {
+    debounceSearch(searchInput, filterStore.filterData);
   });
 
   const debounceSearch = debounce(
@@ -84,10 +89,6 @@
     },
     500,
   );
-
-  $effect(() => {
-    debounceSearch(searchInput, filterStore.filterData);
-  });
 
   function windowKeyDown(ev: KeyboardEvent) {
     if (
@@ -141,6 +142,7 @@
   ) {
     typing = true;
   }
+
   function scrollToTop() {
     window.scrollTo({
       top: 48,
@@ -221,10 +223,12 @@
     </div>
     <div>
       <div class="search-buttons">
-        <a
-          onclick={() => modalStore.openModal("filters")}
+        <!-- // href="#building-button" -->
+        <button
+          onclick={() => {
+            modalStore.openModal("filters");
+          }}
           type="button"
-          href="#building-button"
           ><svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -237,7 +241,7 @@
             stroke-linejoin="round"
             class="lucide lucide-list-filter-icon lucide-list-filter"
             ><path d="M2 5h20" /><path d="M6 12h12" /><path d="M9 19h6" /></svg
-          >Filter</a
+          >Filter</button
         >
         {#if filterStore.filterData.filter !== null}
           <button onclick={() => filterStore.resetFilter()} type="button"
