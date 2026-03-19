@@ -1,35 +1,42 @@
 ---
-import { divide } from "es-toolkit/compat";
+import type { ContributorInfo } from "../lib/types";
 
-interface Props {
-  name: string;
-  img_url?: string;
-  gh_url?: string;
-  img_alt?: string;
-}
-const { name, img_url, gh_url, img_alt } = Astro.props;
+type Props = Record<string, any>;
+const { name, href, img_alt }: ContributorInfo = Astro.props;
+const img_url = name.toLowerCase().split(" ").join("-");
+/// <references />
 ---
 
 {
-  gh_url ? (
+  href ? (
     <a
       class="contributor-profile tooltip"
-      href={gh_url ?? "about:blank"}
+      href={href ?? "about:blank"}
       target="_blank"
+      data-tooltip={name}
     >
-      <img src={img_url ?? "/profile.svg"} alt={img_alt} title={name} />
+      <object data={`/contributors/images/${img_url}.png`} type="image/jpeg">
+        <img src={"/profile.svg"} alt={img_alt} title={name} />
+      </object>
+      <div>{name}</div>
     </a>
   ) : (
-    <div class="contributor-profile tooltip">
-      <img src={img_url ?? "/profile.svg"} alt={img_alt} title={name} />
+    <div class="contributor-profile tooltip" data-tooltip={name}>
+      <object data={`/contributors/images/${img_url}.png`} type="image/png">
+        <img src={"/profile.svg"} alt={img_alt} title={name} />
+      </object>
+      <div>{name}</div>
     </div>
   )
 }
 
 <style>
+  object,
   img {
+    margin: unset;
+    padding: unset;
     width: 2.5rem;
-    aspect-ratio: 1/1;
+    height: 2.5rem;
     border: 1px solid #aaa;
     border-radius: 2rem;
   }
@@ -39,11 +46,59 @@ const { name, img_url, gh_url, img_alt } = Astro.props;
     gap: 0.5rem;
     align-items: center;
     font-weight: 600;
+    > div {
+      display: none;
+    }
+  }
+  .tooltip {
+    position: relative;
+    &::before {
+      content: attr(data-tooltip);
+      position: absolute;
+      top: 0;
+      left: 0;
+      translate: 0 calc(-1 * (100% + 10px));
+      padding: 0.25rem 0.5rem;
+      background-color: hsla(0, 0%, 10%, 0.5);
+      color: white;
+      border-radius: 8px;
+      pointer-events: none;
+      opacity: 0;
+      width: max-content;
+      transition:opacity .125s;
+    }
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: min(50%, 1.25rem);
+      pointer-events:none;
+      translate: 0 -100% ;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      opacity: 0;
+      transition:opacity .125s;
+      border-color: hsla(0, 0%, 10%, 0.5) transparent transparent transparent;
+    }
+    &:hover::before, &:hover::after {
+      opacity: initial;
+    }
   }
   a[href] {
     text-decoration: none;
     &:hover {
       color: hsl(5, 53%, 32%);
+    }
+  }
+  @media screen and (max-width: 768px) {
+    .contributor-profile {
+      > div {
+        display: initial;
+      }
+    }
+    .tooltip::after, .tooltip::before {
+      display:none;
     }
   }
 </style>
