@@ -128,7 +128,10 @@
             code.toLowerCase().includes(searchTerm) ||
             collegeName?.toLowerCase().includes(searchTerm) ||
             divisionName?.toLowerCase().includes(searchTerm) ||
-            building?.name.toLowerCase().includes(searchTerm),
+            building?.name.toLowerCase().includes(searchTerm) ||
+            classesMap.get(code)?.some(
+              (c) => c.courseCode.toLowerCase().includes(searchTerm)
+            ),
         )
       : rooms;
   }

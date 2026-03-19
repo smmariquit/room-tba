@@ -74,6 +74,14 @@
           ?.name}"
       ></iframe>
     </div>
+    <div class="map-links">
+      <a href="https://www.google.com/maps?q={lat},{lon}" target="_blank" rel="noreferrer">
+        Open in Google Maps
+      </a>
+      <a href="https://www.openstreetmap.org/?mlat={lat}&mlon={lon}#map=18/{lat}/{lon}" target="_blank" rel="norefferer">
+        Open in OpenStreetMap
+      </a>
+    </div>  
   {/if}
   <hr />
   <div class="room-modal__schedule">
@@ -167,5 +175,27 @@
     p {
       font-size: 0.875rem;
     }
+  }
+
+  .map-links {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .map-links a {
+    font-size: 0.875rem;
+    color: hsl(5, 53%, 32%);
+    text-decoration: none;
+    padding: 0.375rem 0.75rem;
+    border: 1px solid hsl(5, 53%, 32%);
+    border-radius: 0.375rem;
+    transition: all 0.15s;
+  }
+
+  .map-links a:hover{
+    background-color: hsl(5, 50%, 32%);
+    color: wheat;
   }
 </style>
