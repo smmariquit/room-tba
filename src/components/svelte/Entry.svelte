@@ -334,7 +334,7 @@
   #hero-header {
     width: 100%;
     height: 50vh;
-    background-image: linear-gradient(rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0.75)), url('/uplb-bg.webp');
+    background-image: linear-gradient(hsla(5, 53%, 32%, 0.65), hsla(5, 53%, 32%, 0.65)), url('/uplb-bg.webp');
     background-size: cover;
     background-position: center;
     display: flex;
@@ -343,6 +343,7 @@
     justify-content: center;
     padding: 2rem;
     text-align: center;
+    border-bottom: 1px solid hsl(5, 53%, 32%);
   }
   
   .hero-content {
@@ -368,12 +369,13 @@
     h2 {
       font-size: 2.5rem;
       font-weight: bold;
+      color: white;
     }
   }
 
   .subtitle {
     font-size: 1.125rem;
-    color: #4a4a4a;
+    color: hsla(0, 0%, 100%, 0.9);
   }
 
   .search-filter-row {
@@ -412,12 +414,12 @@
       transition: all 0.125s;
       border-radius: 0.5rem;
       border: 1px solid hsl(0, 0%, 87%);
+      color: hsl(5, 53%, 32%);
       background-color: white;
       cursor: pointer;
       &:hover,
       &:focus {
-        color: hsl(5, 53%, 32%);
-        border-color: hsl(5, 53%, 32%);
+        background-color: hsla(5, 53%, 32%, 0.05);
       }
       &:focus {
         outline: 2px solid hsl(5, 53%, 32%);
@@ -465,16 +467,17 @@
     width: 100%;
     padding: 0.75rem 1.5rem;
     font-size: 1rem;
-    border: 2px solid hsl(0, 0%, 90%);
+    border: 1px solid hsl(0, 0%, 87%);
     border-radius: 0.5rem;
     padding-left: 2.5rem;
     transition: all 0.175s;
     outline: none;
     &:hover {
-      border-color: hsl(0, 0%, 70%);
+      border-color: hsl(5, 53%, 20%);
     }
     &:focus {
       border-color: #7b2d26;
+      box-shadow: 0 0 0 3px hsla(5, 53%, 32%, 0.2);
     }
   }
   .room-container {
