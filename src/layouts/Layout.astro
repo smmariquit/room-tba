@@ -16,9 +16,11 @@ import ReloadPrompt from "../components/ReloadPrompt.astro";
   </head>
   <body>
     <slot />
-    <hr />
-    <Footer />
-    <ReloadPrompt />
+    <div class="container">
+      <hr />
+      <Footer />
+      <ReloadPrompt />
+    </div>
   </body>
 </html>
 
@@ -29,14 +31,14 @@ import ReloadPrompt from "../components/ReloadPrompt.astro";
     width: 100%;
     min-height: 100%;
   }
-  body {
+  .container {
     padding: 2rem;
     max-width: 64rem;
     margin-inline: auto;
   }
 
   @media only screen and (max-width:600px) {
-    body {
+    .container {
       padding:1rem;
     }
   }

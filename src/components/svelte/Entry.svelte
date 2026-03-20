@@ -156,70 +156,70 @@
     ><strong>report any errors!</strong></a
   >
 </Banner>
-<main id="main-content">
-  <div id="header">
+<header id="hero-header">
+  <div class="hero-content">
     <div class="heading">
       <img src="/carillon.jpg" alt="A tall antique building" />
-      <div>
-        <h2>Room TBA</h2>
-        <p>"Saan sa UPLB ang ___?" Finally answered.</p>
+      <h2>Room TBA</h2>
+    </div>
+    <p class="subtitle">"Saan sa UPLB ang ___?" Finally answered.</p>
+    
+    <div class="search-filter-row">
+      <div class="search-container">
+        <input
+          type="search"
+          id="search"
+          bind:this={searchElement}
+          bind:value={searchInput}
+          class={typing ? "typing" : ""}
+          oninput={handleInput}
+          placeholder="Search room code, building, division, or course code (e.g., CMSC 21)"
+        />
+        {#if typing}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 200 200"
+            width="20"
+            height="20"
+            class="loading-icon"
+          >
+            <circle stroke-width="17" r="15" cx="40" cy="65">
+              <animate
+                attributeName="cy"
+                calcMode="spline"
+                dur="0.8"
+                values="65;135;65;"
+                keySplines=".5 0 .5 1;.5 0 .5 1"
+                repeatCount="indefinite"
+                begin="-.4"
+              ></animate>
+            </circle>
+            <circle stroke-width="17" r="15" cx="100" cy="65">
+              <animate
+                attributeName="cy"
+                calcMode="spline"
+                dur="0.8"
+                values="65;135;65;"
+                keySplines=".5 0 .5 1;.5 0 .5 1"
+                repeatCount="indefinite"
+                begin="-.2"
+              ></animate>
+            </circle>
+            <circle stroke-width="17" r="15" cx="160" cy="65">
+              <animate
+                attributeName="cy"
+                calcMode="spline"
+                dur="0.8"
+                values="65;135;65;"
+                keySplines=".5 0 .5 1;.5 0 .5 1"
+                repeatCount="indefinite"
+                begin="0"
+              ></animate>
+            </circle>
+          </svg>
+        {/if}
       </div>
-    </div>
-    <div class="search-container">
-      <input
-        type="search"
-        id="search"
-        bind:this={searchElement}
-        bind:value={searchInput}
-        class={typing ? "typing" : ""}
-        oninput={handleInput}
-        placeholder="Search room code, building, division, or course code (e.g., CMSC 21)"
-      />
-      {#if typing}
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 200 200"
-          width="20"
-          height="20"
-          class="loading-icon"
-        >
-          <circle stroke-width="17" r="15" cx="40" cy="65">
-            <animate
-              attributeName="cy"
-              calcMode="spline"
-              dur="0.8"
-              values="65;135;65;"
-              keySplines=".5 0 .5 1;.5 0 .5 1"
-              repeatCount="indefinite"
-              begin="-.4"
-            ></animate>
-          </circle>
-          <circle stroke-width="17" r="15" cx="100" cy="65">
-            <animate
-              attributeName="cy"
-              calcMode="spline"
-              dur="0.8"
-              values="65;135;65;"
-              keySplines=".5 0 .5 1;.5 0 .5 1"
-              repeatCount="indefinite"
-              begin="-.2"
-            ></animate>
-          </circle>
-          <circle stroke-width="17" r="15" cx="160" cy="65">
-            <animate
-              attributeName="cy"
-              calcMode="spline"
-              dur="0.8"
-              values="65;135;65;"
-              keySplines=".5 0 .5 1;.5 0 .5 1"
-              repeatCount="indefinite"
-              begin="0"
-            ></animate>
-          </circle>
-        </svg>
-      {/if}
-    </div>
-    <div>
+
       <div class="search-buttons">
         <a
           onclick={() => modalStore.openModal("filters")}
@@ -257,11 +257,15 @@
           >
         {/if}
       </div>
-      {#if searchInput !== "" && !typing}
-        <div class="rooms-found">{roomsResult.length} rooms found</div>
-      {/if}
     </div>
-    <hr />
+  </div>
+</header>
+
+<main id="main-content" class="container">
+  <div class="rooms-header-info">
+    {#if searchInput !== "" && !typing}
+      <div class="rooms-found">{roomsResult.length} rooms found</div>
+    {/if}
   </div>
 
   <div class="room-container">
@@ -306,6 +310,7 @@
           scrollToTop();
         }}
         disabled={paginateOffset === maxPaginateOffset - 1}
+        aria-label='next'
         ><svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -326,27 +331,63 @@
 </main>
 
 <style>
-  #header {
-    margin-block: 1rem;
+  #hero-header {
+    width: 100%;
+    height: 50vh;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0.75)), url('/uplb-bg.webp');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    text-align: center;
   }
+  
+  .hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    max-width: 60rem;
+    width: 100%;
+  }
+
   .heading {
     display: flex;
-    margin-bottom: 0.5rem;
-    gap: 1rem;
     align-items: center;
+    justify-content: center;
+    gap: 1rem;
     > img {
       border-radius: 0.5rem;
       width: 48px;
       height: 48px;
       object-fit: cover;
     }
-
-    > div * {
-      margin-block: 0.5rem;
+    h2 {
+      font-size: 2.5rem;
+      font-weight: bold;
     }
   }
+
+  .subtitle {
+    font-size: 1.125rem;
+    color: #4a4a4a;
+  }
+
+  .search-filter-row {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+    max-width: 64rem;
+    align-items: center;
+    margin-top: 1rem;
+  }
+
   div.search-container {
     position: relative;
+    flex: 1;
     svg {
       position: absolute;
       left: 1rem;
@@ -359,19 +400,20 @@
   }
 
   div.search-buttons {
-    margin-top: 0.5rem;
     display: flex;
     gap: 1rem;
     button,
     a {
       all: unset;
-      padding: 0.5rem 1rem;
+      padding: 0.75rem 1rem;
       display: flex;
       align-items: center;
       gap: 0.5rem;
       transition: all 0.125s;
       border-radius: 0.5rem;
       border: 1px solid hsl(0, 0%, 87%);
+      background-color: white;
+      cursor: pointer;
       &:hover,
       &:focus {
         color: hsl(5, 53%, 32%);
@@ -383,14 +425,35 @@
       }
     }
   }
+
+  @media screen and (max-width: 768px) {
+    .search-filter-row {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    div.search-buttons {
+      justify-content: center;
+    }
+  }
   :global(a) {
     color: unset;
   }
   main {
-    margin-top: 3rem;
+    margin-top: 1.5rem;
+    max-width: 64rem;
+    margin-inline: auto;
+    padding-inline: 2rem;
   }
-  #header {
+  @media screen and (max-width: 600px) {
+    main {
+      padding-inline: 1rem;
+    }
+  }
+  .rooms-header-info {
     margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
   .rooms-found {
     color: hsl(0, 0%, 30%);
@@ -415,9 +478,14 @@
     }
   }
   .room-container {
-    display: flex;
-    flex-flow: row wrap;
+    display: grid;
+    grid-template-columns: 1fr;
     gap: 0.5rem;
+  }
+  @media screen and (min-width: 768px) {
+    .room-container {
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
   .pagination-controls {
     display: flex;
