@@ -2,6 +2,7 @@
   import RoomDisplay from "./RoomDisplay.svelte";
   import { onMount } from "svelte";
   import { debounce } from "es-toolkit/function";
+  import { MapLibre, Marker, FillExtrusionLayer } from "svelte-maplibre";
   import type {
     BuildingData,
     ClassMapValue,
@@ -147,6 +148,10 @@
       behavior: "smooth",
     });
   }
+
+  function handleMarkerClick(buildingName: string) {
+    filterStore.setFilter("building", buildingName);
+  }
 </script>
 
 <Banner
@@ -262,6 +267,37 @@
 </header>
 
 <main id="main-content" class="container">
+  <div class="map-wrapper">
+    <MapLibre
+      style="https://tiles.openfreemap.org/styles/liberty"
+      center={[121.2414408, 14.165158]}
+      zoom={18}
+      pitch={80}
+      class="map"
+    >
+      <FillExtrusionLayer
+        sourceLayer="building"
+        paint={{
+          'fill-extrusion-color': '#aaa',
+          'fill-extrusion-height': ['get', 'render_height'],
+          'fill-extrusion-base': ['get', 'render_min_height'],
+          'fill-extrusion-opacity': 0.6
+        }}
+        filter={['==', 'extrude', 'true']}
+      />
+      {#each buildings as building}
+        {#if building.lat && building.lon}
+          <Marker
+            lngLat={[building.lon, building.lat]}
+            onclick={() => handleMarkerClick(building.building_name)}
+          >
+            <div class="pin" title={building.building_name}></div>
+          </Marker>
+        {/if}
+      {/each}
+    </MapLibre>
+  </div>
+
   <div class="rooms-header-info">
     {#if searchInput !== "" && !typing}
       <div class="rooms-found">{roomsResult.length} rooms found</div>
@@ -434,6 +470,33 @@
 
   :global(a) {
     color: unset;
+  }
+  .map-wrapper {
+    width: 100%;
+    height: 50vh;
+    position: relative;
+    border: 1px solid hsl(0, 0%, 80%);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    margin-bottom: 1rem;
+  }
+  :global(.map) {
+    width: 100%;
+    height: 100%;
+  }
+  .pin {
+    width: 20px;
+    height: 20px;
+    background-color: hsl(5, 53%, 32%);
+    border: 2px solid white;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    transition: transform 0.2s;
+  }
+  .pin:hover {
+    transform: scale(1.2);
+    background-color: hsl(5, 53%, 40%);
   }
   main {
     margin-top: 1.5rem;
