@@ -11,7 +11,7 @@
     IFilterStore,
     RoomData,
   } from "../../lib/types";
-  import { filterStore, modalStore } from "../../lib/store.svelte";
+  import { filterStore, modalStore, onlineStore } from "../../lib/store.svelte";
   import Banner from "./Banner.svelte";
   import Modal from "./Modal.svelte";
 
@@ -268,34 +268,41 @@
 
 <main id="main-content" class="container">
   <div class="map-wrapper">
-    <MapLibre
-      style="https://tiles.openfreemap.org/styles/liberty"
-      center={[121.2414408, 14.165158]}
-      zoom={18}
-      pitch={80}
-      class="map"
-    >
-      <FillExtrusionLayer
-        sourceLayer="building"
-        paint={{
-          'fill-extrusion-color': '#aaa',
-          'fill-extrusion-height': ['get', 'render_height'],
-          'fill-extrusion-base': ['get', 'render_min_height'],
-          'fill-extrusion-opacity': 0.6
-        }}
-        filter={['==', 'extrude', 'true']}
-      />
-      {#each buildings as building}
-        {#if building.lat && building.lon}
-          <Marker
-            lngLat={[building.lon, building.lat]}
-            onclick={() => handleMarkerClick(building.building_name)}
-          >
-            <div class="pin" title={building.building_name}></div>
-          </Marker>
-        {/if}
-      {/each}
-    </MapLibre>
+    {#if onlineStore.isOnline}
+      <MapLibre
+        style="https://tiles.openfreemap.org/styles/liberty"
+        center={[121.2414408, 14.165158]}
+        zoom={18}
+        pitch={80}
+        class="map"
+      >
+        <FillExtrusionLayer
+          sourceLayer="building"
+          paint={{
+            'fill-extrusion-color': '#aaa',
+            'fill-extrusion-height': ['get', 'render_height'],
+            'fill-extrusion-base': ['get', 'render_min_height'],
+            'fill-extrusion-opacity': 0.6
+          }}
+          filter={['==', 'extrude', 'true']}
+        />
+        {#each buildings as building}
+          {#if building.lat && building.lon}
+            <Marker
+              lngLat={[building.lon, building.lat]}
+              onclick={() => handleMarkerClick(building.building_name)}
+            >
+              <div class="pin" title={building.building_name}></div>
+            </Marker>
+          {/if}
+        {/each}
+      </MapLibre>
+    {:else}
+      <div class="offline-map-message">
+        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-wifi-off"><line x1="2" y1="2" x2="22" y2="22"/><path d="M8.5 8.5a5 5 0 0 1 7 7"/><path d="M19.07 4.93a10 10 0 0 0-3.17-1.8"/><path d="M12.06 7.06a5 5 0 0 1 .44-.06"/><path d="L1 6.62c.3-.33.63-.64.98-.93a10 10 0 0 1 3.27-1.78"/><path d="M16.44 10.82a5 5 0 0 1 .59 2.71"/><path d="M23 10.82a10 10 0 0 0-3.37-5.89"/></svg>
+        <p>The 3D map is unavailable offline.</p>
+      </div>
+    {/if}
   </div>
 
   <div class="rooms-header-info">
@@ -483,6 +490,26 @@
   :global(.map) {
     width: 100%;
     height: 100%;
+  }
+  .offline-map-message {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: hsl(0, 0%, 98%);
+    color: hsl(0, 0%, 40%);
+    gap: 1rem;
+    padding: 2rem;
+    text-align: center;
+    p {
+      font-size: 1rem;
+      font-weight: 500;
+    }
+    svg {
+      color: hsl(0, 0%, 60%);
+    }
   }
   .pin {
     width: 20px;
