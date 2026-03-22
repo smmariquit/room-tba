@@ -344,6 +344,9 @@
     padding: 2rem;
     text-align: center;
     border-bottom: 1px solid hsl(5, 53%, 32%);
+    @media screen and (max-width: 768px) {
+      padding-top: 5rem;
+    }
   }
   
   .hero-content {
@@ -380,16 +383,17 @@
 
   .search-filter-row {
     display: flex;
+    flex-direction: column;
     gap: 1rem;
     width: 100%;
     max-width: 64rem;
-    align-items: center;
+    align-items: stretch;
     margin-top: 1rem;
   }
 
   div.search-container {
     position: relative;
-    flex: 1;
+    width: 100%;
     svg {
       position: absolute;
       left: 1rem;
@@ -404,6 +408,7 @@
   div.search-buttons {
     display: flex;
     gap: 1rem;
+    justify-content: center;
     button,
     a {
       all: unset;
@@ -428,15 +433,6 @@
     }
   }
 
-  @media screen and (max-width: 768px) {
-    .search-filter-row {
-      flex-direction: column;
-      align-items: stretch;
-    }
-    div.search-buttons {
-      justify-content: center;
-    }
-  }
   :global(a) {
     color: unset;
   }
