@@ -424,10 +424,9 @@
       cursor: pointer;
       &:hover,
       &:focus {
-        background-color: hsla(5, 53%, 32%, 0.05);
+        outline: 2px solid hsl(5, 53%, 32%);
       }
       &:focus {
-        outline: 2px solid hsl(5, 53%, 32%);
         outline-offset: 3px;
       }
     }
