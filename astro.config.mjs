@@ -9,13 +9,20 @@ export default defineConfig({
     react(),
     svelte(),
     AstroPWA({
-      registerType: "autoUpdate",
       workbox: {
         globPatterns: ["**/*.{js,css,html,ico,png,svg,webmanifest,json,jpg}"],
       }
     }),
   ],
+  vite: {
+    preview: {
+      host: "127.0.0.1"
+    },
+    server: {
+      host: "localhost",
+    }
+  },
   redirects: {
     "/contribute": "https://forms.gle/nVUMuuZgfW1HgXc98"
-  }
+  },
 });

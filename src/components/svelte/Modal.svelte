@@ -52,6 +52,7 @@
     padding: 0.75rem;
     width: 100vw;
     height: 100vh;
+    z-index: 50;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -60,7 +61,7 @@
     flex: 0 1 1024px;
     max-height: 90dvh;
     background-color: white;
-    z-index: 100;
+    z-index: inherit;
     border-radius: 1rem;
     padding: 1.5rem;
     display: flex;
