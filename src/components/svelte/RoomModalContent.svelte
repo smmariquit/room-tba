@@ -202,6 +202,21 @@
     transition: all 0.15s;
   }
 
+  .no-directions {
+    color: hsl(0, 0%, 60%);
+    a {
+      color: hsl(5, 53%, 32%);
+      outline: none;
+      transition: all 0.2s;
+      padding: 0.125rem 0.25rem;
+      &:focus {
+        background-color: hsl(5, 53%, 32%);
+        color: white;
+        border-radius: 4px;
+        text-decoration: none;
+      }
+    }
+  } 
   .map-links a:hover{
     background-color: hsl(5, 50%, 32%);
     color: wheat;
