@@ -101,6 +101,20 @@ class FilterStore {
   };
 }
 
+class OnlineStore {
+  private _isOnline = $state(typeof window !== "undefined" ? window.navigator.onLine : true);
+
+  isOnline = $derived(this._isOnline);
+
+  constructor() {
+    if (typeof window !== "undefined") {
+      window.addEventListener("online", () => (this._isOnline = true));
+      window.addEventListener("offline", () => (this._isOnline = false));
+    }
+  }
+}
+
 export const filterStore = new FilterStore();
 export const currentRoomStore = new RoomStore();
 export const modalStore = new ModalStore();
+export const onlineStore = new OnlineStore();
