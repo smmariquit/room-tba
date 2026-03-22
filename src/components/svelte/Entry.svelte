@@ -29,6 +29,7 @@
   let searchInput: string = $state("");
   let typing: boolean = $state(false);
   let paginateOffset: number = $state(0);
+  // svelte-ignore state_referenced_locally
   let roomsResult: Props["rooms"] = $state(rooms);
   const maxPaginateOffset: number = $derived(
     Math.floor((roomsResult.length - 1) / MAX_DISPLAY_RESULT) + 1,
@@ -42,9 +43,12 @@
   onMount(() => {
     const params = new URLSearchParams(window.location.search);
     const paramsQuery = params.get("s");
+
     if (paramsQuery != null) {
-      searchInput = paramsQuery;
       const searchString = paramsQuery.toLowerCase();
+
+      searchInput = paramsQuery;
+
       roomsResult =
         searchString !== ""
           ? rooms.filter(
@@ -54,7 +58,7 @@
                 divisionName?.toLowerCase().includes(searchString) ||
                 building?.name.toLowerCase().includes(searchString),
             )
-          : [];
+          : rooms;
     }
     filterStore.setData([buildings, colleges, divisions]);
     window.addEventListener("keydown", windowKeyDown);
@@ -224,11 +228,12 @@
     <div>
       <div class="search-buttons">
         <!-- // href="#building-button" -->
-        <button
+        <a
           onclick={() => {
             modalStore.openModal("filters");
           }}
           type="button"
+          href="#building-button"
           ><svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -241,7 +246,7 @@
             stroke-linejoin="round"
             class="lucide lucide-list-filter-icon lucide-list-filter"
             ><path d="M2 5h20" /><path d="M6 12h12" /><path d="M9 19h6" /></svg
-          >Filter</button
+          >Filter</a
         >
         {#if filterStore.filterData.filter !== null}
           <button onclick={() => filterStore.resetFilter()} type="button"
@@ -304,6 +309,7 @@
       <div>
         {paginateOffset + 1} of {maxPaginateOffset}
       </div>
+      <!-- svelte-ignore a11y_consider_explicit_label -->
       <button
         onclick={() => {
           paginateOffset + 1 < maxPaginateOffset && paginateOffset++;
