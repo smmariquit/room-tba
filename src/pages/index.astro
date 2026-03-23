@@ -9,7 +9,7 @@ import {
 } from "../../drizzle/schema";
 import Entry from "../components/svelte/Entry.svelte";
 import Layout from "../layouts/Layout.astro";
-import { eq } from "drizzle-orm";
+import { count, eq, isNotNull, isNull } from "drizzle-orm";
 
 const rooms = await db
   .select({
@@ -62,6 +62,16 @@ rooms.sort((a, b) => {
   const countB = classesDict.get(b.code)?.length ?? 0;
   return countB - countA;
 });
+
+const [{ count: directionCount }] = await db
+  .select({ count: count() })
+  .from(roomsTable)
+  .where(isNotNull(roomsTable.directions));
+
+const [{ count: totalRooms }] = await db
+  .select({ count: count() })
+  .from(roomsTable);
+console.log({ directionCount, totalRooms });
 ---
 
 <Layout>
@@ -74,16 +84,73 @@ rooms.sort((a, b) => {
     divisions={divisions}
     client:load
   />
+  <div class="directions-status">
+    <div class="directions-header">Rooms with directions</div>
+    <div class="directions-progressbar">
+      <div
+        class="directions-progressbar__value"
+        data-value={Math.floor((directionCount / totalRooms) * 100)}
+      >
+      </div>
+    </div>
+    <div>{directionCount} / {totalRooms}</div>
+    <a href="/contribute" target="_blank">Contribute</a>
+  </div>
 </Layout>
 
 <style>
+  .directions-status {
+    position: fixed;
+    bottom: .5rem;
+    left: .5rem;
+    display: flex;
+    gap: 0.5rem;
+    padding: .5rem 1rem;
+    align-items: center;
+    border-radius: 1rem;
+    box-shadow: 0 2px 0.5rem 0 hsla(0, 0%, 0%, 0.2);
+    background-color: white;
+    font-size: 0.875rem;
+    z-index:100;
+
+    .directions-header {
+      font-weight: 600;
+    }
+    .directions-progressbar {
+      height: 0.75rem;
+      border-radius: 0.5rem;
+      width: 10rem;
+      background-color: hsl(0, 0%, 89%);
+    }
+    .directions-progressbar__value {
+      position: relative;
+      width: calc(attr(data-value number) * 1%);
+      height: 100%;
+      border-radius: 0.5rem;
+      background-color: hsl(135, 100%, 42%);
+    }
+    a {
+      text-decoration:unset;
+      padding:.25rem .75rem;
+      border-radius: .5rem;
+      transition:background-color .175s;
+      background-color: hsl(5, 53%, 42%);
+      &:hover {
+        background-color: hsl(5, 53%, 37%);
+      }
+      &:active {
+        background-color: hsl(5, 53%, 32%);
+      }
+      color:white;
+    }
+  }
   a.skip-content {
     outline:unset;
     position: fixed;
-    top:-42px;
+    top: -42px;
     color: white;
     background-color: hsl(5, 53%, 32%);
-    padding:.5rem 1.25rem;
+    padding: 0.5rem 1.25rem;
     text-decoration: none;
     transition:all .25s;
     z-index:100;
