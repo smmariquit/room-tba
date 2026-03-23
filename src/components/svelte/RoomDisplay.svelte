@@ -70,7 +70,7 @@
     border-radius: 0.5rem;
     transition: all 0.125s;
     &:hover,
-    &:focus {
+    &:focus-visible {
       border-color: hsl(5, 53%, 32%);
       background-color: hsl(5, 53%, 92%);
       .class-count {
@@ -107,7 +107,7 @@
         outline: none;
         transition: all 0.2s;
         padding: 0.125rem 0.25rem;
-        &:focus {
+        &:focus-visible {
           background-color: hsl(5, 53%, 32%);
           color: white;
           border-radius: 4px;

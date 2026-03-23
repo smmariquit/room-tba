@@ -52,6 +52,7 @@ const img_url = name.toLowerCase().split(" ").join("-");
   }
   .tooltip {
     position: relative;
+    outline: unset;
     &::before {
       content: attr(data-tooltip);
       position: absolute;
@@ -81,7 +82,7 @@ const img_url = name.toLowerCase().split(" ").join("-");
       transition:opacity .125s;
       border-color: hsla(0, 0%, 10%, 0.5) transparent transparent transparent;
     }
-    &:hover::before, &:hover::after {
+    &:is(:hover, :focus)::before, &:is(:hover, :focus)::after {
       opacity: initial;
     }
   }

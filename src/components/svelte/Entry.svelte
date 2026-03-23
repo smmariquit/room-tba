@@ -29,6 +29,7 @@
   let searchInput: string = $state("");
   let typing: boolean = $state(false);
   let paginateOffset: number = $state(0);
+  // svelte-ignore state_referenced_locally
   let roomsResult: Props["rooms"] = $state(rooms);
   const maxPaginateOffset: number = $derived(
     Math.floor((roomsResult.length - 1) / MAX_DISPLAY_RESULT) + 1,
@@ -42,9 +43,12 @@
   onMount(() => {
     const params = new URLSearchParams(window.location.search);
     const paramsQuery = params.get("s");
+
     if (paramsQuery != null) {
-      searchInput = paramsQuery;
       const searchString = paramsQuery.toLowerCase();
+
+      searchInput = paramsQuery;
+
       roomsResult =
         searchString !== ""
           ? rooms.filter(
@@ -54,20 +58,25 @@
                 divisionName?.toLowerCase().includes(searchString) ||
                 building?.name.toLowerCase().includes(searchString),
             )
-          : [];
+          : rooms;
     }
-    $effect(() => {
-      if (modalStore.open) {
-        document.body.style.overflow = "hidden";
-      } else {
-        document.body.style.overflow = "visible";
-      }
-    });
     filterStore.setData([buildings, colleges, divisions]);
     window.addEventListener("keydown", windowKeyDown);
     return () => {
       window.removeEventListener("keydown", windowKeyDown);
     };
+  });
+
+  $effect(() => {
+    if (modalStore.open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "visible";
+    }
+  });
+
+  $effect(() => {
+    debounceSearch(searchInput, filterStore.filterData);
   });
 
   const debounceSearch = debounce(
@@ -84,10 +93,6 @@
     },
     500,
   );
-
-  $effect(() => {
-    debounceSearch(searchInput, filterStore.filterData);
-  });
 
   function windowKeyDown(ev: KeyboardEvent) {
     if (
@@ -129,9 +134,9 @@
             collegeName?.toLowerCase().includes(searchTerm) ||
             divisionName?.toLowerCase().includes(searchTerm) ||
             building?.name.toLowerCase().includes(searchTerm) ||
-            classesMap.get(code)?.some(
-              (c) => c.courseCode.toLowerCase().includes(searchTerm)
-            ),
+            classesMap
+              .get(code)
+              ?.some((c) => c.courseCode.toLowerCase().includes(searchTerm)),
         )
       : rooms;
   }
@@ -141,6 +146,7 @@
   ) {
     typing = true;
   }
+
   function scrollToTop() {
     window.scrollTo({
       top: 48,
@@ -163,7 +169,7 @@
       <h2>Room TBA</h2>
     </div>
     <p class="subtitle">"Saan sa UPLB ang ___?" Finally answered.</p>
-    
+
     <div class="search-filter-row">
       <div class="search-container">
         <input
@@ -221,8 +227,11 @@
       </div>
 
       <div class="search-buttons">
+        <!-- // href="#building-button" -->
         <a
-          onclick={() => modalStore.openModal("filters")}
+          onclick={() => {
+            modalStore.openModal("filters");
+          }}
           type="button"
           href="#building-button"
           ><svg
@@ -304,13 +313,14 @@
       <div>
         {paginateOffset + 1} of {maxPaginateOffset}
       </div>
+      <!-- svelte-ignore a11y_consider_explicit_label -->
       <button
         onclick={() => {
           paginateOffset + 1 < maxPaginateOffset && paginateOffset++;
           scrollToTop();
         }}
         disabled={paginateOffset === maxPaginateOffset - 1}
-        aria-label='next'
+        aria-label="next"
         ><svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -334,7 +344,11 @@
   #hero-header {
     width: 100%;
     height: 50vh;
-    background-image: linear-gradient(hsla(5, 53%, 32%, 0.65), hsla(5, 53%, 32%, 0.65)), url('/uplb-bg.webp');
+    background-image: linear-gradient(
+        hsla(5, 53%, 32%, 0.65),
+        hsla(5, 53%, 32%, 0.65)
+      ),
+      url("/uplb-bg.webp");
     background-size: cover;
     background-position: center;
     display: flex;
@@ -348,7 +362,7 @@
       padding-top: 5rem;
     }
   }
-  
+
   .hero-content {
     display: flex;
     flex-direction: column;
@@ -423,10 +437,13 @@
       background-color: white;
       cursor: pointer;
       &:hover,
-      &:focus {
+      &:focus-visible {
+        color: hsl(5, 53%, 32%);
+        border-color: hsl(5, 53%, 32%);
         outline: 2px solid hsl(5, 53%, 32%);
       }
-      &:focus {
+      &:focus-visible {
+        outline: 2px solid hsl(5, 53%, 32%);
         outline-offset: 3px;
       }
     }
@@ -492,7 +509,6 @@
     gap: 0.5rem;
     margin: 1rem 0;
     button {
-      all: unset;
       padding: 0.5rem;
       display: flex;
       justify-content: center;

@@ -13,6 +13,19 @@ import ReloadPrompt from "../components/ReloadPrompt.astro";
     <meta name="generator" content={Astro.generator} />
     <title>Room TBA - Searching utility for finding rooms around UPLB</title>
     {pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />}
+    <style is:global>
+      button {
+        all:unset;
+      }
+      button, a, input {
+        outline: 2px solid transparent;
+        outline-offset: 2px;
+        
+        &:focus-visible {
+          outline-color: hsl(5, 53%, 32%);
+        }
+      }
+    </style>
   </head>
   <body>
     <slot />
