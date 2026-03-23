@@ -83,13 +83,21 @@
       ></iframe>
     </div>
     <div class="map-links">
-      <a href="https://www.google.com/maps?q={lat},{lon}" target="_blank" rel="noreferrer">
+      <a
+        href="https://www.google.com/maps?q={lat},{lon}"
+        target="_blank"
+        rel="noreferrer"
+      >
         Open in Google Maps
       </a>
-      <a href="https://www.openstreetmap.org/?mlat={lat}&mlon={lon}#map=18/{lat}/{lon}" target="_blank" rel="norefferer">
+      <a
+        href="https://www.openstreetmap.org/?mlat={lat}&mlon={lon}#map=18/{lat}/{lon}"
+        target="_blank"
+        rel="norefferer"
+      >
         Open in OpenStreetMap
       </a>
-    </div>  
+    </div>
   {/if}
   <hr />
   <div class="room-modal__schedule">
@@ -104,7 +112,6 @@
 
 <style>
   button[aria-label="close-modal"] {
-    all: unset;
     color: hsl(0, 0%, 70%);
     &:hover {
       color: hsl(0, 0%, 40%);
@@ -216,8 +223,8 @@
         text-decoration: none;
       }
     }
-  } 
-  .map-links a:hover{
+  }
+  .map-links a:hover {
     background-color: hsl(5, 50%, 32%);
     color: wheat;
   }
