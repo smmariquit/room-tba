@@ -15,12 +15,14 @@ import ReloadPrompt from "../components/ReloadPrompt.astro";
     {pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />}
     <style is:global>
       button {
-        all:unset;
+        all: unset;
       }
-      button, a, input {
+      button,
+      a,
+      input {
         outline: 2px solid transparent;
         outline-offset: 2px;
-        
+
         &:focus-visible {
           outline-color: hsl(5, 53%, 32%);
         }
@@ -45,7 +47,7 @@ import ReloadPrompt from "../components/ReloadPrompt.astro";
     min-height: 100%;
   }
   body {
-    margin-bottom:4rem;
+    margin-bottom: 4rem;
   }
   .container {
     padding: 2rem;
@@ -53,9 +55,9 @@ import ReloadPrompt from "../components/ReloadPrompt.astro";
     margin-inline: auto;
   }
 
-  @media only screen and (max-width:600px) {
+  @media only screen and (max-width: 600px) {
     .container {
-      padding:1rem;
+      padding: 1rem;
     }
   }
 </style>

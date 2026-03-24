@@ -12,7 +12,7 @@ const client = new Database("../data/info.db");
 import appData from "../data/app_data.json";
 const db = drizzle({ client });
 
-console.log(await db.select().from(roomsTable))
+console.log(await db.select().from(roomsTable));
 /* 
 
 ===========================================================
@@ -84,7 +84,6 @@ const rooms = await Promise.all(
   }),
 );
 await db.insert(roomsTable).values(rooms); */
-
 
 /* 
 ===========================================================

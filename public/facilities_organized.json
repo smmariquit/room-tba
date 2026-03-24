@@ -337,9 +337,7 @@
     "ZOTCLAB BC",
     "ZOTCLAB-CL"
   ],
-  "ChE - Chemical Engineering": [
-    "Unit Ops"
-  ],
+  "ChE - Chemical Engineering": ["Unit Ops"],
   "DAAE - Department of Agricultural and Applied Economics": [
     "DAAE Conference Room 1",
     "DAAE Conference Room 2"
@@ -353,10 +351,7 @@
     "DCERP  AVR",
     "DCERP AVR"
   ],
-  "DHFDS - Department of...": [
-    "DHFDS",
-    "DHFDS GRAD"
-  ],
+  "DHFDS - Department of...": ["DHFDS", "DHFDS GRAD"],
   "DVCS - Department of Veterinary Clinical Sciences": [
     "DVCS L.A. SURGERY RM",
     "DVCS LR1",
@@ -400,20 +395,9 @@
     "Annex 3",
     "Annex 4"
   ],
-  "GENERAL - Computer Teaching Lab": [
-    "CATL",
-    "CTL"
-  ],
-  "GENERAL - General Facilities": [
-    "BRIDGE ROOM"
-  ],
-  "GENERAL - General Lecture Halls": [
-    "ALH",
-    "CLH",
-    "FL",
-    "NL",
-    "RGQ"
-  ],
+  "GENERAL - Computer Teaching Lab": ["CATL", "CTL"],
+  "GENERAL - General Facilities": ["BRIDGE ROOM"],
+  "GENERAL - General Lecture Halls": ["ALH", "CLH", "FL", "NL", "RGQ"],
   "GENERAL - General Lecture Rooms": [
     "LECTURE ROOM 2B",
     "LECTURE ROOM 3A",
@@ -429,14 +413,8 @@
     "Main Library",
     "Main Library Reference Section Discussion Area"
   ],
-  "GENERAL - To Be Announced / Online": [
-    "Online",
-    "TBA",
-    "TBa"
-  ],
-  "GENERAL - UP Rural High School": [
-    "UPRHS"
-  ],
+  "GENERAL - To Be Announced / Online": ["Online", "TBA", "TBa"],
+  "GENERAL - UP Rural High School": ["UPRHS"],
   "GS - Graduate School": [
     "GRAD ROOM",
     "GS 201",
@@ -528,15 +506,9 @@
     "IFST Pilot Plant",
     "IFST STL"
   ],
-  "IHNF - Institute of Human Nutrition and Food": [
-    "IHNF Conference Room"
-  ],
-  "IMSP - Institute of Mathematical Sciences and Physics": [
-    "IMSP PC203"
-  ],
-  "INSTAT - Institute of Statistics": [
-    "INSTAT RA2"
-  ],
+  "IHNF - Institute of Human Nutrition and Food": ["IHNF Conference Room"],
+  "IMSP - Institute of Mathematical Sciences and Physics": ["IMSP PC203"],
+  "INSTAT - Institute of Statistics": ["INSTAT RA2"],
   "IRNR - Institute of Renewable Natural Resources": [
     "IRNR 252",
     "IRNR 253",

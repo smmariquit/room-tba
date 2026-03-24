@@ -108,12 +108,8 @@
           "name": "classes_room_id_rooms_id_fk",
           "tableFrom": "classes",
           "tableTo": "rooms",
-          "columnsFrom": [
-            "room_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["room_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -222,12 +218,8 @@
           "name": "rooms_building_id_buildings_id_fk",
           "tableFrom": "rooms",
           "tableTo": "buildings",
-          "columnsFrom": [
-            "building_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["building_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -235,12 +227,8 @@
           "name": "rooms_college_id_colleges_id_fk",
           "tableFrom": "rooms",
           "tableTo": "colleges",
-          "columnsFrom": [
-            "college_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["college_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -248,12 +236,8 @@
           "name": "rooms_division_id_divisions_id_fk",
           "tableFrom": "rooms",
           "tableTo": "divisions",
-          "columnsFrom": [
-            "division_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["division_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }

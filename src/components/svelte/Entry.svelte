@@ -345,10 +345,8 @@
   #hero-header {
     width: 100%;
     height: 50vh;
-    background-image: linear-gradient(
-        hsla(5, 53%, 32%, 0.65),
-        hsla(5, 53%, 32%, 0.65)
-      ),
+    background-image:
+      linear-gradient(hsla(5, 53%, 32%, 0.65), hsla(5, 53%, 32%, 0.65)),
       url("/uplb-bg.webp");
     background-size: cover;
     background-position: center;

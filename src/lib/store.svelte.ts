@@ -68,7 +68,7 @@ class FilterStore {
 
   filterData = $derived({
     type: this._filterStore.type,
-    filter: this._filterStore.filter
+    filter: this._filterStore.filter,
   });
 
   getData = () => ({
@@ -80,7 +80,7 @@ class FilterStore {
   setFilter = (type: IFilterStore["type"], filter: string | null) => {
     this._filterStore.type = type;
     this._filterStore.filter = filter;
-  }
+  };
 
   setData = ([buildings, colleges, divisions]: [
     BuildingData[],
@@ -96,7 +96,7 @@ class FilterStore {
     this._filterStore = {
       ...this._filterStore,
       filter: null,
-      type: null
+      type: null,
     };
   };
 }

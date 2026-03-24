@@ -1,6 +1,6 @@
 # Room TBA - UPLB Room Finder
 
-A web app to help UPLB students find rooms on campus. "Saan sa UPLB ang ___?" Finally answered.
+A web app to help UPLB students find rooms on campus. "Saan sa UPLB ang \_\_\_?" Finally answered.
 
 ## Features
 
@@ -19,17 +19,21 @@ Data is sourced from UPLB AMIS for 2nd Semester AY 2025-2026.
 ## Development/Contribution
 
 To run locally, you need to download [Bun.js](https://bun.sh/) and run the following command:
+
 ```
 bun dev
 ```
 
-The data is stored in the info.db file, and may be accessed using sqlite. If you are not familiar with using SQL, you may run the following command to open up drizzle studio and start correcting data: 
+The data is stored in the info.db file, and may be accessed using sqlite. If you are not familiar with using SQL, you may run the following command to open up drizzle studio and start correcting data:
+
 ```
 bunx drizzle-kit studio
 ```
+
 After that, you may open a pull request and describe the changes.
 
 ## Project structure
+
 This project uses [Astro](https://astro.build), and may have the following folders:
 
 - `/public` - All the static assets that can be requested by the route

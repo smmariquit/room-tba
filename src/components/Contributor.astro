@@ -31,7 +31,8 @@ const img_url = name.toLowerCase().split(" ").join("-");
 }
 
 <style>
-  object, img {
+  object,
+  img {
     margin: unset;
     padding: unset;
     width: 2.5rem;
@@ -41,7 +42,7 @@ const img_url = name.toLowerCase().split(" ").join("-");
   }
   .contributor-profile {
     display: flex;
-    z-index:40;
+    z-index: 40;
     font-size: 0.875rem;
     gap: 0.5rem;
     align-items: center;
@@ -66,23 +67,24 @@ const img_url = name.toLowerCase().split(" ").join("-");
       pointer-events: none;
       opacity: 0;
       width: max-content;
-      transition:opacity .125s;
+      transition: opacity 0.125s;
     }
     &::after {
       content: "";
       position: absolute;
       top: 0;
       left: min(50%, 1.25rem);
-      pointer-events:none;
-      translate: 0 -100% ;
+      pointer-events: none;
+      translate: 0 -100%;
       margin-left: -5px;
       border-width: 5px;
       border-style: solid;
       opacity: 0;
-      transition:opacity .125s;
+      transition: opacity 0.125s;
       border-color: hsla(0, 0%, 10%, 0.5) transparent transparent transparent;
     }
-    &:is(:hover, :focus)::before, &:is(:hover, :focus)::after {
+    &:is(:hover, :focus)::before,
+    &:is(:hover, :focus)::after {
       opacity: initial;
     }
   }
@@ -98,8 +100,9 @@ const img_url = name.toLowerCase().split(" ").join("-");
         display: initial;
       }
     }
-    .tooltip::after, .tooltip::before {
-      display:none;
+    .tooltip::after,
+    .tooltip::before {
+      display: none;
     }
   }
 </style>
