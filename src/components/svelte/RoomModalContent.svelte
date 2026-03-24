@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { modalStore, currentRoomStore} from "../../lib/store.svelte";
+  import { modalStore, currentRoomStore } from "../../lib/store.svelte";
   import Classes from "./Classes.svelte";
   import ScheduleRender from "./ScheduleRender.svelte";
 </script>
@@ -8,8 +8,23 @@
   <div class="header-section">
     <div class="header-top-row">
       <h2>{currentRoomStore.roomData?.code}</h2>
-      <button onclick={() => modalStore.closeModal()} class="close-btn" aria-label="Close">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      <button
+        onclick={() => modalStore.closeModal()}
+        class="close-btn"
+        aria-label="Close"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          ><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg
+        >
       </button>
     </div>
     <div class="subtitle-badge">
@@ -18,7 +33,9 @@
           {currentRoomStore.roomData.collegeName}
         {/if}
         {#if currentRoomStore.roomData?.building?.name}
-          {#if currentRoomStore.roomData?.collegeName} • {/if}
+          {#if currentRoomStore.roomData?.collegeName}
+            •
+          {/if}
           {currentRoomStore.roomData.building.name}
         {/if}
       </p>
@@ -41,7 +58,9 @@
 
   {#if currentRoomStore.roomData?.building}
     <div class="building-note">
-      <h3 class="building-note-title">How to get to {currentRoomStore.roomData.building.name}</h3>
+      <h3 class="building-note-title">
+        How to get to {currentRoomStore.roomData.building.name}
+      </h3>
       {#if currentRoomStore.roomData.building.directions}
         <p class="building-directions">
           {currentRoomStore.roomData.building.directions}
@@ -61,14 +80,18 @@
   {#if currentRoomStore.roomData?.building?.lat && currentRoomStore.roomData?.building?.lon}
     <div class="map-links">
       <a
-        href="https://www.google.com/maps?q={currentRoomStore.roomData.building.lat},{currentRoomStore.roomData.building.lon}"
+        href="https://www.google.com/maps?q={currentRoomStore.roomData.building
+          .lat},{currentRoomStore.roomData.building.lon}"
         target="_blank"
         rel="noreferrer"
       >
         Open in Google Maps
       </a>
       <a
-        href="https://www.openstreetmap.org/?mlat={currentRoomStore.roomData.building.lat}&mlon={currentRoomStore.roomData.building.lon}#map=18/{currentRoomStore.roomData.building.lat}/{currentRoomStore.roomData.building.lon}"
+        href="https://www.openstreetmap.org/?mlat={currentRoomStore.roomData
+          .building.lat}&mlon={currentRoomStore.roomData.building
+          .lon}#map=18/{currentRoomStore.roomData.building
+          .lat}/{currentRoomStore.roomData.building.lon}"
         target="_blank"
         rel="noreferrer"
       >
@@ -121,13 +144,12 @@
     border-radius: 0.25rem;
     transition: background-color 0.15s;
   }
-  
+
   .close-btn:hover {
     background-color: #f0f0f0;
   }
 
   .header-section h2 {
-    font-family: 'DM Sans', sans-serif;
     font-weight: bold;
     font-size: 1.125rem;
     line-height: 1.25rem;
@@ -145,7 +167,6 @@
   }
 
   .subtitle-badge p {
-    font-family: 'DM Sans', sans-serif;
     font-weight: normal;
     font-size: 0.75rem;
     color: #4f4f4f;
@@ -153,7 +174,6 @@
   }
 
   .room-directions {
-    font-family: 'DM Sans', sans-serif;
     font-size: 0.875rem;
     line-height: 1.5;
     color: #4f4f4f;
@@ -170,7 +190,6 @@
   }
 
   .building-note-title {
-    font-family: 'DM Sans', sans-serif;
     font-weight: 600;
     font-size: 1rem;
     margin: 0 0 0.5rem 0;
@@ -178,7 +197,6 @@
   }
 
   .building-directions {
-    font-family: 'DM Sans', sans-serif;
     font-size: 0.875rem;
     line-height: 1.5;
     color: #4f4f4f;
@@ -188,7 +206,7 @@
   .no-directions {
     color: hsl(0, 0%, 60%);
   }
-  
+
   .no-directions a {
     color: hsl(5, 53%, 32%);
     outline: none;
@@ -197,7 +215,8 @@
     border-radius: 4px;
   }
 
-  .no-directions a:hover, .no-directions a:focus-visible {
+  .no-directions a:hover,
+  .no-directions a:focus-visible {
     background-color: hsl(5, 53%, 32%);
     color: white;
     text-decoration: none;
@@ -210,7 +229,6 @@
   }
 
   .schedule-section h3 {
-    font-family: 'DM Sans', sans-serif;
     font-weight: 600;
     font-size: 0.875rem;
     line-height: 1.25rem;
@@ -237,7 +255,8 @@
     border-radius: 4px;
     text-decoration: none;
   }
-  .map-links a:hover, .map-links a:focus-visible {
+  .map-links a:hover,
+  .map-links a:focus-visible {
     background-color: hsl(5, 53%, 32%);
     color: white;
   }

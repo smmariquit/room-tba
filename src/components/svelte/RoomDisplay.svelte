@@ -16,8 +16,7 @@
       : original.replaceAll(pattern, (substr) => `<mark>${substr}</mark>`);
   }
 
-  function openRoomData(
-  ) {
+  function openRoomData() {
     currentRoomStore.updateClasses(classes);
     currentRoomStore.updateRoom(room);
     modalStore.openModal("room-details");
@@ -27,7 +26,20 @@
 <button class="room-data" onclick={openRoomData}>
   <div class="room-data__content">
     <div class="icon-wrapper">
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        ><line x1="7" y1="17" x2="17" y2="7"></line><polyline
+          points="7 7 17 7 17 17"
+        ></polyline></svg
+      >
     </div>
     <h3 class="room-code">{@html highlightSearch(room.code, pattern)}</h3>
     <div class="class-count">
@@ -49,7 +61,6 @@
     transition: all 0.125s;
     width: 100%;
     box-sizing: border-box;
-    font-family: 'DM Sans', sans-serif;
   }
 
   .room-data:hover,
