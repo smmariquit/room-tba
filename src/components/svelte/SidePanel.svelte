@@ -65,9 +65,13 @@
     (inputValue: string, filterData: typeof filterStore.filterData) => {
       typing = false;
       
-      // If the user starts typing a new search while looking at room details,
+      // If the user starts typing a new search while looking at a modal,
       // close the modal and go back to search view
-      if (inputValue !== "" && modalStore.type === "room-details") {
+      if (inputValue !== "" && modalStore.open) {
+        if (modalStore.type === 'room-details') {
+          filterStore.resetFilter();
+          filterData = { type: null, filter: null, buildings: filterData.buildings, colleges: filterData.colleges, divisions: filterData.divisions };
+        }
         modalStore.closeModal();
       }
 
@@ -142,7 +146,10 @@
   function handleInput(
   ) {
     typing = true;
-    if (modalStore.open && modalStore.type === 'room-details') {
+    if (modalStore.open) {
+      if (modalStore.type === 'room-details') {
+        filterStore.resetFilter();
+      }
       modalStore.closeModal();
     }
   }
