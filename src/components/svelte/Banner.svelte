@@ -12,14 +12,13 @@
 
 <style>
   div {
-    position: absolute;
-    left: 0;
-    top: 0;
+    position: relative;
     width: 100%;
     padding: 0.5rem 1rem;
     font-size: 0.875rem;
     background-color: hsla(45, 100%, 51%, 0.901);
     color: hsl(45, 94%, 27%);
     text-align: center;
+    box-sizing: border-box;
   }
 </style>

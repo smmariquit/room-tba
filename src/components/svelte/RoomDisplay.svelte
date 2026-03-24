@@ -17,103 +17,85 @@
   }
 
   function openRoomData(
-    event: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement },
   ) {
     currentRoomStore.updateClasses(classes);
     currentRoomStore.updateRoom(room);
     modalStore.openModal("room-details");
-    window.location.hash = "#modal-content";
-    // window.history.pushState();
   }
 </script>
 
 <button class="room-data" onclick={openRoomData}>
-  <div class="room-data__header">
-    <h3>{@html highlightSearch(room.code, pattern)}</h3>
+  <div class="room-data__content">
+    <div class="icon-wrapper">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+    </div>
+    <h3 class="room-code">{@html highlightSearch(room.code, pattern)}</h3>
     <div class="class-count">
-      {classes.length} class{classes.length > 1 ? "es" : ""}
+      {classes.length} class{classes.length !== 1 ? "es" : ""}
     </div>
   </div>
-  <p class="subheading">
-    {@html highlightSearch(room.building?.name ?? "No building", pattern)} • {@html highlightSearch(
-      room.collegeName?.replace("College of ", "") ?? "No college",
-      pattern,
-    )} •
-    {@html highlightSearch(room.divisionName ?? "No division", pattern)}
-  </p>
-  {#if room.directions}
-    <p class="directions">
-      {room.directions}
-    </p>
-  {:else}
-    <p class="directions no-directions">
-      <em>No directions?</em>
-      <a href="/contribute" target="_blank" rel="noreferrer"
-        ><strong>Contribute to room-tba</strong></a
-      >
-    </p>
-  {/if}
 </button>
 
 <style>
-  .room-data__header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 0.25rem;
-    gap: 0.5rem;
-  }
   .room-data {
     all: unset;
-    flex: 1 1 24rem;
-    padding: 1.5rem 1.5rem;
-    border: 1px solid hsl(0, 0%, 80%);
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0.75rem;
+    background-color: white;
+    border: 1px solid #ececec;
     border-radius: 0.5rem;
+    cursor: pointer;
     transition: all 0.125s;
-    &:hover,
-    &:focus {
-      border-color: hsl(5, 53%, 32%);
-      background-color: hsl(5, 53%, 92%);
-      .class-count {
-        background-color: hsl(5, 53%, 95%);
-      }
-    }
-    h3 {
-      font-weight: 600;
-      font-size: 1.25rem;
-    }
-    > .subheading {
-      margin-bottom: 0.25rem;
-      color: hsl(0, 0%, 40%);
-      font-size: 0.875rem;
-    }
-    > .directions {
-      font-size: 0.875rem;
-    }
-    :global(mark) {
-      background-color: hsl(5, 53%, 90%);
-    }
-    .class-count {
-      background: hsl(0, 0%, 95%);
-      border-radius: 0.25rem;
-      padding: 0.25rem 0.5rem;
-      font-size: 0.875rem;
-      margin: 0.25rem;
-      flex: 0 0 auto;
-    }
-    .no-directions {
-      color: hsl(0, 0%, 60%);
-      a {
-        color: hsl(5, 53%, 32%);
-        outline: none;
-        transition: all 0.2s;
-        padding: 0.125rem 0.25rem;
-        &:focus {
-          background-color: hsl(5, 53%, 32%);
-          color: white;
-          border-radius: 4px;
-          text-decoration: none;
-        }
-      }
-    }
+    width: 90%;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .room-data:hover,
+  .room-data:focus {
+    border-color: hsl(5, 53%, 32%);
+    background-color: hsl(5, 53%, 98%);
+  }
+
+  .room-data__content {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    width: 100%;
+  }
+
+  .icon-wrapper {
+    flex-shrink: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: black;
+  }
+
+  .room-code {
+    font-weight: normal;
+    font-size: 0.875rem;
+    color: black;
+    margin: 0;
+    line-height: 1.25rem;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  .class-count {
+    background-color: #ececec;
+    border-radius: 0.25rem;
+    padding: 2px 0.375rem;
+    font-size: 0.75rem;
+    color: #969696;
+    margin-left: auto; /* Push to the right if there's space, or keep it close */
+    white-space: nowrap;
+  }
+
+  :global(mark) {
+    background-color: hsl(5, 53%, 90%);
   }
 </style>

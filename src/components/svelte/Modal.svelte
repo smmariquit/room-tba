@@ -50,14 +50,15 @@
     left: 50%;
     translate: -50% -50%;
     padding: 0.75rem;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100dvh;
     display: flex;
     justify-content: center;
     align-items: center;
+    box-sizing: border-box;
   }
   .modal-content {
-    flex: 0 1 1024px;
+    flex: 0 1 64rem;
     max-height: 90dvh;
     background-color: white;
     z-index: 100;
@@ -66,7 +67,7 @@
     display: flex;
     flex-flow: column nowrap;
   }
-  @media only screen and (max-width: 500px) {
+  @media only screen and (max-width: 31.25rem) {
     .modal-content {
       padding: 1rem;
     }
