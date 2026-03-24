@@ -31,6 +31,12 @@
     ),
   );
 
+  const isSearchOnly = $derived(
+    searchInput !== "" && 
+    filterStore.filterData.filter === null && 
+    !(modalStore.open && modalStore.type === 'room-details')
+  );
+
   onMount(() => {
     const params = new URLSearchParams(window.location.search);
     const paramsQuery = params.get("s");
@@ -215,55 +221,80 @@
   </div>
 
   {#if searchInput !== "" || filterStore.filterData.filter !== null || (modalStore.open && modalStore.type === 'room-details')}
-    <div class="panel-content">
+    <div class="panel-content {isSearchOnly ? 'search-mode-panel' : ''}">
       {#if modalStore.open && modalStore.type === 'room-details'}
         <RoomModalContent />
       {:else}
         {#if filterStore.filterData.type === 'building' && filterStore.filterData.filter !== null}
           <div class="building-header">
-            <h2>{filterStore.filterData.filter}</h2>
-            <p>Rooms used by the institution</p>
+            <div class="header-top-row">
+              <h2>{filterStore.filterData.filter}</h2>
+            </div>
+            <p class="building-subtitle">Rooms used by the institution</p>
           </div>
         {/if}
 
-        <div class="rooms-header-info">
-          {#if searchInput !== "" && !typing}
-            <div class="rooms-found">{roomsResult.length} rooms found</div>
+        {#if isSearchOnly}
+          <div class="mobile-compact-results">
+            {#if roomsResult.length === 0}
+              <div class="compact-result-empty">
+                <span class="compact-room-code">No rooms found</span>
+              </div>
+            {:else}
+              {#each roomsResult.slice(0, 4) as room}
+                <button class="compact-result-item" onclick={() => {
+                  currentRoomStore.updateClasses(classesMap.get(room.code) ?? []);
+                  currentRoomStore.updateRoom(room);
+                  modalStore.openModal("room-details");
+                }}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#969696" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+                  <span class="compact-room-code"><strong>{room.code}</strong> {room.building?.name ? `· ${room.building.name}` : ''}</span>
+                </button>
+              {/each}
+            {/if}
+          </div>
+        {/if}
+
+        <div class="desktop-full-results {isSearchOnly ? 'hide-on-mobile' : ''}">
+          <div class="rooms-header-info">
+            {#if searchInput !== "" && !typing}
+              <div class="rooms-found">{roomsResult.length} rooms found</div>
+            {/if}
+          </div>
+
+          <div class="room-container">
+            {#each paginatedRooms as room}
+              <RoomDisplay
+                {room}
+                {searchInput}
+                classes={classesMap.get(room.code) ?? []}
+              ></RoomDisplay>
+            {/each}
+          </div>
+
+          {#if roomsResult.length > 20}
+            <div class="pagination-controls">
+              <button title='next'
+                onclick={() => {
+                  paginateOffset > 0 && paginateOffset--;
+                  scrollToTop();
+                }}
+                disabled={paginateOffset === 0}
+                ><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6" /></svg></button>
+              <div>
+                {paginateOffset + 1} of {maxPaginateOffset}
+              </div>
+              <button
+                onclick={() => {
+                  paginateOffset + 1 < maxPaginateOffset && paginateOffset++;
+                  scrollToTop();
+                }}
+                disabled={paginateOffset === maxPaginateOffset - 1}
+                aria-label='next'
+                ><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg></button>
+            </div>
           {/if}
         </div>
-
-        <div class="room-container">
-          {#each paginatedRooms as room}
-            <RoomDisplay
-              {room}
-              {searchInput}
-              classes={classesMap.get(room.code) ?? []}
-            ></RoomDisplay>
-          {/each}
-        </div>
-
-        {#if roomsResult.length > 20}
-          <div class="pagination-controls">
-            <button title='next'
-              onclick={() => {
-                paginateOffset > 0 && paginateOffset--;
-                scrollToTop();
-              }}
-              disabled={paginateOffset === 0}
-              ><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6" /></svg></button>
-            <div>
-              {paginateOffset + 1} of {maxPaginateOffset}
-            </div>
-            <button
-              onclick={() => {
-                paginateOffset + 1 < maxPaginateOffset && paginateOffset++;
-                scrollToTop();
-              }}
-              disabled={paginateOffset === maxPaginateOffset - 1}
-              aria-label='next'
-              ><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg></button>
-          </div>
-        {/if}
       {/if}
     </div>
   {/if}
@@ -288,13 +319,15 @@
   /* Mobile responsiveness for side panel */
   @media screen and (max-width: 48rem) {
     .side-panel-wrapper {
-       margin-left: auto;
-       margin-right: auto;
-       margin-top: auto;
-       margin-bottom: 1.3125rem;
-       width: calc(100% - 2.625rem);
-       flex: none;
-       height: 50vh;
+       position: relative;
+       margin: 0;
+       width: 100%;
+       max-width: 100%;
+       flex: 1;
+       pointer-events: none; /* Let clicks pass through empty space */
+       display: flex;
+       flex-direction: column;
+       justify-content: space-between; /* Space between search top and panel bottom */
     }
   }
 
@@ -307,6 +340,14 @@
     padding: 0.75rem 1rem;
     gap: 0.5rem;
     flex-shrink: 0;
+  }
+
+  @media screen and (max-width: 48rem) {
+    .search-filter-row {
+      margin: 1rem;
+      pointer-events: auto;
+      border-radius: 2rem; /* Pill shape for mobile */
+    }
   }
 
   .search-container {
@@ -366,22 +407,101 @@
   }
 
   .panel-content {
-    overflow-x: hidden;
     background-color: white;
     border-radius: 0.75rem;
     box-shadow: 0rem 2px 0.25rem 0rem rgba(0,0,0,0.25);
     padding: 1.125rem 1.5rem;
     flex: 1;
-    overflow-y: auto;
+    overflow: hidden;
+    overflow-x: clip;
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
+
+    .desktop-full-results {
+      overflow-y: auto;
+    }
+  }
+
+  @media screen and (max-width: 48rem) {
+    .panel-content {
+      pointer-events: auto;
+      margin: 0;
+      border-radius: 1.5rem;
+      max-height: 40vh; 
+      padding: 1.5rem 1.5rem;
+      box-shadow: 0 -0.25rem 1rem rgba(0,0,0,0.1);
+      flex: none; 
+      margin-top: auto; 
+    }
+
+    .panel-content.search-mode-panel {
+      margin-top: -1rem; /* THIS IS HUMAN MADE SLOP*/
+      margin-bottom: auto; 
+      margin-left: 1rem;
+      margin-right: 1rem;
+      border-radius: 0.75rem;
+      padding: 0.5rem;
+      max-height: none;
+      box-shadow: 0rem 2px 0.25rem 0rem rgba(0,0,0,0.25);
+    }
+    
+    .hide-on-mobile {
+      display: none !important;
+    }
+  }
+
+  .mobile-compact-results {
+    display: none;
+  }
+  
+  @media screen and (max-width: 48rem) {
+    .mobile-compact-results {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+  
+  .compact-result-item {
+    all: unset;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 0.5rem;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  
+  .compact-result-item:last-child {
+    border-bottom: none;
+  }
+  
+  .compact-result-empty {
+    padding: 0.75rem 0.5rem;
+    font-family: 'DM Sans', sans-serif;
+    color: #969696;
+    text-align: center;
+  }
+  
+  .compact-room-code {
+    font-size: 0.875rem;
+    color: black;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .building-header {
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
+  }
+
+  .header-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 
   .building-header h2 {
@@ -392,12 +512,19 @@
     color: black;
   }
 
-  .building-header p {
+  .building-desc {
+    font-size: 0.75rem;
+    color: #4f4f4f;
+    line-height: 1.5;
+    margin: 0;
+    margin-bottom: 0.5rem;
+  }
+
+  .building-subtitle {
     font-size: 0.875rem;
     color: #4c4c4c;
     font-weight: bold;
     margin: 0;
-    margin-top: 0.25rem;
   }
 
   .rooms-header-info {

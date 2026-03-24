@@ -47,7 +47,8 @@
     border-radius: 0.5rem;
     cursor: pointer;
     transition: all 0.125s;
-    width: 90%;
+    width: 100%;
+    box-sizing: border-box;
     font-family: 'DM Sans', sans-serif;
   }
 

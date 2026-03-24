@@ -1,12 +1,17 @@
 <script lang="ts">
-  import { modalStore, currentRoomStore } from "../../lib/store.svelte";
+  import { modalStore, currentRoomStore} from "../../lib/store.svelte";
   import Classes from "./Classes.svelte";
   import ScheduleRender from "./ScheduleRender.svelte";
 </script>
 
 <div class="room-details-container">
   <div class="header-section">
-    <h2>{currentRoomStore.roomData?.code}</h2>
+    <div class="header-top-row">
+      <h2>{currentRoomStore.roomData?.code}</h2>
+      <button onclick={() => modalStore.closeModal()} class="close-btn" aria-label="Close">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </div>
     <div class="subtitle-badge">
       <p>
         {#if currentRoomStore.roomData?.collegeName}
@@ -35,6 +40,7 @@
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
+    overflow-y: auto;
   }
 
   .header-section {
@@ -42,6 +48,30 @@
     flex-direction: column;
     gap: 0.25rem;
     align-items: flex-start;
+    width: 100%;
+  }
+
+  .header-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  .close-btn {
+    all: unset;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #4f4f4f;
+    padding: 0.25rem;
+    border-radius: 0.25rem;
+    transition: background-color 0.15s;
+  }
+  
+  .close-btn:hover {
+    background-color: #f0f0f0;
   }
 
   .header-section h2 {
