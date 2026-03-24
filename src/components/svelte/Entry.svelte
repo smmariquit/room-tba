@@ -179,6 +179,7 @@
           bind:value={searchInput}
           class={typing ? "typing" : ""}
           oninput={handleInput}
+          autocomplete="off"
           placeholder="Search room code, building, division, or course code (e.g., CMSC 21)"
         />
         {#if typing}
