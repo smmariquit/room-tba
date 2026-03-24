@@ -304,7 +304,6 @@ const courseColors = [
   "#B71C1C",
 ] as const;
 
-
 export function parseScheduleTime(scheduleStr: string) {
   if (!scheduleStr || scheduleStr === "TBA") return null;
 

@@ -1,0 +1,19 @@
+{
+  "plugins": ["prettier-plugin-astro", "prettier-plugin-svelte"],
+  "overrides": [
+    {
+      "files": "*.astro",
+      "options": {
+        "tabWidth": 2,
+        "parser": "astro"
+      }
+    },
+    {
+      "files": "*.svelte",
+      "options": {
+        "parser": "svelte"
+      }
+    }
+  ],
+  "printWidth": 80
+}

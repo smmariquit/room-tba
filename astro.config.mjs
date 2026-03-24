@@ -11,18 +11,18 @@ export default defineConfig({
     AstroPWA({
       workbox: {
         globPatterns: ["**/*.{js,css,html,ico,png,svg,webmanifest,json,jpg}"],
-      }
+      },
     }),
   ],
   vite: {
     preview: {
-      host: "127.0.0.1"
+      host: "127.0.0.1",
     },
     server: {
       host: "localhost",
-    }
+    },
   },
   redirects: {
-    "/contribute": "https://forms.gle/nVUMuuZgfW1HgXc98"
+    "/contribute": "https://forms.gle/nVUMuuZgfW1HgXc98",
   },
 });

@@ -9,7 +9,11 @@
     DivisionData,
     RoomData,
   } from "../../lib/types";
-  import { filterStore, modalStore, currentRoomStore } from "../../lib/store.svelte";
+  import {
+    filterStore,
+    modalStore,
+    currentRoomStore,
+  } from "../../lib/store.svelte";
   import Banner from "./Banner.svelte";
   import Modal from "./Modal.svelte";
   import SidePanel from "./SidePanel.svelte";
@@ -23,7 +27,7 @@
   };
 
   const { rooms, classesMap, buildings, divisions, colleges }: Props = $props();
-  
+
   let mapInstance: MapLibreMap | null = $state(null);
 
   onMount(() => {
@@ -31,20 +35,28 @@
   });
 
   $effect(() => {
-    if (modalStore.open && modalStore.type === 'room-details' && currentRoomStore.roomData?.building) {
-       const lat = currentRoomStore.roomData.building.lat;
-       const lon = currentRoomStore.roomData.building.lon;
-       if (lat && lon && mapInstance) {
-          untrack(() => {
-            mapInstance?.flyTo({ center: [lon, lat], zoom: 19, duration: 1500 });
-          });
-       }
+    if (
+      modalStore.open &&
+      modalStore.type === "room-details" &&
+      currentRoomStore.roomData?.building
+    ) {
+      const lat = currentRoomStore.roomData.building.lat;
+      const lon = currentRoomStore.roomData.building.lon;
+      if (lat && lon && mapInstance) {
+        untrack(() => {
+          mapInstance?.flyTo({ center: [lon, lat], zoom: 19, duration: 1500 });
+        });
+      }
     }
   });
 
-  function handleMarkerClick(buildingName: string, lat: number | null, lon: number | null) {
+  function handleMarkerClick(
+    buildingName: string,
+    lat: number | null,
+    lon: number | null,
+  ) {
     filterStore.setFilter("building", buildingName);
-    modalStore.closeModal(); 
+    modalStore.closeModal();
     if (mapInstance && lat && lon) {
       mapInstance.flyTo({ center: [lon, lat], zoom: 18, duration: 1500 });
     }
@@ -59,24 +71,32 @@
       center={[121.2414408, 14.165158]}
       zoom={17}
       pitch={60}
-      maxBounds={[[121.225963, 14.150106], [121.254638, 14.172678]]}
+      maxBounds={[
+        [121.225963, 14.150106],
+        [121.254638, 14.172678],
+      ]}
       class="map"
     >
       <FillExtrusionLayer
         sourceLayer="building"
         paint={{
-          'fill-extrusion-color': '#aaa',
-          'fill-extrusion-height': ['get', 'render_height'],
-          'fill-extrusion-base': ['get', 'render_min_height'],
-          'fill-extrusion-opacity': 0.6
+          "fill-extrusion-color": "#aaa",
+          "fill-extrusion-height": ["get", "render_height"],
+          "fill-extrusion-base": ["get", "render_min_height"],
+          "fill-extrusion-opacity": 0.6,
         }}
-        filter={['==', 'extrude', 'true']}
+        filter={["==", "extrude", "true"]}
       />
       {#each buildings as building}
         {#if building.lat && building.lon}
           <Marker
             lngLat={[building.lon, building.lat]}
-            onclick={() => handleMarkerClick(building.building_name, building.lat, building.lon)}
+            onclick={() =>
+              handleMarkerClick(
+                building.building_name,
+                building.lat,
+                building.lon,
+              )}
           >
             <div class="pin" title={building.building_name}></div>
           </Marker>
@@ -93,7 +113,7 @@
         ><strong>report any errors!</strong></a
       >
     </Banner>
-    
+
     <header class="top-header">
       <h2>Room TBA</h2>
     </header>
@@ -101,7 +121,7 @@
     <SidePanel {rooms} {classesMap} />
   </div>
 
-  {#if modalStore.open && modalStore.type !== 'room-details'}
+  {#if modalStore.open && modalStore.type !== "room-details"}
     <Modal />
   {/if}
 </div>
@@ -114,7 +134,14 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    font-family: 'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family:
+      "DM Sans",
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      sans-serif;
   }
 
   .map-container {
@@ -151,7 +178,7 @@
     align-items: center;
     justify-content: center;
     padding: 0.75rem;
-    box-shadow: 0 2px 0.25rem rgba(0,0,0,0.1);
+    box-shadow: 0 2px 0.25rem rgba(0, 0, 0, 0.1);
   }
 
   .top-header h2 {
@@ -168,7 +195,7 @@
     border: 2px solid white;
     border-radius: 50%;
     cursor: pointer;
-    box-shadow: 0 2px 0.25rem rgba(0,0,0,0.3);
+    box-shadow: 0 2px 0.25rem rgba(0, 0, 0, 0.3);
     transition: transform 0.2s;
   }
 

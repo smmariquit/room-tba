@@ -39,5 +39,4 @@ export const classesTable = sqliteTable("classes", (s) => ({
     .notNull()
     .references(() => roomsTable.id),
   course_title: s.text("course_title").notNull(),
-  
 }));
