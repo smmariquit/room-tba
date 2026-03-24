@@ -25,6 +25,39 @@
     </div>
   </div>
 
+  {#if currentRoomStore.roomData?.directions}
+    <p class="room-directions">
+      {currentRoomStore.roomData.directions}
+    </p>
+  {:else}
+    <p class="room-directions no-directions">
+      No directions? <a
+        href="https://docs.google.com/forms/d/e/1FAIpQLSdius5C7OyC1klraq71fFwWPZNvNk_iDLFyhCNir_ccC07Q7Q/viewform?usp=dialog"
+        target="_blank"
+        rel="noreferrer"><strong>Contribute to room-tba</strong></a
+      >
+    </p>
+  {/if}
+
+  {#if currentRoomStore.roomData?.building}
+    <div class="building-note">
+      <h3 class="building-note-title">How to get to {currentRoomStore.roomData.building.name}</h3>
+      {#if currentRoomStore.roomData.building.directions}
+        <p class="building-directions">
+          {currentRoomStore.roomData.building.directions}
+        </p>
+      {:else}
+        <p class="building-directions no-directions">
+          No directions? <a
+            href="https://docs.google.com/forms/d/e/1FAIpQLSdius5C7OyC1klraq71fFwWPZNvNk_iDLFyhCNir_ccC07Q7Q/viewform?usp=dialog"
+            target="_blank"
+            rel="noreferrer"><strong>Contribute to room-tba</strong></a
+          >
+        </p>
+      {/if}
+    </div>
+  {/if}
+
   {#if currentRoomStore.roomData?.building?.lat && currentRoomStore.roomData?.building?.lon}
     <div class="map-links">
       <a
@@ -117,6 +150,57 @@
     font-size: 0.75rem;
     color: #4f4f4f;
     margin: 0;
+  }
+
+  .room-directions {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: #4f4f4f;
+    margin: 0;
+  }
+
+  .building-note {
+    padding: 1rem 1.5rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    border-left: 4px solid hsl(103, 100%, 27%);
+    background-color: hsla(103, 100%, 89%, 0.5);
+    border-radius: 0 0.5rem 0.5rem 0;
+  }
+
+  .building-note-title {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    margin: 0 0 0.5rem 0;
+    color: black;
+  }
+
+  .building-directions {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: #4f4f4f;
+    margin: 0;
+  }
+
+  .no-directions {
+    color: hsl(0, 0%, 60%);
+  }
+  
+  .no-directions a {
+    color: hsl(5, 53%, 32%);
+    outline: none;
+    transition: all 0.2s;
+    padding: 0.125rem 0.25rem;
+    border-radius: 4px;
+  }
+
+  .no-directions a:hover, .no-directions a:focus-visible {
+    background-color: hsl(5, 53%, 32%);
+    color: white;
+    text-decoration: none;
   }
 
   .schedule-section {
