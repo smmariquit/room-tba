@@ -83,14 +83,13 @@
   .filters-wrap {
     overflow-y: auto;
     button {
-      all: unset;
       font-size: 0.875rem;
       padding: 0.5rem 1rem;
       border-radius: 0.25rem;
       border: 1px solid hsl(0, 0%, 83%);
       transition: all 0.125s;
       &:hover:not(.active),
-      &:focus:not(.active) {
+      &:focus-visible:not(.active) {
         border-color: hsl(5, 53%, 32%);
         color: hsl(5, 53%, 32%);
       }

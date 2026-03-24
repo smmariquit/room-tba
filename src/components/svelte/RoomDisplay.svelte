@@ -53,7 +53,7 @@
   }
 
   .room-data:hover,
-  .room-data:focus {
+  .room-data:focus-visible {
     border-color: hsl(5, 53%, 32%);
     background-color: hsl(5, 53%, 98%);
   }

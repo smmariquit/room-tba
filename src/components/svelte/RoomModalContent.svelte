@@ -25,6 +25,25 @@
     </div>
   </div>
 
+  {#if currentRoomStore.roomData?.building?.lat && currentRoomStore.roomData?.building?.lon}
+    <div class="map-links">
+      <a
+        href="https://www.google.com/maps?q={currentRoomStore.roomData.building.lat},{currentRoomStore.roomData.building.lon}"
+        target="_blank"
+        rel="noreferrer"
+      >
+        Open in Google Maps
+      </a>
+      <a
+        href="https://www.openstreetmap.org/?mlat={currentRoomStore.roomData.building.lat}&mlon={currentRoomStore.roomData.building.lon}#map=18/{currentRoomStore.roomData.building.lat}/{currentRoomStore.roomData.building.lon}"
+        target="_blank"
+        rel="noreferrer"
+      >
+        Open in OpenStreetMap
+      </a>
+    </div>
+  {/if}
+
   <div class="schedule-section">
     <h3>Classes in this room</h3>
     <ScheduleRender
@@ -117,5 +136,25 @@
 
   :global(.schedule-section > div) {
     width: 100%;
+  }
+
+  .map-links {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .map-links a {
+    color: hsl(5, 53%, 32%);
+    outline: none;
+    transition: all 0.2s;
+    font-size: 0.875rem;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid hsl(5, 53%, 32%);
+    border-radius: 4px;
+    text-decoration: none;
+  }
+  .map-links a:hover, .map-links a:focus-visible {
+    background-color: hsl(5, 53%, 32%);
+    color: white;
   }
 </style>

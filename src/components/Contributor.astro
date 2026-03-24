@@ -31,8 +31,7 @@ const img_url = name.toLowerCase().split(" ").join("-");
 }
 
 <style>
-  object,
-  img {
+  object, img {
     margin: unset;
     padding: unset;
     width: 2.5rem;
@@ -42,6 +41,7 @@ const img_url = name.toLowerCase().split(" ").join("-");
   }
   .contributor-profile {
     display: flex;
+    z-index:40;
     font-size: 0.875rem;
     gap: 0.5rem;
     align-items: center;
@@ -52,6 +52,7 @@ const img_url = name.toLowerCase().split(" ").join("-");
   }
   .tooltip {
     position: relative;
+    outline: unset;
     &::before {
       content: attr(data-tooltip);
       position: absolute;
@@ -81,7 +82,7 @@ const img_url = name.toLowerCase().split(" ").join("-");
       transition:opacity .125s;
       border-color: hsla(0, 0%, 10%, 0.5) transparent transparent transparent;
     }
-    &:hover::before, &:hover::after {
+    &:is(:hover, :focus)::before, &:is(:hover, :focus)::after {
       opacity: initial;
     }
   }
