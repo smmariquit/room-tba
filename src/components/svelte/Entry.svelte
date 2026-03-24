@@ -59,6 +59,7 @@
       center={[121.2414408, 14.165158]}
       zoom={17}
       pitch={60}
+      maxBounds={[[121.225963, 14.150106], [121.254638, 14.172678]]}
       class="map"
     >
       <FillExtrusionLayer
