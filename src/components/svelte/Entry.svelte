@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount, untrack } from "svelte";
   import { MapLibre, Marker, FillExtrusionLayer } from "svelte-maplibre";
-  import { Map as MapLibreMap } from "maplibre-gl";
+  import * as maplibre from "maplibre-gl";
   import type {
     BuildingData,
     ClassMapValue,
@@ -28,7 +28,8 @@
 
   const { rooms, classesMap, buildings, divisions, colleges }: Props = $props();
 
-  let mapInstance: MapLibreMap | undefined = $state();
+  let mapInstance: maplibre.MapLibreMap | undefined = $state();
+
   onMount(() => {
     filterStore.setData([buildings, colleges, divisions]);
   });
