@@ -248,7 +248,7 @@
                 <span class="compact-room-code">No rooms found</span>
               </div>
             {:else}
-              {#each roomsResult.slice(0, 4) as room}
+              {#each roomsResult.slice(0, 5) as room}
                 <button class="compact-result-item" onclick={() => {
                   currentRoomStore.updateClasses(classesMap.get(room.code) ?? []);
                   currentRoomStore.updateRoom(room);
