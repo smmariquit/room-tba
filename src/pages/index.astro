@@ -86,15 +86,19 @@ console.log({ directionCount, totalRooms });
   />
   <div class="directions-status">
     <div class="directions-header">Rooms with directions</div>
-    <div class="directions-progressbar">
-      <div
-        class="directions-progressbar__value"
-        data-value={Math.floor((directionCount / totalRooms) * 100)}
-      >
+    <div class="directions-body">
+      <div>{directionCount} / {totalRooms}</div>
+      <div class="directions-progressbar">
+        <div
+          class="directions-progressbar__value"
+          data-value={Math.floor((directionCount / totalRooms) * 100)}
+        >
+        </div>
       </div>
     </div>
-    <div>{directionCount} / {totalRooms}</div>
-    <a href="/contribute" target="_blank">Contribute</a>
+    <div>
+      <a href="/contribute" target="_blank">Contribute to Room TBA</a>
+    </div>
   </div>
 </Layout>
 
@@ -104,22 +108,30 @@ console.log({ directionCount, totalRooms });
     bottom: .5rem;
     left: .5rem;
     display: flex;
+    flex-direction: column;
     gap: 0.5rem;
-    padding: .5rem 1rem;
-    align-items: center;
+    padding: 1rem;
     border-radius: 1rem;
     box-shadow: 0 2px 0.5rem 0 hsla(0, 0%, 0%, 0.2);
     background-color: white;
+    width:min(20rem, 90%);
     font-size: 0.875rem;
     z-index:100;
 
     .directions-header {
       font-weight: 600;
+      font-size:1rem;
+    }
+    .directions-body {
+      display:flex;
+      gap:.5rem;
+      align-items: center;
+
     }
     .directions-progressbar {
       height: 0.75rem;
+      flex: 1 0 0;
       border-radius: 0.5rem;
-      width: 10rem;
       background-color: hsl(0, 0%, 89%);
     }
     .directions-progressbar__value {
@@ -130,6 +142,7 @@ console.log({ directionCount, totalRooms });
       background-color: hsl(135, 100%, 42%);
     }
     a {
+      display:inline-block;
       text-decoration:unset;
       padding:.25rem .75rem;
       border-radius: .5rem;
