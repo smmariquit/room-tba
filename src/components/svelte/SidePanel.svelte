@@ -9,13 +9,9 @@
     currentRoomStore,
   } from "../../lib/store.svelte";
   import RoomModalContent from "./RoomModalContent.svelte";
+  import { getAppData } from "../../lib/context";
 
-  type Props = {
-    rooms: RoomData[];
-    classesMap: Map<string, ClassMapValue[]>;
-  };
-
-  const { rooms, classesMap }: Props = $props();
+  const { rooms, classesMap } = getAppData();
 
   const MAX_DISPLAY_RESULT = 20;
 
@@ -24,16 +20,16 @@
   let typing: boolean = $state(false);
   let paginateOffset: number = $state(0);
   // svelte-ignore state_referenced_locally
-  let roomsResult: Props["rooms"] = $state(rooms);
-
-  const maxPaginateOffset: number = $derived(
-    Math.floor((roomsResult.length - 1) / MAX_DISPLAY_RESULT) + 1,
-  );
+  let roomsResult: typeof rooms = $state(rooms);
   const paginatedRooms = $derived(
     roomsResult.slice(
       paginateOffset * MAX_DISPLAY_RESULT,
       (paginateOffset + 1) * MAX_DISPLAY_RESULT,
     ),
+  );
+
+  const maxPaginateOffset: number = $derived(
+    Math.floor((roomsResult.length - 1) / MAX_DISPLAY_RESULT) + 1,
   );
 
   const isSearchOnly = $derived(
@@ -629,14 +625,6 @@
     line-height: 1.25rem;
     margin: 0;
     color: black;
-  }
-
-  .building-desc {
-    font-size: 0.75rem;
-    color: #4f4f4f;
-    line-height: 1.5;
-    margin: 0;
-    margin-bottom: 0.5rem;
   }
 
   .building-subtitle {

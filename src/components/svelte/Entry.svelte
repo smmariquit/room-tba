@@ -24,31 +24,16 @@
     <header class="top-header">
       <h2>Room TBA</h2>
     </header>
-
-    <SidePanel {rooms} {classesMap} />
+    <SidePanel />
   </div>
-
-  {#if modalStore.open}
-    <Modal />
-  {/if}
+  <Modal />
 </div>
 
 <style>
   .app-layout {
-    position: relative;
     width: 100%;
     height: 100dvh;
     overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    font-family:
-      "DM Sans",
-      system-ui,
-      -apple-system,
-      BlinkMacSystemFont,
-      "Segoe UI",
-      Roboto,
-      sans-serif;
   }
 
   :global(.map) {
@@ -57,12 +42,15 @@
   }
 
   .ui-layer {
-    position: relative;
+    position: fixed;
+    top: 0;
+    left: 0;
     z-index: 10;
     pointer-events: none;
     display: flex;
     flex-direction: column;
     height: 100%;
+    width: 100%;
   }
 
   .ui-layer > * {
