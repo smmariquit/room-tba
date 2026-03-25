@@ -23,6 +23,7 @@
   let searchInput: string = $state("");
   let typing: boolean = $state(false);
   let paginateOffset: number = $state(0);
+  // svelte-ignore state_referenced_locally
   let roomsResult: Props["rooms"] = $state(rooms);
 
   const maxPaginateOffset: number = $derived(
