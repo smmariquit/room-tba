@@ -71,7 +71,6 @@ const [{ count: directionCount }] = await db
 const [{ count: totalRooms }] = await db
   .select({ count: count() })
   .from(roomsTable);
-console.log({ directionCount, totalRooms });
 ---
 
 <Layout>

@@ -66,6 +66,7 @@
       style="https://tiles.openfreemap.org/styles/liberty"
       center={[121.2414408, 14.165158]}
       zoom={17}
+      minZoom={16}
       pitch={60}
       maxBounds={[
         [121.225963, 14.150106],
