@@ -1,3 +1,4 @@
+import type { modalOptions } from "../constants/modal-states";
 import type {
   BuildingData,
   ClassMapValue,
@@ -9,7 +10,7 @@ import type {
 
 interface IModalStore {
   open: boolean;
-  type: "landing" | "schedule-expand" | null;
+  type: typeof modalOptions[number] | null;
 }
 
 interface IRoomStore {
