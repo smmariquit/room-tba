@@ -17,16 +17,9 @@
   import Banner from "./Banner.svelte";
   import Modal from "./Modal.svelte";
   import SidePanel from "./SidePanel.svelte";
+  import { getAppData } from "../../lib/context";
 
-  type Props = {
-    rooms: RoomData[];
-    buildings: BuildingData[];
-    colleges: CollegeData[];
-    divisions: DivisionData[];
-    classesMap: Map<string, ClassMapValue[]>;
-  };
-
-  const { rooms, classesMap, buildings, divisions, colleges }: Props = $props();
+  const { rooms, classesMap, buildings, divisions, colleges } = getAppData();
 
   let mapInstance: maplibre.MapLibreMap | undefined = $state();
 

@@ -10,6 +10,7 @@ import {
 import Entry from "../components/svelte/Entry.svelte";
 import Layout from "../layouts/Layout.astro";
 import { count, eq, isNotNull, isNull } from "drizzle-orm";
+import AppProvider from "../components/svelte/AppProvider.svelte";
 
 const rooms = await db
   .select({
@@ -75,14 +76,15 @@ const [{ count: totalRooms }] = await db
 
 <Layout>
   <a href="#main-content" class="skip-content">Skip Content</a>
-  <Entry
-    rooms={rooms}
-    classesMap={classesDict}
+  <AppProvider
     buildings={buildings}
+    classesMap={classesDict}
     colleges={colleges}
     divisions={divisions}
+    rooms={rooms}
     client:load
-  />
+  >
+  </AppProvider>
   <div class="directions-status">
     <div class="directions-header">Rooms with directions</div>
     <div class="directions-body">
@@ -123,7 +125,7 @@ const [{ count: totalRooms }] = await db
     border-radius: 1rem;
     box-shadow: 0 2px 0.5rem 0 hsla(0, 0%, 0%, 0.2);
     background-color: white;
-    width: min(20rem, calc(100% - (2*.5rem)));
+    width: min(20rem, calc(100% - (2 * 0.5rem)));
     font-size: 0.875rem;
     z-index: 20;
 
