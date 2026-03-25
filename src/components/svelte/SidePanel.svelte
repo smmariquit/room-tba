@@ -2,7 +2,7 @@
   import RoomDisplay from "./RoomDisplay.svelte";
   import { onMount } from "svelte";
   import { debounce } from "es-toolkit/function";
-  import type { RoomData, ClassMapValue, IFilterStore } from "../../lib/types";
+  import type { RoomData, IFilterStore } from "../../lib/types";
   import {
     filterStore,
     modalStore,

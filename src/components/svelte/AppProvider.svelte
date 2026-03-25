@@ -1,5 +1,4 @@
 <script lang="ts">
-  import type { Snippet } from "svelte";
   import { setAppData } from "../../lib/context";
   import type {
     BuildingData,

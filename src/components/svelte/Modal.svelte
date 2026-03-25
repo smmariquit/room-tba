@@ -1,8 +1,6 @@
 <script lang="ts">
   import { modalStore } from "../../lib/store.svelte";
   import { fade, fly } from "svelte/transition";
-  import RoomModalContent from "./RoomModalContent.svelte";
-  import FilterModalContent from "./FilterModalContent.svelte";
 </script>
 
 {#if modalStore.open}

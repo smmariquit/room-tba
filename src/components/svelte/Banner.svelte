@@ -3,7 +3,7 @@
   interface Props {
     children: Snippet;
   }
-  const props = $props();
+  const props: Props = $props();
 </script>
 
 <div>

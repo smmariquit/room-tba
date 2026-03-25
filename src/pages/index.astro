@@ -7,9 +7,9 @@ import {
   divisionsTable,
   roomsTable,
 } from "../../drizzle/schema";
-import Entry from "../components/svelte/Entry.svelte";
+// import Entry from "../components/svelte/Entry.svelte";
 import Layout from "../layouts/Layout.astro";
-import { count, eq, isNotNull, isNull } from "drizzle-orm";
+import { count, eq, isNotNull } from "drizzle-orm";
 import AppProvider from "../components/svelte/AppProvider.svelte";
 
 const rooms = await db
@@ -64,11 +64,13 @@ rooms.sort((a, b) => {
   return countB - countA;
 });
 
+// @ts-ignore
 const [{ count: directionCount }] = await db
-  .select({ count: count() })
-  .from(roomsTable)
-  .where(isNotNull(roomsTable.directions));
+.select({ count: count() })
+.from(roomsTable)
+.where(isNotNull(roomsTable.directions));
 
+// @ts-ignore
 const [{ count: totalRooms }] = await db
   .select({ count: count() })
   .from(roomsTable);
