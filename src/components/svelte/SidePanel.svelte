@@ -202,7 +202,7 @@
         /></svg
       >
       <input
-        type="search"
+        type="text"
         id="search"
         bind:this={searchElement}
         bind:value={searchInput}
@@ -501,7 +501,7 @@
     color: black;
   }
 
-  input[type="search"] {
+  input[type="text"] {
     width: 100%;
     border: none;
     outline: none;
@@ -512,7 +512,7 @@
     text-overflow: ellipsis;
   }
 
-  input[type="search"]::placeholder {
+  input[type="text"]::placeholder {
     color: #999;
   }
 
