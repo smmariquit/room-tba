@@ -1,21 +1,7 @@
 <script lang="ts">
-  import { onMount, untrack } from "svelte";
-  import * as maplibre from "maplibre-gl";
-  import {
-    filterStore,
-    modalStore,
-    currentRoomStore,
-  } from "../../lib/store.svelte";
   import Modal from "./Modal.svelte";
   import SidePanel from "./SidePanel.svelte";
-  import { getAppData } from "../../lib/context";
   import Map from "./Map.svelte";
-
-  const { rooms, classesMap, buildings, divisions, colleges } = getAppData();
-
-  onMount(() => {
-    filterStore.setData([buildings, colleges, divisions]);
-  });
 </script>
 
 <div class="app-layout">

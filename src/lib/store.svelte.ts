@@ -62,9 +62,6 @@ class FilterStore {
   private _filterStore: IFilterStore = $state({
     filter: null,
     type: null,
-    buildings: [],
-    colleges: [],
-    divisions: [],
   });
 
   filterData = $derived({
@@ -72,25 +69,9 @@ class FilterStore {
     filter: this._filterStore.filter,
   });
 
-  getData = () => ({
-    buildings: this._filterStore.buildings,
-    colleges: this._filterStore.colleges,
-    divisions: this._filterStore.divisions,
-  });
-
   setFilter = (type: IFilterStore["type"], filter: string | null) => {
     this._filterStore.type = type;
     this._filterStore.filter = filter;
-  };
-
-  setData = ([buildings, colleges, divisions]: [
-    BuildingData[],
-    CollegeData[],
-    DivisionData[],
-  ]) => {
-    this._filterStore.buildings = buildings;
-    this._filterStore.colleges = colleges;
-    this._filterStore.divisions = divisions;
   };
 
   resetFilter = () => {

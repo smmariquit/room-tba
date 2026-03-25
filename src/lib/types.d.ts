@@ -75,9 +75,6 @@ type DivisionData = {
 interface IFilterStore {
   type: "building" | "college" | "division" | null;
   filter: string | null;
-  buildings: BuildingData[];
-  colleges: CollegeData[];
-  divisions: DivisionData[];
 }
 
 interface ContributorInfo {
