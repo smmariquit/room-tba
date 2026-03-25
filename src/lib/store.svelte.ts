@@ -1,10 +1,7 @@
 import type { modalOptions } from "../constants/modal-states";
 import type {
-  BuildingData,
   ClassMapValue,
   RoomData,
-  CollegeData,
-  DivisionData,
   IFilterStore,
 } from "./types";
 
