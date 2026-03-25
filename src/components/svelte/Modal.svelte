@@ -25,11 +25,11 @@
         duration: 75,
       }}
     >
-      {#if modalStore.type === "room-details"}
+      <!-- {#if modalStore.type === "room-details"}
         <RoomModalContent />
       {:else}
         <FilterModalContent />
-      {/if}
+      {/if} -->
     </div>
   </div>
 {/if}

@@ -35,11 +35,7 @@
   });
 
   $effect(() => {
-    if (
-      modalStore.open &&
-      modalStore.type === "room-details" &&
-      currentRoomStore.roomData?.building
-    ) {
+    if (currentRoomStore.roomData?.building) {
       const lat = currentRoomStore.roomData.building.lat;
       const lon = currentRoomStore.roomData.building.lon;
       if (lat && lon && mapInstance) {
@@ -121,7 +117,7 @@
     <SidePanel {rooms} {classesMap} />
   </div>
 
-  {#if modalStore.open && modalStore.type !== "room-details"}
+  {#if modalStore.open}
     <Modal />
   {/if}
 </div>

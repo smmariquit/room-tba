@@ -19,7 +19,6 @@
   function openRoomData() {
     currentRoomStore.updateClasses(classes);
     currentRoomStore.updateRoom(room);
-    modalStore.openModal("room-details");
   }
 </script>
 

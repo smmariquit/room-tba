@@ -38,7 +38,7 @@
   const isSearchOnly = $derived(
     searchInput !== "" &&
       filterStore.filterData.filter === null &&
-      !(modalStore.open && modalStore.type === "room-details"),
+      !modalStore.open,
   );
 
   onMount(() => {
@@ -72,16 +72,6 @@
       // If the user starts typing a new search while looking at a modal,
       // close the modal and go back to search view
       if (inputValue !== "" && modalStore.open) {
-        if (modalStore.type === "room-details") {
-          filterStore.resetFilter();
-          filterData = {
-            type: null,
-            filter: null,
-            buildings: filterData.buildings,
-            colleges: filterData.colleges,
-            divisions: filterData.divisions,
-          };
-        }
         modalStore.closeModal();
       }
 
@@ -156,9 +146,6 @@
   function handleInput() {
     typing = true;
     if (modalStore.open) {
-      if (modalStore.type === "room-details") {
-        filterStore.resetFilter();
-      }
       modalStore.closeModal();
     }
   }
@@ -208,11 +195,9 @@
         bind:value={searchInput}
         class={typing ? "typing" : ""}
         oninput={handleInput}
-        placeholder={modalStore.type === "room-details"
-          ? currentRoomStore.roomData?.code
-          : filterStore.filterData.filter
-            ? filterStore.filterData.filter
-            : "Search room code, building, division..."}
+        placeholder={filterStore.filterData.filter
+          ? filterStore.filterData.filter
+          : "Search room code, building, division..."}
       />
       {#if typing}
         <div class="loading-icon">
@@ -261,7 +246,7 @@
     </div>
 
     <div class="search-buttons">
-      {#if filterStore.filterData.filter !== null || (modalStore.open && modalStore.type === "room-details") || searchInput !== ""}
+      {#if filterStore.filterData.filter !== null || modalStore.open || searchInput !== ""}
         <button
           onclick={closeSearchContext}
           type="button"
@@ -287,12 +272,8 @@
           >
         </button>
       {:else}
-        <button
-          onclick={() => modalStore.openModal("filters")}
-          type="button"
-          class="filter-btn"
-          aria-label="Filters"
-        >
+        <!-- onclick={() => modalStore.openModal("filters")} -->
+        <button type="button" class="filter-btn" aria-label="Filters">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="20"
@@ -311,9 +292,9 @@
     </div>
   </div>
 
-  {#if searchInput !== "" || filterStore.filterData.filter !== null || (modalStore.open && modalStore.type === "room-details")}
+  {#if searchInput !== "" || filterStore.filterData.filter !== null || modalStore.open}
     <div class="panel-content {isSearchOnly ? 'search-mode-panel' : ''}">
-      {#if modalStore.open && modalStore.type === "room-details"}
+      {#if modalStore.open}
         <RoomModalContent />
       {:else}
         {#if filterStore.filterData.type === "building" && filterStore.filterData.filter !== null}
@@ -340,7 +321,6 @@
                       classesMap.get(room.code) ?? [],
                     );
                     currentRoomStore.updateRoom(room);
-                    modalStore.openModal("room-details");
                   }}
                 >
                   <svg
