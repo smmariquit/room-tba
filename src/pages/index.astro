@@ -123,9 +123,9 @@ const [{ count: totalRooms }] = await db
     border-radius: 1rem;
     box-shadow: 0 2px 0.5rem 0 hsla(0, 0%, 0%, 0.2);
     background-color: white;
-    width: min(20rem, 90%);
+    width: min(20rem, calc(100% - (2*.5rem)));
     font-size: 0.875rem;
-    z-index: 100;
+    z-index: 20;
 
     .directions-header {
       font-weight: 600;
