@@ -9,7 +9,7 @@ import type {
 
 interface IModalStore {
   open: boolean;
-  type: "room-details" | "filters" | null;
+  type: "landing" | "schedule-expand" | null;
 }
 
 interface IRoomStore {
