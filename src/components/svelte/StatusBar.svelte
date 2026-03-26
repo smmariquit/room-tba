@@ -62,10 +62,10 @@
       display: flex;
       & > *:not(:last-child) {
         border-right: 2px solid #aaa;
-        padding-right: 1rem;
+        padding-right: 0.75rem;
       }
       & > *:not(:first-child) {
-        padding-left: 1rem;
+        padding-left: 0.75rem;
       }
     }
     .app-version {
