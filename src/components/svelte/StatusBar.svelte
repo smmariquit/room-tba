@@ -46,6 +46,9 @@
 </div>
 
 <style>
+  * {
+    pointer-events: auto;
+  }
   div.status-bar {
     display: flex;
     font-size: 0.875rem;
