@@ -1,14 +1,11 @@
 <script lang="ts">
-  import RoomDisplay from "./RoomDisplay.svelte";
+  // import RoomDisplay from "./RoomDisplay.svelte";
   import { onMount } from "svelte";
   import { debounce } from "es-toolkit/function";
   import type { RoomData, IFilterStore } from "../../lib/types";
-  import {
-    filterStore,
-    modalStore,
-    currentRoomStore,
-  } from "../../lib/store.svelte";
-  import RoomModalContent from "./RoomModalContent.svelte";
+  import { filterStore, modalStore } from "../../lib/store.svelte";
+  // currentRoomStore,
+  // import RoomModalContent from "./RoomModalContent.svelte";
   import { getAppData } from "../../lib/context";
 
   const { rooms, classesMap } = getAppData();
@@ -147,15 +144,15 @@
     }
   }
 
-  function scrollToTop() {
-    const panel = document.querySelector(".panel-content");
-    if (panel) {
-      panel.scrollTo({
-        top: 0,
-        behavior: "smooth",
-      });
-    }
-  }
+  // function scrollToTop() {
+  //   const panel = document.querySelector(".panel-content");
+  //   if (panel) {
+  //     panel.scrollTo({
+  //       top: 0,
+  //       behavior: "smooth",
+  //     });
+  //   }
+  // }
 
   function closeSearchContext() {
     modalStore.closeModal();
@@ -268,150 +265,9 @@
             ></line></svg
           >
         </button>
-      {:else}
-        <!-- onclick={() => modalStore.openModal("filters")} -->
-        <button type="button" class="filter-btn" aria-label="Filters">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            ><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"
-            ></polygon></svg
-          >
-        </button>
       {/if}
     </div>
   </div>
-
-  {#if searchInput !== "" || filterStore.filterData.filter !== null || modalStore.open}
-    <div class="panel-content {isSearchOnly ? 'search-mode-panel' : ''}">
-      {#if modalStore.open}
-        <RoomModalContent />
-      {:else}
-        {#if filterStore.filterData.type === "building" && filterStore.filterData.filter !== null}
-          <div class="building-header">
-            <div class="header-top-row">
-              <h2>{filterStore.filterData.filter}</h2>
-            </div>
-            <p class="building-subtitle">Rooms used by the institution</p>
-          </div>
-        {/if}
-
-        {#if isSearchOnly}
-          <div class="mobile-compact-results">
-            {#if roomsResult.length === 0}
-              <div class="compact-result-empty">
-                <span class="compact-room-code">No rooms found</span>
-              </div>
-            {:else}
-              {#each roomsResult.slice(0, 5) as room}
-                <button
-                  class="compact-result-item"
-                  onclick={() => {
-                    currentRoomStore.updateClasses(
-                      classesMap.get(room.code) ?? [],
-                    );
-                    currentRoomStore.updateRoom(room);
-                  }}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="#969696"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    ><line x1="7" y1="17" x2="17" y2="7"></line><polyline
-                      points="7 7 17 7 17 17"
-                    ></polyline></svg
-                  >
-                  <span class="compact-room-code"
-                    ><strong>{room.code}</strong>
-                    {room.building?.name ? `· ${room.building.name}` : ""}</span
-                  >
-                </button>
-              {/each}
-            {/if}
-          </div>
-        {/if}
-
-        <div
-          class="desktop-full-results {isSearchOnly ? 'hide-on-mobile' : ''}"
-        >
-          <div class="rooms-header-info">
-            {#if searchInput !== "" && !typing}
-              <div class="rooms-found">{roomsResult.length} rooms found</div>
-            {/if}
-          </div>
-
-          <div class="room-container">
-            {#each paginatedRooms as room}
-              <RoomDisplay
-                {room}
-                {searchInput}
-                classes={classesMap.get(room.code) ?? []}
-              ></RoomDisplay>
-            {/each}
-          </div>
-
-          {#if roomsResult.length > 20}
-            <div class="pagination-controls">
-              <button
-                title="next"
-                onclick={() => {
-                  paginateOffset > 0 && paginateOffset--;
-                  scrollToTop();
-                }}
-                disabled={paginateOffset === 0}
-                ><svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"><path d="m15 18-6-6 6-6" /></svg
-                ></button
-              >
-              <div>
-                {paginateOffset + 1} of {maxPaginateOffset}
-              </div>
-              <button
-                onclick={() => {
-                  paginateOffset + 1 < maxPaginateOffset && paginateOffset++;
-                  scrollToTop();
-                }}
-                disabled={paginateOffset === maxPaginateOffset - 1}
-                aria-label="next"
-                ><svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg
-                ></button
-              >
-            </div>
-          {/if}
-        </div>
-      {/if}
-    </div>
-  {/if}
 </div>
 
 <style>
@@ -423,7 +279,7 @@
     flex-direction: column;
     gap: 0.75rem;
     flex: 1;
-    min-height: 0;
+    flex: 1;
     pointer-events: auto;
   }
 
@@ -486,7 +342,7 @@
   }
 
   input[type="text"]::placeholder {
-    color: #999;
+    color: #6b6b6b;
   }
 
   .search-buttons {
@@ -495,7 +351,6 @@
     align-items: center;
   }
 
-  .filter-btn,
   .clear-btn {
     all: unset;
     cursor: pointer;
@@ -517,7 +372,7 @@
     stroke: #7b2d26;
   }
 
-  .panel-content {
+  /* .panel-content {
     background-color: white;
     border-radius: 0.75rem;
     box-shadow: 0rem 2px 0.25rem 0rem rgba(0, 0, 0, 0.25);
@@ -530,6 +385,7 @@
     gap: 0.75rem;
 
     .desktop-full-results {
+      flex: 1;
       overflow-y: auto;
     }
   }
@@ -547,7 +403,7 @@
     }
 
     .panel-content.search-mode-panel {
-      margin-top: -1rem; /* THIS IS HUMAN MADE SLOP*/
+      margin-top: -1rem; // THIS IS HUMAN MADE SLOP
       margin-bottom: auto;
       margin-left: 1rem;
       margin-right: 1rem;
@@ -673,5 +529,5 @@
   .pagination-controls button:disabled {
     opacity: 0.5;
     pointer-events: none;
-  }
+  } */
 </style>
