@@ -5,18 +5,28 @@ import type {
   IFilterStore,
 } from "./types";
 
-interface IModalStore {
+interface ModalStoreState {
   open: boolean;
   type: typeof modalOptions[number] | null;
 }
 
-interface IRoomStore {
+interface RoomStoreState {
   roomData: RoomData | null;
   classesData: ClassMapValue[];
 }
 
+interface QueryStoreState {
+  type: "query" | "result";
+  category: "building" | "division" | "college" | "rooms"
+  filters: {
+    type: "building" | "division" | "college",
+    value: string
+  }[]
+}
+
+
 class ModalStore {
-  private _modalStore: IModalStore = $state({
+  private _modalStore: ModalStoreState = $state({
     open: false,
     type: null,
   });
@@ -24,7 +34,7 @@ class ModalStore {
   open = $derived(this._modalStore.open);
   type = $derived(this._modalStore.type);
 
-  openModal = (type: IModalStore["type"]) => {
+  openModal = (type: ModalStoreState["type"]) => {
     this._modalStore.open = true;
     this._modalStore.type = type;
   };
@@ -38,7 +48,7 @@ class ModalStore {
 }
 
 class RoomStore {
-  private _roomStore: IRoomStore = $state({
+  private _roomStore: RoomStoreState = $state({
     roomData: null,
     classesData: [],
   });
@@ -55,31 +65,7 @@ class RoomStore {
   };
 }
 
-class FilterStore {
-  private _filterStore: IFilterStore = $state({
-    filter: null,
-    type: null,
-  });
 
-  filterData = $derived({
-    type: this._filterStore.type,
-    filter: this._filterStore.filter,
-  });
 
-  setFilter = (type: IFilterStore["type"], filter: string | null) => {
-    this._filterStore.type = type;
-    this._filterStore.filter = filter;
-  };
-
-  resetFilter = () => {
-    this._filterStore = {
-      ...this._filterStore,
-      filter: null,
-      type: null,
-    };
-  };
-}
-
-export const filterStore = new FilterStore();
 export const currentRoomStore = new RoomStore();
 export const modalStore = new ModalStore();
