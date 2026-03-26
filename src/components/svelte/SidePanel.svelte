@@ -417,8 +417,6 @@
 <style>
   .side-panel-wrapper {
     position: relative;
-    margin-top: 0.75rem;
-    margin-left: 1.3125rem;
     width: 25.75rem;
     max-width: calc(100% - 2.625rem);
     display: flex;
@@ -426,7 +424,6 @@
     gap: 0.75rem;
     flex: 1;
     min-height: 0;
-    margin-bottom: 1.3125rem;
     pointer-events: auto;
   }
 
@@ -458,7 +455,6 @@
 
   @media screen and (max-width: 48rem) {
     .search-filter-row {
-      margin: 1rem;
       pointer-events: auto;
       border-radius: 2rem; /* Pill shape for mobile */
     }

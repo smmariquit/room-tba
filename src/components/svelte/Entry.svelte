@@ -2,6 +2,7 @@
   import Modal from "./Modal.svelte";
   import SidePanel from "./SidePanel.svelte";
   import Map from "./Map.svelte";
+  import StatusBar from "./StatusBar.svelte";
 </script>
 
 <div class="app-layout">
@@ -10,7 +11,10 @@
     <header class="top-header">
       <h2>Room TBA</h2>
     </header>
-    <SidePanel />
+    <div class="inner-layer">
+      <SidePanel />
+      <StatusBar />
+    </div>
   </div>
   <Modal />
 </div>
@@ -20,6 +24,12 @@
     width: 100%;
     height: 100dvh;
     overflow: hidden;
+  }
+  .inner-layer {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    flex: 1 0 0;
   }
 
   :global(.map) {
