@@ -7,6 +7,8 @@ type AppData = {
   colleges: CollegeData[];
   divisions: DivisionData[];
   classesMap: Map<string, ClassMapValue[]>;
+  totalRooms: number;
+  directionCount: number;
 }
 
 export const [getAppData, setAppData] = createContext<AppData>();

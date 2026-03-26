@@ -84,10 +84,12 @@ const [{ count: totalRooms }] = await db
     colleges={colleges}
     divisions={divisions}
     rooms={rooms}
+    directionCount={directionCount}
+    totalRooms={totalRooms}
     client:load
   >
   </AppProvider>
-  <div class="directions-status">
+  <!-- <div class="directions-status">
     <div class="directions-header">Rooms with directions</div>
     <div class="directions-body">
       <div>{directionCount} / {totalRooms}</div>
@@ -102,7 +104,7 @@ const [{ count: totalRooms }] = await db
     <div>
       <a href="/contribute" target="_blank">Contribute to Room TBA</a>
     </div>
-  </div>
+  </div> -->
 </Layout>
 
 <style>

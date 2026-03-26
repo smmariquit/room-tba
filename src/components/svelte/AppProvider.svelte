@@ -15,6 +15,8 @@
     colleges: CollegeData[];
     divisions: DivisionData[];
     classesMap: Map<string, ClassMapValue[]>;
+    totalRooms: number;
+    directionCount: number;
   };
   const appData: Props = $props();
   // svelte-ignore state_referenced_locally
