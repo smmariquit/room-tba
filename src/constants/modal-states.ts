@@ -1,1 +1,1 @@
-export const modalOptions = ["landing","schedule-expand"] as const;
+export const modalOptions = ["landing", "schedule-expand", "contributors", "changelog"] as const;
