@@ -30,6 +30,8 @@
     flex-direction: column;
     padding: 0.5rem;
     flex: 1 0 0;
+    pointer-events: none;
+    gap: 0.5rem;
   }
 
   :global(.map) {
@@ -47,10 +49,6 @@
     flex-direction: column;
     height: 100%;
     width: 100%;
-  }
-
-  .ui-layer > * {
-    pointer-events: auto;
   }
 
   .top-header {
