@@ -2,8 +2,8 @@ import type { modalOptions } from "../constants/modal-states";
 import type {
   ClassMapValue,
   RoomData,
-  IFilterStore,
 } from "./types";
+import { SvelteMap } from "svelte/reactivity"
 
 interface ModalStoreState {
   open: boolean;
@@ -16,14 +16,9 @@ interface RoomStoreState {
 }
 
 interface QueryStoreState {
-  type: "query" | "result";
-  category: "building" | "division" | "college" | "rooms"
-  filters: {
-    type: "building" | "division" | "college",
-    value: string
-  }[]
+  type: "query" | "result" | null;
+  category: "building" | "division" | "college" | "rooms" | null
 }
-
 
 class ModalStore {
   private _modalStore: ModalStoreState = $state({
@@ -65,7 +60,49 @@ class RoomStore {
   };
 }
 
+class QueryStore {
+  private _queryStore: QueryStoreState = $state({
+    category: null,
+    type: null,
+  })
+  private _filters = new SvelteMap<string, Exclude<QueryStoreState["category"], null>>();
+  value = $state("");
+  category = $derived(this._queryStore.category)
+  type = $derived(this._queryStore.type)
+  filterValues = $derived(Array.from(this._filters.entries().map(([value, category]) => ({
+    category,
+    value
+  }))))
+  
+  // onclick of query buttons
+  updateQuery = (obj: QueryStoreState) => {
+    this._queryStore = obj;
+  }
+
+  // when clicking the x button
+  clearQuery = () => {
+    this._queryStore = {
+      category: null,
+      type: null
+    }
+  }
+
+  addFilter = (key: string, category: Exclude<QueryStoreState["category"], null>) => {
+    this._filters.set(key, category)
+  }
+
+  removeFilter = (key: string) => {
+    this._filters.delete(key);
+  }
+
+  clearFilter = () => {
+    this._filters.clear();
+  }
 
 
+
+}
+
+export const queryStore = new QueryStore();
 export const currentRoomStore = new RoomStore();
 export const modalStore = new ModalStore();
