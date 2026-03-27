@@ -1,6 +1,7 @@
 <script lang="ts">
   import { getAppData } from "../../lib/context";
   import { queryStore, type QueryStoreState } from "../../lib/store.svelte";
+  import Suggestion from "./Suggestion.svelte";
   const { buildings, colleges, divisions, rooms } = getAppData();
 
   const suggestedResult = $derived<
@@ -72,9 +73,7 @@
 
 <div class="suggestions-container" class:visible={queryStore.value !== ""}>
   {#each suggestedResult as suggestion}
-    <div>
-      <div>{suggestion.value}</div>
-    </div>
+    <Suggestion {...suggestion} />
   {/each}
 </div>
 
