@@ -70,7 +70,7 @@
   $inspect(suggestedResult);
 </script>
 
-<div class="suggestions-container">
+<div class="suggestions-container" class:visible={queryStore.value !== ""}>
   {#each suggestedResult as suggestion}
     <div>
       <div>{suggestion.value}</div>
@@ -84,5 +84,15 @@
     width: 100%;
     height: max-content;
     border-radius: 1rem;
+    padding: 1rem;
+    background-color: white;
+    pointer-events: none;
+    box-shadow: 0rem 2px 0.25rem 0rem rgba(0, 0, 0, 0.25);
+    margin-top: 0.5rem;
+    opacity: 0;
+  }
+  .visible {
+    pointer-events: auto;
+    opacity: 1;
   }
 </style>
