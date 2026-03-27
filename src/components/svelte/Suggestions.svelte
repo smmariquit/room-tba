@@ -71,11 +71,17 @@
   $inspect(suggestedResult);
 </script>
 
-<div class="suggestions-container" class:visible={queryStore.value !== ""}>
-  {#each suggestedResult as suggestion}
-    <Suggestion {...suggestion} />
-  {/each}
-</div>
+{#if queryStore.type === "query"}
+  <div class="suggestions-container" class:visible={queryStore.value !== ""}>
+    {#if suggestedResult.length !== 0}
+      {#each suggestedResult as suggestion}
+        <Suggestion {...suggestion} />
+      {/each}
+    {:else}
+      <div class="no-suggestions">No results for your search</div>
+    {/if}
+  </div>
+{/if}
 
 <style>
   .suggestions-container {
@@ -83,12 +89,17 @@
     width: 100%;
     height: max-content;
     border-radius: 1rem;
-    padding: 1rem;
+    padding: 0.25rem;
+    display: flex;
+    flex-direction: column;
     background-color: white;
     pointer-events: none;
     box-shadow: 0rem 2px 0.25rem 0rem rgba(0, 0, 0, 0.25);
     margin-top: 0.5rem;
     opacity: 0;
+  }
+  .no-suggestions {
+    padding: 0.5rem 1rem;
   }
   .visible {
     pointer-events: auto;
