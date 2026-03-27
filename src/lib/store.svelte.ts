@@ -17,7 +17,7 @@ interface RoomStoreState {
 
 export interface QueryStoreState {
   type: "query" | "result" | null;
-  category: "building" | "division" | "college" | "rooms" | null
+  category: "building" | "division" | "college" | "room" | null
 }
 
 class ModalStore {
