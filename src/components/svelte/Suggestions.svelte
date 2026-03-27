@@ -69,3 +69,20 @@
   }
   $inspect(suggestedResult);
 </script>
+
+<div class="suggestions-container">
+  {#each suggestedResult as suggestion}
+    <div>
+      <div>{suggestion.value}</div>
+    </div>
+  {/each}
+</div>
+
+<style>
+  .suggestions-container {
+    position: absolute;
+    width: 100%;
+    height: max-content;
+    border-radius: 1rem;
+  }
+</style>
