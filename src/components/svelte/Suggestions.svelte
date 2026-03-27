@@ -71,17 +71,19 @@
   $inspect(suggestedResult);
 </script>
 
-{#if queryStore.type === "query"}
-  <div class="suggestions-container" class:visible={queryStore.value !== ""}>
-    {#if suggestedResult.length !== 0}
-      {#each suggestedResult as suggestion}
-        <Suggestion {...suggestion} />
-      {/each}
-    {:else}
-      <div class="no-suggestions">No results for your search</div>
-    {/if}
-  </div>
-{/if}
+<div class="suggestions-container" class:visible={queryStore.type === "query"}>
+  {#if queryStore.value === ""}
+    <Suggestion value={"CAS Building"} category={"building"} />
+    <Suggestion value={"Institute of Computer Science"} category={"division"} />
+    <Suggestion value={"MMM LH"} category={"room"} />
+  {:else if suggestedResult.length !== 0}
+    {#each suggestedResult as suggestion}
+      <Suggestion {...suggestion} />
+    {/each}
+  {:else}
+    <div class="no-suggestions">No results for your search</div>
+  {/if}
+</div>
 
 <style>
   .suggestions-container {
