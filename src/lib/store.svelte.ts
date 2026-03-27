@@ -16,7 +16,7 @@ interface RoomStoreState {
 }
 
 export interface QueryStoreState {
-  type: "query" | "result" | null;
+  type: "query" | "result";
   category: "building" | "division" | "college" | "room" | null
 }
 
@@ -63,7 +63,7 @@ class RoomStore {
 class QueryStore {
   private _queryStore: QueryStoreState = $state({
     category: null,
-    type: null,
+    type: "query",
   })
   private _filters = new SvelteMap<string, Exclude<QueryStoreState["category"], null>>();
   value = $state("");
@@ -83,8 +83,9 @@ class QueryStore {
   clearQuery = () => {
     this._queryStore = {
       category: null,
-      type: null
+      type: "query"
     }
+    this.value = ""
   }
 
   setType(type: typeof this.type) {
