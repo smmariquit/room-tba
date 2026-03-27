@@ -1,36 +1,12 @@
 <script lang="ts">
   import { FillExtrusionLayer, MapLibre, Marker } from "svelte-maplibre";
   import * as maplibre from "maplibre-gl";
-  import {
-    currentRoomStore,
-    filterStore,
-    modalStore,
-  } from "../../lib/store.svelte";
   import { getAppData } from "../../lib/context";
-  import { untrack } from "svelte";
 
   const { buildings } = getAppData();
   let mapInstance: maplibre.MapLibreMap | undefined = $state();
 
-  $effect(() => {
-    if (currentRoomStore.roomData?.building) {
-      const lat = currentRoomStore.roomData.building.lat;
-      const lon = currentRoomStore.roomData.building.lon;
-      if (lat && lon && mapInstance) {
-        untrack(() => {
-          mapInstance?.flyTo({ center: [lon, lat], zoom: 19, duration: 1500 });
-        });
-      }
-    }
-  });
-
-  function handleMarkerClick(
-    buildingName: string,
-    lat: number | null,
-    lon: number | null,
-  ) {
-    filterStore.setFilter("building", buildingName);
-    modalStore.closeModal();
+  function handleMarkerClick(lat: number | null, lon: number | null) {
     if (mapInstance && lat && lon) {
       mapInstance.flyTo({ center: [lon, lat], zoom: 18, duration: 1500 });
     }

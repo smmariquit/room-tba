@@ -22,13 +22,7 @@
       out:fade={{
         duration: 75,
       }}
-    >
-      <!-- {#if modalStore.type === "room-details"}
-        <RoomModalContent />
-      {:else}
-        <FilterModalContent />
-      {/if} -->
-    </div>
+    ></div>
   </div>
 {/if}
 

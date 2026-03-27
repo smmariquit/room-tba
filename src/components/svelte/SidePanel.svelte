@@ -2,8 +2,8 @@
   // import RoomDisplay from "./RoomDisplay.svelte";
   import { onMount } from "svelte";
   import { debounce } from "es-toolkit/function";
-  import type { RoomData, IFilterStore } from "../../lib/types";
-  import { filterStore, modalStore } from "../../lib/store.svelte";
+  import type { RoomData } from "../../lib/types";
+  import { modalStore } from "../../lib/store.svelte";
   // currentRoomStore,
   // import RoomModalContent from "./RoomModalContent.svelte";
   import { getAppData } from "../../lib/context";
@@ -27,12 +27,6 @@
 
   const maxPaginateOffset: number = $derived(
     Math.floor((roomsResult.length - 1) / MAX_DISPLAY_RESULT) + 1,
-  );
-
-  const isSearchOnly = $derived(
-    searchInput !== "" &&
-      filterStore.filterData.filter === null &&
-      !modalStore.open,
   );
 
   onMount(() => {
@@ -59,30 +53,27 @@
     };
   });
 
-  const debounceSearch = debounce(
-    (inputValue: string, filterData: typeof filterStore.filterData) => {
-      typing = false;
+  const debounceSearch = debounce((inputValue: string) => {
+    typing = false;
 
-      // If the user starts typing a new search while looking at a modal,
-      // close the modal and go back to search view
-      if (inputValue !== "" && modalStore.open) {
-        modalStore.closeModal();
-      }
+    // If the user starts typing a new search while looking at a modal,
+    // close the modal and go back to search view
+    if (inputValue !== "" && modalStore.open) {
+      modalStore.closeModal();
+    }
 
-      roomsResult = findRooms(rooms, inputValue, filterData);
-      paginateOffset = 0;
-      const url = new URL(window.location.href);
+    roomsResult = findRooms(rooms, inputValue);
+    paginateOffset = 0;
+    const url = new URL(window.location.href);
 
-      if (inputValue === "") url.searchParams.delete("s");
-      else url.searchParams.set("s", inputValue);
+    if (inputValue === "") url.searchParams.delete("s");
+    else url.searchParams.set("s", inputValue);
 
-      window.history.replaceState({}, "", url);
-    },
-    500,
-  );
+    window.history.replaceState({}, "", url);
+  }, 500);
 
   $effect(() => {
-    debounceSearch(searchInput, filterStore.filterData);
+    debounceSearch(searchInput);
   });
 
   function windowKeyDown(ev: KeyboardEvent) {
@@ -95,33 +86,27 @@
       ev.preventDefault();
       searchElement.focus();
     }
-    if (ev.key === "Escape") {
-      modalStore.closeModal();
-      if (filterStore.filterData.filter !== null) {
-        filterStore.resetFilter();
-      }
-    }
   }
 
   function findRooms(
     rooms: RoomData[],
     searchTerm: string,
-    { type, filter }: Pick<IFilterStore, "filter" | "type">,
+    // { type, filter }: Pick<IFilterStore, "filter" | "type">,
   ) {
     searchTerm = searchTerm.toLowerCase().trim();
 
-    if (filter !== null)
-      switch (type) {
-        case "building":
-          rooms = rooms.filter((room) => room.building?.name.includes(filter));
-          break;
-        case "college":
-          rooms = rooms.filter((room) => room.collegeName?.includes(filter));
-          break;
-        case "division":
-          rooms = rooms.filter((room) => room.divisionName?.includes(filter));
-          break;
-      }
+    // if (filter !== null)
+    //   switch (type) {
+    //     case "building":
+    //       rooms = rooms.filter((room) => room.building?.name.includes(filter));
+    //       break;
+    //     case "college":
+    //       rooms = rooms.filter((room) => room.collegeName?.includes(filter));
+    //       break;
+    //     case "division":
+    //       rooms = rooms.filter((room) => room.divisionName?.includes(filter));
+    //       break;
+    //   }
 
     return searchInput !== ""
       ? rooms.filter(
@@ -156,7 +141,6 @@
 
   function closeSearchContext() {
     modalStore.closeModal();
-    filterStore.resetFilter();
     searchInput = "";
   }
 </script>
@@ -189,9 +173,7 @@
         bind:value={searchInput}
         class={typing ? "typing" : ""}
         oninput={handleInput}
-        placeholder={filterStore.filterData.filter
-          ? filterStore.filterData.filter
-          : "Search room code, building, division..."}
+        placeholder={"Search room code, building, division..."}
       />
       {#if typing}
         <div class="loading-icon">
@@ -240,7 +222,7 @@
     </div>
 
     <div class="search-buttons">
-      {#if filterStore.filterData.filter !== null || modalStore.open || searchInput !== ""}
+      {#if searchInput !== ""}
         <button
           onclick={closeSearchContext}
           type="button"
