@@ -24,114 +24,120 @@
   $inspect(queryStore.value);
 </script>
 
-<div class="search-filter-row">
-  <div class="search-container">
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="20"
-      height="20"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      class="search-icon"
-      ><circle cx="11" cy="11" r="8" /><line
-        x1="21"
-        y1="21"
-        x2="16.65"
-        y2="16.65"
-      /></svg
-    >
-    <input
-      type="text"
-      id="search"
-      value={queryStore.value}
-      bind:this={searchElement}
-      class={typing ? "typing" : ""}
-      oninput={handleInput}
-      placeholder={"Search room code, building, division..."}
-    />
-    {#if typing}
-      <div class="loading-icon">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 200 200"
-          width="20"
-          height="20"
-        >
-          <circle stroke-width="17" r="15" cx="40" cy="65"
-            ><animate
-              attributeName="cy"
-              calcMode="spline"
-              dur="0.8"
-              values="65;135;65;"
-              keySplines=".5 0 .5 1;.5 0 .5 1"
-              repeatCount="indefinite"
-              begin="-.4"
-            ></animate></circle
-          >
-          <circle stroke-width="17" r="15" cx="100" cy="65"
-            ><animate
-              attributeName="cy"
-              calcMode="spline"
-              dur="0.8"
-              values="65;135;65;"
-              keySplines=".5 0 .5 1;.5 0 .5 1"
-              repeatCount="indefinite"
-              begin="-.2"
-            ></animate></circle
-          >
-          <circle stroke-width="17" r="15" cx="160" cy="65"
-            ><animate
-              attributeName="cy"
-              calcMode="spline"
-              dur="0.8"
-              values="65;135;65;"
-              keySplines=".5 0 .5 1;.5 0 .5 1"
-              repeatCount="indefinite"
-              begin="0"
-            ></animate></circle
-          >
-        </svg>
-      </div>
-    {/if}
-  </div>
-
-  <div class="search-buttons">
-    {#if queryStore.value !== ""}
-      <button
-        onclick={closeSearchContext}
-        type="button"
-        class="clear-btn"
-        aria-label="Clear Search"
+<div class="search-filter-container">
+  <div class="search-filter">
+    <div class="search-container">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="search-icon"
+        ><circle cx="11" cy="11" r="8" /><line
+          x1="21"
+          y1="21"
+          x2="16.65"
+          y2="16.65"
+        /></svg
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          ><line x1="18" y1="6" x2="6" y2="18"></line><line
-            x1="6"
-            y1="6"
-            x2="18"
-            y2="18"
-          ></line></svg
+      <input
+        type="text"
+        id="search"
+        value={queryStore.value}
+        bind:this={searchElement}
+        class={typing ? "typing" : ""}
+        oninput={handleInput}
+        placeholder={"Search room code, building, division..."}
+      />
+      {#if typing}
+        <div class="loading-icon">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 200 200"
+            width="20"
+            height="20"
+          >
+            <circle stroke-width="17" r="15" cx="40" cy="65"
+              ><animate
+                attributeName="cy"
+                calcMode="spline"
+                dur="0.8"
+                values="65;135;65;"
+                keySplines=".5 0 .5 1;.5 0 .5 1"
+                repeatCount="indefinite"
+                begin="-.4"
+              ></animate></circle
+            >
+            <circle stroke-width="17" r="15" cx="100" cy="65"
+              ><animate
+                attributeName="cy"
+                calcMode="spline"
+                dur="0.8"
+                values="65;135;65;"
+                keySplines=".5 0 .5 1;.5 0 .5 1"
+                repeatCount="indefinite"
+                begin="-.2"
+              ></animate></circle
+            >
+            <circle stroke-width="17" r="15" cx="160" cy="65"
+              ><animate
+                attributeName="cy"
+                calcMode="spline"
+                dur="0.8"
+                values="65;135;65;"
+                keySplines=".5 0 .5 1;.5 0 .5 1"
+                repeatCount="indefinite"
+                begin="0"
+              ></animate></circle
+            >
+          </svg>
+        </div>
+      {/if}
+    </div>
+
+    <div class="search-buttons">
+      {#if queryStore.value !== ""}
+        <button
+          onclick={closeSearchContext}
+          type="button"
+          class="clear-btn"
+          aria-label="Clear Search"
         >
-      </button>
-    {/if}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><line x1="18" y1="6" x2="6" y2="18"></line><line
+              x1="6"
+              y1="6"
+              x2="18"
+              y2="18"
+            ></line></svg
+          >
+        </button>
+      {/if}
+    </div>
   </div>
   <Suggestions />
 </div>
 
 <style>
-  .search-filter-row {
+  .search-filter-container {
+    position: relative;
+  }
+
+  .search-filter {
     background-color: white;
     border-radius: 0.8125rem;
     box-shadow: 0rem 2px 0.25rem 0rem rgba(0, 0, 0, 0.25);
@@ -143,7 +149,7 @@
   }
 
   @media screen and (max-width: 48rem) {
-    .search-filter-row {
+    .search-filter {
       pointer-events: auto;
       border-radius: 2rem; /* Pill shape for mobile */
     }
