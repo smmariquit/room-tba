@@ -18,7 +18,7 @@
   }
 
   function closeSearchContext() {
-    queryStore.value = "";
+    queryStore.clearQuery();
     searchElement?.focus();
     console.log(queryStore.value);
   }
