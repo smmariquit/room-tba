@@ -15,7 +15,7 @@ interface RoomStoreState {
   classesData: ClassMapValue[];
 }
 
-interface QueryStoreState {
+export interface QueryStoreState {
   type: "query" | "result" | null;
   category: "building" | "division" | "college" | "rooms" | null
 }
