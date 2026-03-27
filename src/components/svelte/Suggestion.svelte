@@ -12,9 +12,7 @@
       : original.replaceAll(pattern, (substr) => `<strong>${substr}</strong>`);
   }
 
-  function handleSuggestionClick(
-    event: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement },
-  ) {
+  function handleSuggestionClick() {
     queryStore.updateQuery({
       type: "result",
       category: suggestion.category,
