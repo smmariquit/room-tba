@@ -41,12 +41,7 @@
       {#if building.lat && building.lon}
         <Marker
           lngLat={[building.lon, building.lat]}
-          onclick={() =>
-            handleMarkerClick(
-              building.building_name,
-              building.lat,
-              building.lon,
-            )}
+          onclick={() => handleMarkerClick(building.lat, building.lon)}
         >
           <div class="pin" title={building.building_name}></div>
         </Marker>
