@@ -87,6 +87,10 @@ class QueryStore {
     }
   }
 
+  setType(type: typeof this.type) {
+    this.type = type;
+  }
+
   addFilter = (key: string, category: Exclude<QueryStoreState["category"], null>) => {
     this._filters.set(key, category)
   }
