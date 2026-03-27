@@ -8,6 +8,7 @@
 
   const throttleSearch = throttle((searchInput: string) => {
     queryStore.value = searchInput;
+    queryStore.setType("query");
   }, 500);
 
   function handleInput(
@@ -48,6 +49,7 @@
       <input
         type="text"
         id="search"
+        autocomplete="off"
         value={queryStore.value}
         bind:this={searchElement}
         class={typing ? "typing" : ""}
