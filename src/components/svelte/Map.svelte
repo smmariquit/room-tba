@@ -2,14 +2,40 @@
   import { FillExtrusionLayer, MapLibre, Marker } from "svelte-maplibre";
   import * as maplibre from "maplibre-gl";
   import { getAppData } from "../../lib/context";
+  import { queryStore } from "../../lib/store.svelte";
 
   const { buildings } = getAppData();
   let mapInstance: maplibre.MapLibreMap | undefined = $state();
 
-  function handleMarkerClick(lat: number | null, lon: number | null) {
-    if (mapInstance && lat && lon) {
-      mapInstance.flyTo({ center: [lon, lat], zoom: 18, duration: 1500 });
+  $effect(() => {
+    if (
+      queryStore.category === "building" &&
+      queryStore.type === "result" &&
+      mapInstance
+    ) {
+      const currentBulding = buildings.find(
+        (building) => building.building_name === queryStore.value,
+      );
+      if (
+        typeof currentBulding !== "undefined" &&
+        currentBulding.lon &&
+        currentBulding.lat
+      ) {
+        mapInstance.flyTo({
+          center: [currentBulding.lon, currentBulding.lat],
+          zoom: 18,
+          duration: 1500,
+        });
+      }
     }
+  });
+
+  function handleMarkerClick(buildingName: string) {
+    queryStore.updateQuery({
+      category: "building",
+      type: "result",
+    });
+    queryStore.value = buildingName;
   }
 </script>
 
@@ -41,9 +67,14 @@
       {#if building.lat && building.lon}
         <Marker
           lngLat={[building.lon, building.lat]}
-          onclick={() => handleMarkerClick(building.lat, building.lon)}
+          onclick={() => handleMarkerClick(building.building_name)}
         >
-          <div class="pin" title={building.building_name}></div>
+          <div
+            class="pin"
+            class:active={queryStore.category === "building" &&
+              queryStore.value === building.building_name}
+            title={building.building_name}
+          ></div>
         </Marker>
       {/if}
     {/each}
@@ -67,8 +98,34 @@
     border: 2px solid white;
     border-radius: 50%;
     cursor: pointer;
+    position: relative;
     box-shadow: 0 2px 0.25rem rgba(0, 0, 0, 0.3);
-    transition: transform 0.2s;
+    transition:
+      transform 0.2s,
+      scale 1.5s;
+    &.active {
+      scale: 1.75;
+      &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        outline: 0.125rem dashed hsl(5, 53%, 40%);
+        outline-offset: 0.25rem;
+        animation: rotating 3s 1.5s linear infinite;
+      }
+    }
+  }
+  @keyframes rotating {
+    from {
+      rotate: 0deg;
+    }
+    to {
+      rotate: 360deg;
+    }
   }
 
   .pin:hover {
