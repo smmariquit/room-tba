@@ -137,6 +137,7 @@
 <style>
   .search-filter-container {
     position: relative;
+    pointer-events: auto;
   }
 
   .search-filter {

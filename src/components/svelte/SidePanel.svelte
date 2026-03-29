@@ -104,6 +104,7 @@
     <div class="side-panel-content">
       {#if queryStore.category === "building"}
         <BuildingResult />
+        <div>Opened: {queryStore.value}</div>
       {:else if queryStore.category === "college"}
         <CollegeResult />
         <div>Opened: a college</div>
@@ -128,13 +129,14 @@
     gap: 0.75rem;
     flex: 1;
     flex: 1;
-    pointer-events: auto;
+    pointer-events: none;
   }
   .side-panel-content {
     flex: 1;
     background-color: white;
     border-radius: 1rem;
     padding: 1rem;
+    pointer-events: auto;
   }
 
   /* Mobile responsiveness for side panel */
