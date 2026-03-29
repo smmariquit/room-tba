@@ -1,4 +1,4 @@
-<script lang="ts">
+<!-- <script lang="ts">
   import { filterStore, modalStore } from "../../lib/store.svelte";
   import type { IFilterStore } from "../../lib/types";
 
@@ -95,4 +95,4 @@
       }
     }
   }
-</style>
+</style> -->

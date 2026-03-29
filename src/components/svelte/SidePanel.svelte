@@ -1,6 +1,11 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import Search from "./Search.svelte";
+  import { queryStore } from "../../lib/store.svelte";
+  import BuildingResult from "./BuildingQuery.svelte";
+  import CollegeResult from "./CollegeResult.svelte";
+  import DivisionResult from "./DivisionResult.svelte";
+  import RoomResult from "./RoomResult.svelte";
 
   // let searchElement: HTMLInputElement | null = $state(null);
   // let searchInput: string = $state("");
@@ -95,6 +100,22 @@
 
 <div class="side-panel-wrapper">
   <Search />
+  {#if queryStore.type === "result"}
+    <div class="side-panel-content">
+      {#if queryStore.category === "building"}
+        <BuildingResult />
+      {:else if queryStore.category === "college"}
+        <CollegeResult />
+        <div>Opened: a college</div>
+      {:else if queryStore.category === "division"}
+        <DivisionResult />
+        <div>Opened: a division</div>
+      {:else}
+        <RoomResult />
+        <div>Opened: a room</div>
+      {/if}
+    </div>
+  {/if}
 </div>
 
 <style>
@@ -108,6 +129,12 @@
     flex: 1;
     flex: 1;
     pointer-events: auto;
+  }
+  .side-panel-content {
+    flex: 1;
+    background-color: white;
+    border-radius: 1rem;
+    padding: 1rem;
   }
 
   /* Mobile responsiveness for side panel */
