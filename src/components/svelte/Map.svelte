@@ -9,25 +9,26 @@
 
   $effect(() => {
     if (
-      queryStore.category === "building" &&
-      queryStore.type === "result" &&
-      mapInstance
-    ) {
-      const currentBulding = buildings.find(
-        (building) => building.building_name === queryStore.value,
-      );
-      if (
-        typeof currentBulding !== "undefined" &&
-        currentBulding.lon &&
-        currentBulding.lat
-      ) {
-        mapInstance.flyTo({
-          center: [currentBulding.lon, currentBulding.lat],
-          zoom: 18,
-          duration: 1500,
-        });
-      }
-    }
+      queryStore.category !== "building" ||
+      queryStore.type !== "result" ||
+      !mapInstance
+    )
+      return;
+
+    const currentBuilding = buildings.find(
+      (building) => building.building_name === queryStore.value,
+    );
+
+    if (
+      typeof currentBuilding !== "undefined" &&
+      currentBuilding.lon &&
+      currentBuilding.lat
+    )
+      mapInstance.flyTo({
+        center: [currentBuilding.lon, currentBuilding.lat],
+        zoom: 18,
+        duration: 1500,
+      });
   });
 
   function handleMarkerClick(buildingName: string) {
