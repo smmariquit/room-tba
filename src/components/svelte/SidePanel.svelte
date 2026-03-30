@@ -120,7 +120,6 @@
     position: relative;
     width: 25.75rem;
     max-width: calc(100% - 2.625rem);
-    max-height: 90vh;
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
@@ -128,15 +127,15 @@
     pointer-events: none;
   }
   .side-panel-content {
-    flex: 1;
     background-color: white;
     border-radius: 1.5rem; /* 24px */
     padding: 1.125rem 1.5rem; /* 18px top/bottom, 24px left/right */
     pointer-events: auto;
     display: flex;
+    flex: 1 1 0;
     flex-direction: column;
     overflow: hidden;
-    box-shadow: 0px -2px 4px 0px rgba(0, 0, 0, 0.25);
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
   }
 
   /* Mobile responsiveness for side panel */
