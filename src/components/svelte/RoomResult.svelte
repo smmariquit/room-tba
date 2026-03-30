@@ -6,12 +6,10 @@
 
   const { rooms, classesMap } = getAppData();
 
-  const roomData = $derived(
-    rooms.find((r) => r.code === queryStore.value),
-  );
+  const roomData = $derived(rooms.find((r) => r.code === queryStore.value));
 
   const classesData = $derived(
-    roomData ? classesMap.get(roomData.code) || [] : []
+    roomData ? classesMap.get(roomData.code) || [] : [],
   );
 </script>
 
@@ -74,14 +72,17 @@
     {#if roomData.building?.lat && roomData.building?.lon}
       <div class="map-links">
         <a
-          href="https://www.google.com/maps?q={roomData.building.lat},{roomData.building.lon}"
+          href="https://www.google.com/maps?q={roomData.building.lat},{roomData
+            .building.lon}"
           target="_blank"
           rel="noreferrer"
         >
           Open in Google Maps
         </a>
         <a
-          href="https://www.openstreetmap.org/?mlat={roomData.building.lat}&mlon={roomData.building.lon}#map=18/{roomData.building.lat}/{roomData.building.lon}"
+          href="https://www.openstreetmap.org/?mlat={roomData.building
+            .lat}&mlon={roomData.building.lon}#map=18/{roomData.building
+            .lat}/{roomData.building.lon}"
           target="_blank"
           rel="noreferrer"
         >
@@ -92,10 +93,7 @@
 
     <div class="schedule-section">
       <h3>Classes in this room</h3>
-      <ScheduleRender
-        roomCode={roomData.code}
-        classes={classesData}
-      />
+      <ScheduleRender roomCode={roomData.code} classes={classesData} />
       <Classes classes={classesData} />
     </div>
   {:else}
@@ -129,7 +127,6 @@
   }
 
   .header-section h2 {
-    font-family: "DM Sans", sans-serif;
     font-weight: bold;
     font-size: 1.125rem;
     line-height: 1.25rem;
@@ -147,7 +144,6 @@
   }
 
   .subtitle-badge p {
-    font-family: "DM Sans", sans-serif;
     font-weight: normal;
     font-size: 0.75rem;
     color: #4f4f4f;
@@ -155,7 +151,6 @@
   }
 
   .room-directions {
-    font-family: "DM Sans", sans-serif;
     font-size: 0.875rem;
     line-height: 1.5;
     color: #4f4f4f;
@@ -172,7 +167,6 @@
   }
 
   .building-note-title {
-    font-family: "DM Sans", sans-serif;
     font-weight: 600;
     font-size: 1rem;
     margin: 0 0 0.5rem 0;
@@ -180,7 +174,6 @@
   }
 
   .building-directions {
-    font-family: "DM Sans", sans-serif;
     font-size: 0.875rem;
     line-height: 1.5;
     color: #4f4f4f;
@@ -213,7 +206,6 @@
   }
 
   .schedule-section h3 {
-    font-family: "DM Sans", sans-serif;
     font-weight: 600;
     font-size: 0.875rem;
     line-height: 1.25rem;
@@ -231,7 +223,6 @@
     flex-wrap: wrap;
   }
   .map-links a {
-    font-family: "DM Sans", sans-serif;
     color: hsl(5, 53%, 32%);
     outline: none;
     transition: all 0.2s;

@@ -100,7 +100,6 @@
   }
 
   .building-title {
-    font-family: "DM Sans", sans-serif;
     font-size: 1.125rem; /* 18px */
     font-weight: bold;
     color: black;
@@ -118,7 +117,6 @@
   }
 
   .rooms-subtitle {
-    font-family: "DM Sans", sans-serif;
     font-size: 0.875rem; /* 14px */
     font-weight: bold;
     color: #4c4c4c;
