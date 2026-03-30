@@ -3,33 +3,43 @@
   import * as maplibre from "maplibre-gl";
   import { getAppData } from "../../lib/context";
   import { queryStore } from "../../lib/store.svelte";
+  import { untrack } from "svelte";
 
   const { buildings } = getAppData();
   let mapInstance: maplibre.MapLibreMap | undefined = $state();
 
   $effect(() => {
-    if (
-      queryStore.category !== "building" ||
-      queryStore.type !== "result" ||
-      !mapInstance
-    )
-      return;
+    console.log(queryStore.category, mapInstance);
+    if (queryStore.category === "building" && queryStore.type === "result") {
+      const currentBuilding = buildings.find(
+        (building) => building.building_name === queryStore.value,
+      );
 
-    const currentBuilding = buildings.find(
-      (building) => building.building_name === queryStore.value,
-    );
-
-    if (
-      typeof currentBuilding !== "undefined" &&
-      currentBuilding.lon &&
-      currentBuilding.lat
-    )
-      mapInstance.flyTo({
-        center: [currentBuilding.lon, currentBuilding.lat],
-        zoom: 18,
-        duration: 1500,
+      if (
+        typeof currentBuilding !== "undefined" &&
+        currentBuilding.lon &&
+        currentBuilding.lat
+      )
+        mapInstance?.flyTo({
+          center: [currentBuilding.lon, currentBuilding.lat],
+          zoom: 18,
+          duration: 1500,
+        });
+    } else if (queryStore.category === null) {
+      untrack(() => {
+        mapInstance?.flyTo({
+          center: [121.24224620509085, 14.16283754850545],
+          zoom: 15.24,
+          pitch: 60,
+          bearing: -154.48,
+          duration: 1500,
+        });
       });
+    }
   });
+
+  $inspect(mapInstance);
+  // $inspect(queryStore.category);
 
   function handleMarkerClick(buildingName: string) {
     queryStore.updateQuery({
@@ -41,17 +51,33 @@
 </script>
 
 <div class="map-container">
+  <!-- <button
+    onclick={() =>
+      console.log(
+        /**
+         *
+         * zoom 15.238803882144735 bearing -154.48049706309405
+         * LAT 14.16283754850545 LONG 121.24224620509085
+         */
+
+        mapInstance?.getZoom(),
+        mapInstance?.getBearing(),
+        mapInstance?.getCenter(),
+      )}
+    style="position:fixed; left:50%; top:50%; z-index: 100;">log map</button
+  > -->
   <MapLibre
     bind:map={mapInstance}
     style="https://tiles.openfreemap.org/styles/liberty"
-    center={[121.2414408, 14.165158]}
-    zoom={17}
-    minZoom={16}
-    pitch={60}
     maxBounds={[
       [121.225963, 14.150106],
       [121.254638, 14.172678],
     ]}
+    center={[121.24224620509085, 14.16283754850545]}
+    zoom={15.24}
+    pitch={20}
+    bearing={-154.48}
+    minZoom={15.5}
     class="map"
   >
     <FillExtrusionLayer
