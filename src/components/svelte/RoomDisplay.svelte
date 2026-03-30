@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { currentRoomStore } from "../../lib/store.svelte";
+  import { currentRoomStore, queryStore } from "../../lib/store.svelte";
   import type { RoomData, ClassMapValue } from "../../lib/types";
 
   type Props = {
@@ -19,6 +19,8 @@
   function openRoomData() {
     currentRoomStore.updateClasses(classes);
     currentRoomStore.updateRoom(room);
+    queryStore.updateQuery({ type: "result", category: "room" });
+    queryStore.value = room.code;
   }
 </script>
 
