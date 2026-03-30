@@ -8,10 +8,10 @@
   const { buildings, rooms } = getAppData();
   let mapInstance: maplibre.MapLibreMap | undefined = $state.raw();
 
-  let animationFrameId: number | null = null;
-  let isRotating = false;
-  let lastTimestamp = 0;
-  let currentRotation = 0;
+  let animationFrameId: number | null = $state(null);
+  let isRotating = $state(false);
+  let lastTimestamp = $state(0);
+  let currentRotation = $state(0);
 
   function rotateCamera(timestamp: number) {
     if (!mapInstance || !isRotating) return;
