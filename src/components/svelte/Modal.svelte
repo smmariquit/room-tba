@@ -10,20 +10,17 @@
     <button
       class="overlay"
       onclick={() => modalStore.closeModal()}
-      transition:fade={{ duration: 100 }}
+      transition:fade={{ duration: 200 }}
     ></button>
     <div
       class="modal-content {modalStore.type === 'landing'
         ? 'landing-modal-container'
         : ''}"
       id="modal-content"
-      in:fly={{
+      transition:fly={{
         duration: 200,
         delay: 50,
         y: 50,
-      }}
-      out:fade={{
-        duration: 75,
       }}
     >
       {#if modalStore.type === "landing"}
@@ -68,9 +65,9 @@
     flex-flow: column nowrap;
   }
   .landing-modal-container {
-    flex: 0 1 48rem; 
-    padding: 0; 
-    overflow: hidden; 
+    flex: 0 1 48rem;
+    padding: 0;
+    overflow: hidden;
   }
   @media only screen and (max-width: 31.25rem) {
     .modal-content {
