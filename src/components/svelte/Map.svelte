@@ -8,6 +8,56 @@
   const { buildings, rooms } = getAppData();
   let mapInstance: maplibre.MapLibreMap | undefined = $state.raw();
 
+  let animationFrameId: number | null = null;
+  let isRotating = false;
+  let lastTimestamp = 0;
+  let currentRotation = 0;
+
+  function rotateCamera(timestamp: number) {
+    if (!mapInstance || !isRotating) return;
+    
+    if (!lastTimestamp) lastTimestamp = timestamp;
+    const delta = timestamp - lastTimestamp;
+    lastTimestamp = timestamp;
+
+    currentRotation = (currentRotation + delta / 150) % 360;
+    mapInstance.rotateTo(currentRotation, { duration: 0 });
+    
+    animationFrameId = requestAnimationFrame(rotateCamera);
+  }
+
+  function startRotation() {
+    stopRotation();
+    if (!mapInstance) return;
+    isRotating = true;
+    lastTimestamp = 0;
+    currentRotation = mapInstance.getBearing();
+    animationFrameId = requestAnimationFrame(rotateCamera);
+  }
+
+  function stopRotation() {
+    isRotating = false;
+    lastTimestamp = 0;
+    if (animationFrameId !== null) {
+      cancelAnimationFrame(animationFrameId);
+      animationFrameId = null;
+    }
+  }
+
+  $effect(() => {
+    if (mapInstance) {
+      const map = mapInstance;
+      map.on('mousedown', stopRotation);
+      map.on('touchstart', stopRotation);
+      map.on('wheel', stopRotation);
+      return () => {
+        map.off('mousedown', stopRotation);
+        map.off('touchstart', stopRotation);
+        map.off('wheel', stopRotation);
+      };
+    }
+  });
+
   $effect(() => {
     const category = queryStore.category;
     const type = queryStore.type;
@@ -17,17 +67,23 @@
     if (!map) return;
 
     untrack(() => {
+      stopRotation();
+      map.off("moveend", startRotation);
+
       if (category === "building" && type === "result") {
         const currentBuilding = buildings.find(
           (building) => building.building_name === value,
         );
 
-        if (currentBuilding && currentBuilding.lon && currentBuilding.lat)
+        if (currentBuilding && currentBuilding.lon && currentBuilding.lat) {
           map.flyTo({
             center: [currentBuilding.lon, currentBuilding.lat],
             zoom: 18,
+            pitch: 60,
             duration: 1500,
           });
+          map.once("moveend", startRotation);
+        }
       } else if (category === null) {
         map.flyTo({
           center: [121.24224620509085, 14.16283754850545],
@@ -47,8 +103,10 @@
           map.flyTo({
             center: [currentRoom.building.lon, currentRoom.building.lat],
             zoom: 18,
+            pitch: 60,
             duration: 1500,
           });
+          map.once("moveend", startRotation);
         }
       }
     });
