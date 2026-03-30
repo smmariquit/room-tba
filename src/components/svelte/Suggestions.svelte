@@ -73,9 +73,20 @@
 
 <div class="suggestions-container" class:visible={queryStore.type === "query"}>
   {#if queryStore.value === ""}
-    <Suggestion value={"CAS Building"} category={"building"} />
-    <Suggestion value={"Institute of Computer Science"} category={"division"} />
-    <Suggestion value={"MMM LH"} category={"room"} />
+    {#if queryStore.queryHistory.length !== 0}
+      <h2>Recent searches</h2>
+      {#each queryStore.queryHistory as { category, value }}
+        <Suggestion {value} {category} />
+      {/each}
+    {:else}
+      <h2>Trending searches</h2>
+      <Suggestion value={"CAS Building"} category={"building"} />
+      <Suggestion
+        value={"Institute of Computer Science"}
+        category={"division"}
+      />
+      <Suggestion value={"MMM LH"} category={"room"} />
+    {/if}
   {:else if suggestedResult.length !== 0}
     {#each suggestedResult as suggestion}
       <Suggestion {...suggestion} />
