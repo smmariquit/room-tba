@@ -50,13 +50,15 @@
     pointer-events: auto;
   }
   div.status-bar {
+    position: absolute;
+    bottom: 0.5rem;
+    left: 0.5rem;
     display: flex;
     font-size: 0.875rem;
     font-weight: 600;
     gap: 1rem;
     background-color: white;
     padding: 0.5rem 1.5rem;
-    margin-top: auto;
     border-radius: 1rem;
     box-shadow: 0 2px 0.5rem 0 hsla(0, 0%, 0%, 0.2);
     .metadata {
@@ -82,7 +84,6 @@
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      flex-basis: 25rem;
       flex-shrink: 1;
 
       .progress-bar {
