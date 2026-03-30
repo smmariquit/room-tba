@@ -1,4 +1,4 @@
-<script lang="ts"> 
+<script lang="ts">
   import { modalStore } from "../../lib/store.svelte";
   import { contributors } from "../../constants/contributors";
 
@@ -23,8 +23,8 @@
   <div class="content-body">
     <div class="description-container">
       <p class="description">
-        Room TBA is an open-source website built to help UPLB students their
-        rooms across the Los Banos campus.
+        Room TBA is an open-source website built to help UPLB students find
+        their rooms across the Los Baños campus.
       </p>
       <a
         href="https://github.com/smmariquit/room-tba"
