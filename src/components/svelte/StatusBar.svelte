@@ -123,7 +123,7 @@
       align-items: center;
       gap: 0.5rem;
       flex-shrink: 1;
-
+      flex-basis: 25rem;
       .progress-bar {
         height: 0.75rem;
         flex: 1 0 0;
@@ -169,6 +169,7 @@
       .directions-progress {
         width: 100%;
         justify-content: space-between;
+        flex-basis: auto;
       }
 
       .metadata {
