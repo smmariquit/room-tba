@@ -5,7 +5,7 @@
   import { queryStore } from "../../lib/store.svelte";
   import { untrack } from "svelte";
 
-  const { buildings } = getAppData();
+  const { buildings, rooms } = getAppData();
   let mapInstance: maplibre.MapLibreMap | undefined = $state();
 
   $effect(() => {
@@ -15,11 +15,7 @@
         (building) => building.building_name === queryStore.value,
       );
 
-      if (
-        typeof currentBuilding !== "undefined" &&
-        currentBuilding.lon &&
-        currentBuilding.lat
-      )
+      if (currentBuilding && currentBuilding.lon && currentBuilding.lat)
         mapInstance?.flyTo({
           center: [currentBuilding.lon, currentBuilding.lat],
           zoom: 18,
@@ -35,11 +31,22 @@
           duration: 1500,
         });
       });
+    } else if (queryStore.category === "room") {
+      const currentRoom = rooms.find((room) => room.code === queryStore.value);
+      if (
+        currentRoom &&
+        currentRoom.building &&
+        currentRoom.building.lat &&
+        currentRoom.building.lon
+      ) {
+        mapInstance?.flyTo({
+          center: [currentRoom.building.lon, currentRoom.building.lat],
+          zoom: 18,
+          duration: 1500,
+        });
+      }
     }
   });
-
-  $inspect(mapInstance);
-  // $inspect(queryStore.category);
 
   function handleMarkerClick(buildingName: string) {
     queryStore.updateQuery({
@@ -47,6 +54,26 @@
       type: "result",
     });
     queryStore.value = buildingName;
+  }
+
+  function isActiveMarker(target: string) {
+    if (!queryStore.category || queryStore.type !== "result") return false;
+    switch (queryStore.category) {
+      case "building":
+        return target === queryStore.value;
+      case "room": {
+        const currentRoom = rooms.find(
+          (room) => room.code === queryStore.value,
+        );
+        return (
+          currentRoom &&
+          currentRoom.building &&
+          currentRoom.building.name === target
+        );
+      }
+      default:
+        break;
+    }
   }
 </script>
 
@@ -98,8 +125,7 @@
         >
           <div
             class="pin"
-            class:active={queryStore.category === "building" &&
-              queryStore.value === building.building_name}
+            class:active={isActiveMarker(building.building_name)}
             title={building.building_name}
           ></div>
         </Marker>
