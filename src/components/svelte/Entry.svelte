@@ -8,37 +8,30 @@
   import type { RecentSearch } from "../../lib/types";
   import { isRecentSearch } from "../../lib/locStorage";
 
-  const updateData = (recentSearch: RecentSearch) => {
+  const updateData = (queryHistory: RecentSearch[]) => {
+    localStorage.setItem("recent-search", JSON.stringify(queryHistory));
+  };
+  onMount(() => {
+    const hideLanding = localStorage.getItem("hideLandingModal");
     const recentSearchesLS = localStorage.getItem("recent-search");
-    const recentSearches = [];
     try {
       const parsedSearches: unknown[] = JSON.parse(recentSearchesLS ?? "[]");
       parsedSearches.forEach((parsedSearch) => {
         if (isRecentSearch(parsedSearch)) {
-          recentSearches.push(parsedSearch);
+          queryStore.addHistory(parsedSearch);
         }
       });
-      recentSearches.unshift(recentSearch);
-      if (recentSearches.length > 5) recentSearches.pop();
-      localStorage.setItem("recent-search", JSON.stringify(recentSearches));
     } catch (e) {
-      localStorage.setItem("recent-search", JSON.stringify([recentSearch]));
+      queryStore.queryHistory = [];
     }
-  };
-  onMount(() => {
-    const hideLanding = localStorage.getItem("hideLandingModal");
     if (hideLanding !== "true") {
       modalStore.openModal("landing");
     }
   });
   $effect(() => {
-    console.log(queryStore);
-    if (queryStore.type === "result" && queryStore.category !== null)
-      updateData({
-        category: queryStore.category,
-        value: queryStore.value,
-      });
+    updateData(queryStore.queryHistory);
   });
+  $inspect(queryStore.queryHistory);
 </script>
 
 <div class="app-layout">
