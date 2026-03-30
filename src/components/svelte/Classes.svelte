@@ -43,15 +43,9 @@
     font-size: 14px;
     flex: 1 0 300px;
     border: 1px solid transparent;
-    cursor: pointer;
     transition:
       border 0.15s,
       background-color 0.1s;
-    &:hover,
-    &:focus-visible {
-      border: 1px solid hsl(5, 53%, 32%);
-      background-color: hsl(5, 53%, 90%);
-    }
   }
   .class-info {
     flex: 1;
