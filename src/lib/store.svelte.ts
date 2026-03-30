@@ -39,7 +39,7 @@ class QueryStore {
     category: null,
     type: "query",
   });
-  private _queryHistory: RecentSearch[] = $state([]);
+  queryHistory: RecentSearch[] = $state([]);
   private _filters = new SvelteMap<
     string,
     Exclude<QueryStoreState["category"], null>
@@ -60,7 +60,17 @@ class QueryStore {
   updateQuery = (obj: QueryStoreState, value: string) => {
     this._queryStore = obj;
     this.value = value;
+    if (obj.type === "result" && obj.category !== null) {
+      this.addHistory({
+        category: obj.category,
+        value
+      });
+    }
   };
+
+  addHistory(recentSearch: RecentSearch) {
+    this.queryHistory = [recentSearch, ...(this.queryHistory.slice(0, this.queryHistory.length > 5 ? 5 : 4))]
+  }
 
   // when clicking the x button
   clearQuery = () => {
