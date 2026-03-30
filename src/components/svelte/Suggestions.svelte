@@ -73,9 +73,9 @@
 
 <div class="suggestions-container" class:visible={queryStore.type === "query"}>
   {#if queryStore.value === ""}
-    {#if queryStore.queryHistory.length !== 0}
+    {#if queryStore.recentSearches.length !== 0}
       <h2>Recent searches</h2>
-      {#each queryStore.queryHistory as { category, value }}
+      {#each queryStore.recentSearches as { category, value }}
         <Suggestion {value} {category} />
       {/each}
     {:else}

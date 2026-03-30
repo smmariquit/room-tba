@@ -39,7 +39,7 @@ class QueryStore {
     category: null,
     type: "query",
   });
-  queryHistory: RecentSearch[] = $state([]);
+  recentSearches: RecentSearch[] = $state([]);
   private _filters = new SvelteMap<
     string,
     Exclude<QueryStoreState["category"], null>
@@ -61,21 +61,21 @@ class QueryStore {
     this._queryStore = obj;
     this.value = value;
     if (obj.type === "result" && obj.category !== null) {
-      this.addHistory({
+      this.addRecentSearch({
         category: obj.category,
         value
       });
     }
   };
 
-  addHistory(recentSearch: RecentSearch) {
-    const qIndex = this.queryHistory.findIndex(query => query.value === recentSearch.value && query.category === recentSearch.category);
+  addRecentSearch(recentSearch: RecentSearch) {
+    const qIndex = this.recentSearches.findIndex(query => query.value === recentSearch.value && query.category === recentSearch.category);
     if (qIndex !== -1)
-      this.queryHistory.splice(qIndex, 1);
-    else if (this.queryHistory.length > 4)
-      this.queryHistory.pop();
+      this.recentSearches.splice(qIndex, 1);
+    else if (this.recentSearches.length > 4)
+      this.recentSearches.pop();
 
-    this.queryHistory.unshift(recentSearch);
+    this.recentSearches.unshift(recentSearch);
   }
 
   // when clicking the x button

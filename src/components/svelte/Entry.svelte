@@ -18,20 +18,20 @@
       const parsedSearches: unknown[] = JSON.parse(recentSearchesLS ?? "[]");
       parsedSearches.forEach((parsedSearch) => {
         if (isRecentSearch(parsedSearch)) {
-          queryStore.addHistory(parsedSearch);
+          queryStore.addRecentSearch(parsedSearch);
         }
       });
     } catch (e) {
-      queryStore.queryHistory = [];
+      queryStore.recentSearches = [];
     }
     if (hideLanding !== "true") {
       modalStore.openModal("landing");
     }
   });
   $effect(() => {
-    updateData(queryStore.queryHistory);
+    updateData(queryStore.recentSearches);
   });
-  $inspect(queryStore.queryHistory);
+  $inspect(queryStore.recentSearches);
 </script>
 
 <div class="app-layout">
