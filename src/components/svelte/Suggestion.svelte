@@ -13,11 +13,13 @@
   }
 
   function handleSuggestionClick() {
-    queryStore.updateQuery({
-      type: "result",
-      category: suggestion.category,
-    });
-    queryStore.value = suggestion.value;
+    queryStore.updateQuery(
+      {
+        type: "result",
+        category: suggestion.category,
+      },
+      suggestion.value,
+    );
   }
 </script>
 

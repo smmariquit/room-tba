@@ -1,5 +1,6 @@
 import type { modalOptions } from "../constants/modal-states";
 import { SvelteMap } from "svelte/reactivity";
+import type { RecentSearch } from "./types";
 
 interface ModalStoreState {
   open: boolean;
@@ -38,6 +39,7 @@ class QueryStore {
     category: null,
     type: "query",
   });
+  private _queryHistory: RecentSearch[] = $state([]);
   private _filters = new SvelteMap<
     string,
     Exclude<QueryStoreState["category"], null>
@@ -55,8 +57,9 @@ class QueryStore {
   );
 
   // onclick of query buttons
-  updateQuery = (obj: QueryStoreState) => {
+  updateQuery = (obj: QueryStoreState, value: string) => {
     this._queryStore = obj;
+    this.value = value;
   };
 
   // when clicking the x button

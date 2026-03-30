@@ -113,11 +113,13 @@
   });
 
   function handleMarkerClick(buildingName: string) {
-    queryStore.updateQuery({
-      category: "building",
-      type: "result",
-    });
-    queryStore.value = buildingName;
+    queryStore.updateQuery(
+      {
+        category: "building",
+        type: "result",
+      },
+      buildingName,
+    );
   }
 
   let activeBuildingName = $derived.by(() => {
