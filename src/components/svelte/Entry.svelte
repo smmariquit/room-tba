@@ -1,25 +1,52 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { modalStore } from "../../lib/store.svelte";
+  import { modalStore, queryStore } from "../../lib/store.svelte";
   import Modal from "./Modal.svelte";
   import SidePanel from "./SidePanel.svelte";
   import Map from "./Map.svelte";
   import StatusBar from "./StatusBar.svelte";
+  import type { RecentSearch } from "../../lib/types";
+  import { isRecentSearch } from "../../lib/locStorage";
 
+  const updateData = (recentSearch: RecentSearch) => {
+    const recentSearchesLS = localStorage.getItem("recent-search");
+    const recentSearches = [];
+    try {
+      const parsedSearches: unknown[] = JSON.parse(recentSearchesLS ?? "[]");
+      parsedSearches.forEach((parsedSearch) => {
+        if (isRecentSearch(parsedSearch)) {
+          recentSearches.push(parsedSearch);
+        }
+      });
+      recentSearches.unshift(recentSearch);
+      if (recentSearches.length > 5) recentSearches.pop();
+      localStorage.setItem("recent-search", JSON.stringify(recentSearches));
+    } catch (e) {
+      localStorage.setItem("recent-search", JSON.stringify([recentSearch]));
+    }
+  };
   onMount(() => {
     const hideLanding = localStorage.getItem("hideLandingModal");
     if (hideLanding !== "true") {
       modalStore.openModal("landing");
     }
   });
+  $effect(() => {
+    console.log(queryStore);
+    if (queryStore.type === "result" && queryStore.category !== null)
+      updateData({
+        category: queryStore.category,
+        value: queryStore.value,
+      });
+  });
 </script>
 
 <div class="app-layout">
   <Map />
   <div class="ui-layer">
-    <header class="top-header">
+    <!-- <header class="top-header">
       <h2>Room TBA</h2>
-    </header>
+    </header> -->
     <div class="inner-layer">
       <SidePanel />
       <StatusBar />

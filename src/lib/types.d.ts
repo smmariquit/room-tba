@@ -1,3 +1,5 @@
+import type { QueryStoreState } from "./store.svelte";
+
 export type AppData = {
   buildings: {
     [key: string]: {
@@ -76,4 +78,9 @@ interface ContributorInfo {
   name: string;
   href?: string;
   img_alt?: string;
+}
+
+interface RecentSearch {
+  category: Exclude<QueryStoreState["category"], null>,
+  value: string
 }
