@@ -113,6 +113,7 @@
   });
 
   function handleMarkerClick(buildingName: string) {
+    if (buildingName === queryStore.value) return;
     queryStore.updateQuery(
       {
         category: "building",
