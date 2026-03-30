@@ -106,13 +106,10 @@
         <BuildingResult />
       {:else if queryStore.category === "college"}
         <CollegeResult />
-        <div>Opened: a college</div>
       {:else if queryStore.category === "division"}
         <DivisionResult />
-        <div>Opened: a division</div>
       {:else}
         <RoomResult />
-        <div>Opened: a room</div>
       {/if}
     </div>
   {/if}
