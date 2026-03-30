@@ -72,9 +72,6 @@
     pointer-events: auto;
   }
   div.status-bar {
-    position: absolute;
-    bottom: 0.5rem;
-    left: 0.5rem;
     display: flex;
     font-size: 0.875rem;
     font-weight: 600;
