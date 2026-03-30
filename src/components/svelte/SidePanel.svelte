@@ -104,7 +104,6 @@
     <div class="side-panel-content">
       {#if queryStore.category === "building"}
         <BuildingResult />
-        <div>Opened: {queryStore.value}</div>
       {:else if queryStore.category === "college"}
         <CollegeResult />
         <div>Opened: a college</div>
@@ -124,10 +123,10 @@
     position: relative;
     width: 25.75rem;
     max-width: calc(100% - 2.625rem);
+    max-height: 90vh;
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
-    flex: 1;
     flex: 1;
     pointer-events: none;
   }
@@ -137,6 +136,9 @@
     border-radius: 1rem;
     padding: 1rem;
     pointer-events: auto;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
   }
 
   /* Mobile responsiveness for side panel */

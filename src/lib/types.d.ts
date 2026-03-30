@@ -72,7 +72,6 @@ type DivisionData = {
   division_name: string;
 };
 
-
 interface ContributorInfo {
   name: string;
   href?: string;

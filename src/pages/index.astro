@@ -66,9 +66,9 @@ rooms.sort((a, b) => {
 
 // @ts-ignore
 const [{ count: directionCount }] = await db
-.select({ count: count() })
-.from(roomsTable)
-.where(isNotNull(roomsTable.directions));
+  .select({ count: count() })
+  .from(roomsTable)
+  .where(isNotNull(roomsTable.directions));
 
 // @ts-ignore
 const [{ count: totalRooms }] = await db
@@ -87,8 +87,7 @@ const [{ count: totalRooms }] = await db
     directionCount={directionCount}
     totalRooms={totalRooms}
     client:load
-  >
-  </AppProvider>
+  />
   <!-- <div class="directions-status">
     <div class="directions-header">Rooms with directions</div>
     <div class="directions-body">

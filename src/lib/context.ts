@@ -1,5 +1,11 @@
-import { createContext } from "svelte"
-import type { BuildingData, ClassMapValue, CollegeData, DivisionData, RoomData } from "./types";
+import { createContext } from "svelte";
+import type {
+  BuildingData,
+  ClassMapValue,
+  CollegeData,
+  DivisionData,
+  RoomData,
+} from "./types";
 
 type AppData = {
   rooms: RoomData[];
@@ -9,6 +15,6 @@ type AppData = {
   classesMap: Map<string, ClassMapValue[]>;
   totalRooms: number;
   directionCount: number;
-}
+};
 
 export const [getAppData, setAppData] = createContext<AppData>();
