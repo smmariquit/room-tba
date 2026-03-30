@@ -6,46 +6,52 @@
   import { untrack } from "svelte";
 
   const { buildings, rooms } = getAppData();
-  let mapInstance: maplibre.MapLibreMap | undefined = $state();
+  let mapInstance: maplibre.MapLibreMap | undefined = $state.raw();
 
   $effect(() => {
-    console.log(queryStore.category, mapInstance);
-    if (queryStore.category === "building" && queryStore.type === "result") {
-      const currentBuilding = buildings.find(
-        (building) => building.building_name === queryStore.value,
-      );
+    const category = queryStore.category;
+    const type = queryStore.type;
+    const value = queryStore.value;
+    const map = mapInstance;
 
-      if (currentBuilding && currentBuilding.lon && currentBuilding.lat)
-        mapInstance?.flyTo({
-          center: [currentBuilding.lon, currentBuilding.lat],
-          zoom: 18,
-          duration: 1500,
-        });
-    } else if (queryStore.category === null) {
-      untrack(() => {
-        mapInstance?.flyTo({
+    if (!map) return;
+
+    untrack(() => {
+      if (category === "building" && type === "result") {
+        const currentBuilding = buildings.find(
+          (building) => building.building_name === value,
+        );
+
+        if (currentBuilding && currentBuilding.lon && currentBuilding.lat)
+          map.flyTo({
+            center: [currentBuilding.lon, currentBuilding.lat],
+            zoom: 18,
+            duration: 1500,
+          });
+      } else if (category === null) {
+        map.flyTo({
           center: [121.24224620509085, 14.16283754850545],
           zoom: 15.24,
           pitch: 60,
           bearing: -154.48,
           duration: 1500,
         });
-      });
-    } else if (queryStore.category === "room") {
-      const currentRoom = rooms.find((room) => room.code === queryStore.value);
-      if (
-        currentRoom &&
-        currentRoom.building &&
-        currentRoom.building.lat &&
-        currentRoom.building.lon
-      ) {
-        mapInstance?.flyTo({
-          center: [currentRoom.building.lon, currentRoom.building.lat],
-          zoom: 18,
-          duration: 1500,
-        });
+      } else if (category === "room") {
+        const currentRoom = rooms.find((room) => room.code === value);
+        if (
+          currentRoom &&
+          currentRoom.building &&
+          currentRoom.building.lat &&
+          currentRoom.building.lon
+        ) {
+          map.flyTo({
+            center: [currentRoom.building.lon, currentRoom.building.lat],
+            zoom: 18,
+            duration: 1500,
+          });
+        }
       }
-    }
+    });
   });
 
   function handleMarkerClick(buildingName: string) {
@@ -56,25 +62,21 @@
     queryStore.value = buildingName;
   }
 
-  function isActiveMarker(target: string) {
-    if (!queryStore.category || queryStore.type !== "result") return false;
+  let activeBuildingName = $derived.by(() => {
+    if (!queryStore.category || queryStore.type !== "result") return null;
     switch (queryStore.category) {
       case "building":
-        return target === queryStore.value;
+        return queryStore.value;
       case "room": {
         const currentRoom = rooms.find(
           (room) => room.code === queryStore.value,
         );
-        return (
-          currentRoom &&
-          currentRoom.building &&
-          currentRoom.building.name === target
-        );
+        return currentRoom && currentRoom.building ? currentRoom.building.name : null;
       }
       default:
-        break;
+        return null;
     }
-  }
+  });
 </script>
 
 <div class="map-container">
@@ -125,7 +127,7 @@
         >
           <div
             class="pin"
-            class:active={isActiveMarker(building.building_name)}
+            class:active={activeBuildingName === building.building_name}
             title={building.building_name}
           ></div>
         </Marker>

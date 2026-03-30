@@ -77,7 +77,6 @@ const [{ count: totalRooms }] = await db
 ---
 
 <Layout>
-  <a href="#main-content" class="skip-content">Skip Content</a>
   <AppProvider
     buildings={buildings}
     classesMap={classesDict}
@@ -168,21 +167,6 @@ const [{ count: totalRooms }] = await db
         background-color: hsl(5, 53%, 32%);
       }
       color: white;
-    }
-  }
-  a.skip-content {
-    outline: unset;
-    position: fixed;
-    top: -42px;
-    color: white;
-    background-color: hsl(5, 53%, 32%);
-    padding: 0.5rem 1.25rem;
-    text-decoration: none;
-    transition: all 0.25s;
-    z-index: 100;
-    border-radius: 0.5rem;
-    &:focus-within {
-      top: 0;
     }
   }
 </style>
