@@ -15,14 +15,14 @@
 
   function rotateCamera(timestamp: number) {
     if (!mapInstance || !isRotating) return;
-    
+
     if (!lastTimestamp) lastTimestamp = timestamp;
     const delta = timestamp - lastTimestamp;
     lastTimestamp = timestamp;
 
     currentRotation = (currentRotation + delta / 150) % 360;
     mapInstance.rotateTo(currentRotation, { duration: 0 });
-    
+
     animationFrameId = requestAnimationFrame(rotateCamera);
   }
 
@@ -47,13 +47,13 @@
   $effect(() => {
     if (mapInstance) {
       const map = mapInstance;
-      map.on('mousedown', stopRotation);
-      map.on('touchstart', stopRotation);
-      map.on('wheel', stopRotation);
+      map.on("mousedown", stopRotation);
+      map.on("touchstart", stopRotation);
+      map.on("wheel", stopRotation);
       return () => {
-        map.off('mousedown', stopRotation);
-        map.off('touchstart', stopRotation);
-        map.off('wheel', stopRotation);
+        map.off("mousedown", stopRotation);
+        map.off("touchstart", stopRotation);
+        map.off("wheel", stopRotation);
       };
     }
   });
@@ -129,7 +129,9 @@
         const currentRoom = rooms.find(
           (room) => room.code === queryStore.value,
         );
-        return currentRoom && currentRoom.building ? currentRoom.building.name : null;
+        return currentRoom && currentRoom.building
+          ? currentRoom.building.name
+          : null;
       }
       default:
         return null;

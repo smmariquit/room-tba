@@ -1,6 +1,7 @@
 <script lang="ts">
   import { modalStore } from "../../lib/store.svelte";
   import { fade, fly } from "svelte/transition";
+  import LandingModal from "./LandingModal.svelte";
 </script>
 
 {#if modalStore.open}
@@ -12,7 +13,9 @@
       transition:fade={{ duration: 100 }}
     ></button>
     <div
-      class="modal-content"
+      class="modal-content {modalStore.type === 'landing'
+        ? 'landing-modal-container'
+        : ''}"
       id="modal-content"
       in:fly={{
         duration: 200,
@@ -22,7 +25,11 @@
       out:fade={{
         duration: 75,
       }}
-    ></div>
+    >
+      {#if modalStore.type === "landing"}
+        <LandingModal />
+      {/if}
+    </div>
   </div>
 {/if}
 
@@ -60,9 +67,17 @@
     display: flex;
     flex-flow: column nowrap;
   }
+  .landing-modal-container {
+    flex: 0 1 48rem; 
+    padding: 0; 
+    overflow: hidden; 
+  }
   @media only screen and (max-width: 31.25rem) {
     .modal-content {
       padding: 1rem;
+    }
+    .landing-modal-container {
+      padding: 0;
     }
   }
   .overlay {

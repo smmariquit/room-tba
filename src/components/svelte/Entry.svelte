@@ -1,8 +1,17 @@
 <script lang="ts">
+  import { onMount } from "svelte";
+  import { modalStore } from "../../lib/store.svelte";
   import Modal from "./Modal.svelte";
   import SidePanel from "./SidePanel.svelte";
   import Map from "./Map.svelte";
   import StatusBar from "./StatusBar.svelte";
+
+  onMount(() => {
+    const hideLanding = localStorage.getItem("hideLandingModal");
+    if (hideLanding !== "true") {
+      modalStore.openModal("landing");
+    }
+  });
 </script>
 
 <div class="app-layout">
