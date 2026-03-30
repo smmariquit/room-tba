@@ -70,13 +70,12 @@ class QueryStore {
 
   addHistory(recentSearch: RecentSearch) {
     const qIndex = this.queryHistory.findIndex(query => query.value === recentSearch.value && query.category === recentSearch.category);
-    if (qIndex === -1)
-      this.queryHistory = [recentSearch, ...(this.queryHistory.slice(0, this.queryHistory.length > 5 ? 5 : 4))]
-    else {
-      // this.queryHistory = this.queryHistory.splice(qIndex, 1)];
+    if (qIndex !== -1)
       this.queryHistory.splice(qIndex, 1);
-      this.queryHistory.unshift(recentSearch);
-    }
+    else if (this.queryHistory.length > 4)
+      this.queryHistory.pop();
+
+    this.queryHistory.unshift(recentSearch);
   }
 
   // when clicking the x button
