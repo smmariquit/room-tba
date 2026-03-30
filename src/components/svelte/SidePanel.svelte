@@ -133,12 +133,13 @@
   .side-panel-content {
     flex: 1;
     background-color: white;
-    border-radius: 1rem;
-    padding: 1rem;
+    border-radius: 1.5rem; /* 24px */
+    padding: 1.125rem 1.5rem; /* 18px top/bottom, 24px left/right */
     pointer-events: auto;
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    box-shadow: 0px -2px 4px 0px rgba(0, 0, 0, 0.25);
   }
 
   /* Mobile responsiveness for side panel */
@@ -153,6 +154,13 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between; /* Space between search top and panel bottom */
+    }
+
+    .side-panel-content {
+      flex: none;
+      margin-top: auto;
+      max-height: 45vh;
+      box-shadow: 0px -4px 12px rgba(0, 0, 0, 0.1);
     }
   }
 
