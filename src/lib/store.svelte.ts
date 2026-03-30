@@ -1,15 +1,9 @@
 import type { modalOptions } from "../constants/modal-states";
-import type { ClassMapValue, RoomData } from "./types";
 import { SvelteMap } from "svelte/reactivity";
 
 interface ModalStoreState {
   open: boolean;
   type: (typeof modalOptions)[number] | null;
-}
-
-interface RoomStoreState {
-  roomData: RoomData | null;
-  classesData: ClassMapValue[];
 }
 
 export interface QueryStoreState {
@@ -36,24 +30,6 @@ class ModalStore {
       open: false,
       type: null,
     };
-  };
-}
-
-class RoomStore {
-  private _roomStore: RoomStoreState = $state({
-    roomData: null,
-    classesData: [],
-  });
-
-  roomData = $derived(this._roomStore.roomData);
-  classesData = $derived(this._roomStore.classesData);
-
-  updateRoom = (roomData: RoomData) => {
-    this._roomStore.roomData = roomData;
-  };
-
-  updateClasses = (classesData: ClassMapValue[]) => {
-    this._roomStore.classesData = classesData;
   };
 }
 
@@ -113,5 +89,4 @@ class QueryStore {
 }
 
 export const queryStore = new QueryStore();
-export const currentRoomStore = new RoomStore();
 export const modalStore = new ModalStore();
