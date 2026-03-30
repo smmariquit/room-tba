@@ -72,14 +72,6 @@ type DivisionData = {
   division_name: string;
 };
 
-interface IFilterStore {
-  type: "building" | "college" | "division" | null;
-  filter: string | null;
-  buildings: BuildingData[];
-  colleges: CollegeData[];
-  divisions: DivisionData[];
-}
-
 interface ContributorInfo {
   name: string;
   href?: string;

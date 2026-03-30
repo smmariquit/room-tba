@@ -1,6 +1,5 @@
 ---
 import { pwaInfo } from "virtual:pwa-info";
-import Footer from "../components/Footer.astro";
 import ReloadPrompt from "../components/ReloadPrompt.astro";
 ---
 
@@ -31,11 +30,7 @@ import ReloadPrompt from "../components/ReloadPrompt.astro";
   </head>
   <body>
     <slot />
-    <div class="container">
-      <hr />
-      <Footer />
-      <ReloadPrompt />
-    </div>
+    <ReloadPrompt />
   </body>
 </html>
 
@@ -45,14 +40,6 @@ import ReloadPrompt from "../components/ReloadPrompt.astro";
     margin: 0;
     width: 100%;
     min-height: 100%;
-  }
-  body {
-    margin-bottom: 4rem;
-  }
-  .container {
-    padding: 2rem;
-    max-width: 64rem;
-    margin-inline: auto;
   }
 
   @media only screen and (max-width: 600px) {
