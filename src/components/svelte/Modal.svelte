@@ -2,6 +2,7 @@
   import { modalStore } from "../../lib/store.svelte";
   import { fade, fly } from "svelte/transition";
   import LandingModal from "./LandingModal.svelte";
+  import ScheduleModal from "./ScheduleModal.svelte";
 </script>
 
 {#if modalStore.open}
@@ -25,6 +26,8 @@
     >
       {#if modalStore.type === "landing"}
         <LandingModal />
+      {:else if modalStore.type === "schedule-expand"}
+        <ScheduleModal />
       {/if}
     </div>
   </div>
