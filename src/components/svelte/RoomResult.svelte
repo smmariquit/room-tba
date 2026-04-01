@@ -1,8 +1,7 @@
 <script lang="ts">
-  import { queryStore } from "../../lib/store.svelte";
+  import { modalStore, queryStore } from "../../lib/store.svelte";
   import { getAppData } from "../../lib/context";
   import Classes from "./Classes.svelte";
-  import ScheduleRender from "./ScheduleRender.svelte";
 
   const { rooms, classesMap } = getAppData();
 
@@ -92,8 +91,12 @@
     {/if}
 
     <div class="schedule-section">
-      <h3>Classes in this room</h3>
-      <ScheduleRender roomCode={roomData.code} classes={classesData} />
+      <div>
+        <h3>Classes in this room</h3>
+        <button onclick={() => modalStore.openModal("schedule-expand")}
+          >Expand class schedule</button
+        >
+      </div>
       <Classes classes={classesData} />
     </div>
   {:else}
