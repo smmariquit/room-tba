@@ -94,7 +94,7 @@
       <div class="schedule-section__header">
         <h3>Classes in this room</h3>
         <button onclick={() => modalStore.openModal("schedule-expand")}
-          >Open tabular view</button
+          >Open schedule</button
         >
       </div>
       <Classes classes={classesData} />
