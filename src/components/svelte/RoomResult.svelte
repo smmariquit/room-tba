@@ -78,7 +78,7 @@
         >
           Open in Google Maps
         </a>
-        <a
+        <!-- <a
           href="https://www.openstreetmap.org/?mlat={roomData.building
             .lat}&mlon={roomData.building.lon}#map=18/{roomData.building
             .lat}/{roomData.building.lon}"
@@ -86,7 +86,7 @@
           rel="noreferrer"
         >
           Open in OpenStreetMap
-        </a>
+        </a> -->
       </div>
     {/if}
 
@@ -161,18 +161,17 @@
   }
 
   .building-note {
-    padding: 1rem 1.5rem;
+    padding: 0.75rem 1rem;
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
     border-left: 4px solid hsl(103, 100%, 27%);
     background-color: hsla(103, 100%, 89%, 0.5);
-    border-radius: 0 0.5rem 0.5rem 0;
   }
 
   .building-note-title {
     font-weight: 600;
     font-size: 1rem;
-    margin: 0 0 0.5rem 0;
+    margin: 0 0 0.25rem 0;
     color: black;
   }
 
