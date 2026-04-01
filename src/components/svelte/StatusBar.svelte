@@ -143,7 +143,7 @@
     }
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 1000px) {
     div.status-bar {
       padding: 0.5rem 1rem;
       flex-direction: column;
