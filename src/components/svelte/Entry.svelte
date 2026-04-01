@@ -31,7 +31,6 @@
   $effect(() => {
     updateData(queryStore.recentSearches);
   });
-  $inspect(queryStore.recentSearches);
 </script>
 
 <div class="app-layout">
@@ -78,23 +77,6 @@
     flex-direction: column;
     height: 100%;
     width: 100%;
-  }
-
-  .top-header {
-    background-color: white;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.75rem;
-    box-shadow: 0 2px 0.25rem rgba(0, 0, 0, 0.1);
-  }
-
-  .top-header h2 {
-    font-weight: bold;
-    font-size: 0.9375rem;
-    margin: 0;
-    color: black;
   }
 
   :global(*) {
