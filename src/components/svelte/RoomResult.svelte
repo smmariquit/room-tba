@@ -91,10 +91,10 @@
     {/if}
 
     <div class="schedule-section">
-      <div>
+      <div class="schedule-section__header">
         <h3>Classes in this room</h3>
         <button onclick={() => modalStore.openModal("schedule-expand")}
-          >Expand class schedule</button
+          >Open tabular view</button
         >
       </div>
       <Classes classes={classesData} />
@@ -206,18 +206,29 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    .schedule-section__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      button {
+        all: unset;
+        font-size: 0.875rem;
+        font-weight: 600;
+        padding: 0.25rem 1rem;
+        background-color: hsl(5, 53%, 32%);
+        color: white;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+    }
   }
 
   .schedule-section h3 {
     font-weight: 600;
-    font-size: 0.875rem;
+    font-size: 1rem;
     line-height: 1.25rem;
     color: black;
     margin: 0;
-  }
-
-  :global(.schedule-section > div) {
-    width: 100%;
   }
 
   .map-links {
