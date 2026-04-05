@@ -1,0 +1,136 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const changelogEntries = [
+  {
+    version: "v1.0.0",
+    date: "April 2026",
+    summary: "Initial public release of Room TBA.",
+    changes: [
+      "Scraped data from UPLB AMIS for the first time, covering all courses and rooms for 2nd Semester AY 2025-2026.",
+      "Simply search for a course, room, or building to view its details, including schedule, room status, and other relevant information.",
+      "Implemented a responsive design to ensure a seamless experience across different devices.",
+      "Add directions to all buildings listed on the website, making it easier for users to navigate the campus.",
+    ],
+  },
+];
+---
+
+<Layout>
+  <main class="changelog-page">
+    <a href="/" class="back-link">Back to Room TBA</a>
+
+    <header class="hero">
+      <p class="eyebrow">Release notes</p>
+      <h1>Changelog</h1>
+      <p>
+        Room TBA is a living document and is updated regularly, especially every term, to reflect latest changes in course offerings, room status, and other relevant information. Aside from the data itself, the website also undergoes improvements to provide a better user experience. Below are the major updates and changes made to Room TBA since its initial release.
+      </p>
+    </header>
+    {changelogEntries.map(entry => (
+      <article class="entry">
+        <div class="entry-header">
+          <div>
+            <h2 class="hero">{entry.summary} </h2>
+            <p class="version">{entry.version}</p>
+          </div>
+          <p class="date">{entry.date}</p>
+        </div>
+
+          <ul>
+            {entry.changes.map((change) => <li>{change}</li>)}
+          </ul>
+        </article>
+      ))}
+    </section>
+  </main>
+</Layout>
+
+<style>
+  .changelog-page {
+    max-width: 48rem;
+    margin: 0 auto;
+    padding: 2rem 1rem 4rem;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif, "Times New Roman", Times, serif;
+  }
+
+  .back-link {
+    display: inline-flex;
+    margin-bottom: 1.5rem;
+    text-decoration: none;
+    color: hsl(5, 53%, 32%);
+    font-weight: 600;
+  }
+
+  .hero {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .eyebrow,
+  .date,
+  .version {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.75rem;
+    color: hsl(0, 0%, 40%);
+  }
+
+  h1 {
+    font-size: clamp(2.25rem, 5vw, 3.5rem);
+    line-height: 1;
+    margin: 0;
+  }
+
+  .hero p:last-child {
+    max-width: 38rem;
+    color: hsl(0, 0%, 30%);
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .entries {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .entry {
+    border: 1px solid hsl(0, 0%, 88%);
+    border-radius: 1.25rem;
+    padding: 1.25rem;
+    background: white;
+    box-shadow: 0 2px 0.5rem 0 hsla(0, 0%, 0%, 0.06);
+  }
+
+  .entry-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: start;
+    margin-bottom: 1rem;
+  }
+
+  .entry h2 {
+    margin: 0.25rem 0 0;
+    font-size: 1.25rem;
+  }
+
+  ul {
+    margin: 0;
+    padding-left: 1.25rem;
+    color: hsl(0, 0%, 25%);
+    line-height: 1.65;
+  }
+
+  li + li {
+    margin-top: 0.35rem;
+  }
+
+  @media screen and (max-width: 600px) {
+    .entry-header {
+      flex-direction: column;
+    }
+  }
+</style>
