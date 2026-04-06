@@ -223,7 +223,11 @@
               /></svg
             >
             <!-- {zoomLevel} -->
-            <div class="pin-label" transition:fade>
+            <div
+              class="pin-label"
+              class:active={zoomLevel >= 17}
+              transition:fade
+            >
               {building.building_name}
             </div>
           </div>
@@ -255,7 +259,10 @@
     transition:
       transform 0.2s,
       scale 1.5s;
+
     &.active {
+      z-index: 60;
+
       &::before {
         content: "";
         position: absolute;
@@ -285,10 +292,12 @@
       border-radius: 0.5rem;
       padding: 0.25rem 0.75rem;
       width: max-content;
-      z-index: 60;
       opacity: 0;
       transition: opacity 0.2s;
       pointer-events: none;
+      &.active {
+        opacity: 1;
+      }
     }
   }
   @keyframes rotating {
@@ -302,6 +311,7 @@
 
   .pin:hover {
     background-color: hsl(5, 53%, 40%);
+
     .pin-label {
       opacity: 1;
     }
