@@ -3,4 +3,5 @@ export const modalOptions = [
   "schedule-expand",
   "contributors",
   "changelog",
+  "filter",
 ] as const;

@@ -3,6 +3,7 @@
   import { fade, fly } from "svelte/transition";
   import LandingModal from "./LandingModal.svelte";
   import ScheduleModal from "./ScheduleModal.svelte";
+  import FilterModalContent from "./FilterModalContent.svelte";
 </script>
 
 {#if modalStore.open}
@@ -28,6 +29,8 @@
         <LandingModal />
       {:else if modalStore.type === "schedule-expand"}
         <ScheduleModal />
+      {:else if modalStore.type === "filter"}
+        <FilterModalContent />
       {/if}
     </div>
   </div>

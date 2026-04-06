@@ -1,6 +1,6 @@
 <script lang="ts">
   import { throttle } from "es-toolkit";
-  import { queryStore } from "../../../lib/store.svelte";
+  import { queryStore, modalStore } from "../../../lib/store.svelte";
   import Suggestions from "./Suggestions.svelte";
 
   let searchElement = $state<HTMLInputElement | null>(null);
@@ -103,6 +103,26 @@
     </div>
 
     <div class="search-buttons">
+      <button
+        onclick={() => modalStore.openModal("filter")}
+        type="button"
+        class="filter-btn"
+        aria-label="Open Filters"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="lucide lucide-filter"
+          ><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" /></svg
+        >
+      </button>
       {#if queryStore.value !== ""}
         <button
           onclick={closeSearchContext}
@@ -193,13 +213,22 @@
     align-items: center;
   }
 
-  .clear-btn {
+  .clear-btn,
+  .filter-btn {
     all: unset;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     color: black;
+    padding: 0.25rem;
+    border-radius: 0.25rem;
+    transition: background-color 0.125s;
+  }
+
+  .clear-btn:hover,
+  .filter-btn:hover {
+    background-color: #f0f0f0;
   }
 
   .loading-icon {

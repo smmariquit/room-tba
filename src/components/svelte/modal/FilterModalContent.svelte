@@ -1,20 +1,17 @@
-<!-- <script lang="ts">
-  import { filterStore, modalStore } from "../../lib/store.svelte";
-  import type { IFilterStore } from "../../lib/types";
+<script lang="ts">
+  import { getAppData } from "../../../lib/context";
+  import { modalStore, queryStore } from "../../../lib/store.svelte";
+  import type { QueryStoreState } from "../../../lib/store.svelte";
 
-  const { buildings, colleges, divisions } = filterStore.getData();
+  const { buildings, colleges, divisions } = getAppData();
   let type: "buildings" | "colleges" | "divisions" = $state("buildings");
 
   function filterButtonClick(
-    filter_type: IFilterStore["type"],
+    filter_type: Exclude<QueryStoreState["category"], "room" | null>,
     filter_name: string,
   ) {
-    return (
-      e: MouseEvent & {
-        currentTarget: EventTarget & HTMLButtonElement;
-      },
-    ) => {
-      filterStore.setFilter(filter_type, filter_name);
+    return () => {
+      queryStore.updateQuery({ type: "result", category: filter_type }, filter_name);
       modalStore.closeModal();
     };
   }
@@ -95,4 +92,4 @@
       }
     }
   }
-</style> -->
+</style>
