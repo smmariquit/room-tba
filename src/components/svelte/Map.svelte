@@ -89,6 +89,7 @@
             center: [currentBuilding.lon, currentBuilding.lat],
             zoom: 18,
             pitch: 60,
+            offset: [0, -24],
             duration: 1500,
           });
           map.once("moveend", startRotation);
