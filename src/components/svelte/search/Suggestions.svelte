@@ -77,15 +77,19 @@
   $inspect(suggestedResult);
 </script>
 
-<div class="suggestions-container" class:visible={queryStore.type === "query"} class:mobile-hidden={!focused}>
+<div
+  class="suggestions-container"
+  class:visible={queryStore.type === "query"}
+  class:mobile-hidden={!focused}
+>
   {#if queryStore.value === ""}
     {#if queryStore.recentSearches.length !== 0}
-      <h2 class='suggestions-header'>Recent searches</h2>
+      <h2 class="suggestions-header">Recent searches</h2>
       {#each queryStore.recentSearches as { category, value }}
         <Suggestion {value} {category} />
       {/each}
     {:else}
-      <h2 class='suggestions-header'>Trending searches</h2>
+      <h2 class="suggestions-header">Trending searches</h2>
       <Suggestion value={"CAS Building"} category={"building"} />
       <Suggestion
         value={"Institute of Computer Science"}
@@ -108,7 +112,7 @@
     width: 100%;
     height: max-content;
     border-radius: 1rem;
-    padding: 1.125rem 1.5rem;
+    padding: 1rem;
     display: flex;
     flex-direction: column;
     background-color: white;
@@ -131,5 +135,6 @@
   }
   .suggestions-header {
     font-size: 1rem;
+    margin-bottom: 0.5rem;
   }
 </style>

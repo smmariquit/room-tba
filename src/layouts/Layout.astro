@@ -1,6 +1,7 @@
 ---
 import { pwaInfo } from "virtual:pwa-info";
 import ReloadPrompt from "../components/ReloadPrompt.astro";
+import "../styles/font-face.css";
 ---
 
 <!doctype html>
@@ -13,6 +14,16 @@ import ReloadPrompt from "../components/ReloadPrompt.astro";
     <title>Room TBA - Searching utility for finding rooms around UPLB</title>
     {pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />}
     <style is:global>
+      * {
+        font-family:
+          "Inter",
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+      }
       button {
         all: unset;
       }
