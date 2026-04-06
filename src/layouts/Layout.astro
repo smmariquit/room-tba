@@ -9,7 +9,9 @@ import "../styles/font-face.css";
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <link rel="shortcut icon" href="/carillon.jpg" type="image/x-icon" />
+    <link rel="icon" href="/favicon.ico" sizes="48x48"/>
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+    <meta name="theme-color" content="#a30e00">
     <meta name="generator" content={Astro.generator} />
     <title>Room TBA - Searching utility for finding rooms around UPLB</title>
     {pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />}
