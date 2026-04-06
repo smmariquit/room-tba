@@ -113,6 +113,7 @@
           map.flyTo({
             center: [currentRoom.building.lon, currentRoom.building.lat],
             zoom: 18,
+            offset: [0, -24],
             pitch: 60,
             duration: 1500,
           });
