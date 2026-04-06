@@ -41,8 +41,7 @@
     </div>
     <div class="metadata">
       <div class="data-updated">
-        Data sourced from <strong>UPLB AMIS</strong>. Last updated:
-        <strong>January 2026.</strong>
+        Data updated: <strong>January 2026.</strong>
       </div>
       <button
         class="contributors-btn"

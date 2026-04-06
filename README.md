@@ -14,7 +14,7 @@ A web app to help UPLB students find rooms on campus. "Saan sa UPLB ang \_\_\_?"
 
 ## Data Source
 
-Data is sourced from UPLB AMIS for 2nd Semester AY 2025-2026.
+Data is for 2nd Semester AY 2025-2026.
 
 ## Development/Contribution
 
