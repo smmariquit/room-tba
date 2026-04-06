@@ -1,10 +1,12 @@
 <script src="./pwa.ts"></script>
 <div id="pwa-toast" role="alert" aria-labelledby="toast-message">
   <div class="message">
-    <span id="toast-message"></span>
+    <span id="toast-message">App ready to work offline</span>
   </div>
-  <button id="pwa-refresh"> Reload </button>
-  <button id="pwa-close"> Close </button>
+  <div class="button-group">
+    <!-- <button id="pwa-refresh"> Reload </button> -->
+    <button id="pwa-close"> Close </button>
+  </div>
 </div>
 
 <style>
@@ -12,33 +14,43 @@
     visibility: hidden;
     position: fixed;
     background-color: white;
-    right: 0;
-    bottom: 0;
-    margin: 16px;
-    padding: 12px;
-    border: 1px solid #8885;
-    border-radius: 4px;
+    right: 0.5rem;
+    bottom: 0.5rem;
+    padding: 1rem;
+    border-radius: 1rem;
     z-index: 1;
     text-align: left;
-    box-shadow: 3px 4px 5px 0 #8885;
-  }
-  #pwa-toast .message {
-    margin-bottom: 8px;
-  }
-  #pwa-toast button {
-    border: 1px solid #8885;
-    outline: none;
-    margin-right: 5px;
-    border-radius: 2px;
-    padding: 3px 10px;
-  }
-  #pwa-toast.show {
-    visibility: visible;
-  }
-  button#pwa-refresh {
-    display: none;
-  }
-  #pwa-toast.show.refresh button#pwa-refresh {
-    display: inline-block;
+    box-shadow: 0 2px 0.5rem 0 hsla(0, 0%, 0%, 0.2);
+    width: min(20rem, calc(100% - (2 * 0.5rem)));
+    z-index: 30;
+
+    &.show {
+      visibility: visible;
+    }
+
+    .message {
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+    button {
+      border: 1px solid #8885;
+      outline: none;
+      margin-right: 5px;
+      border-radius: 0.5rem;
+      padding: 0.25rem 1rem;
+      font-size: 0.875rem;
+      &:active {
+        background-color: hsl(0, 0%, 95%);
+      }
+    }
+    .button-group {
+      display: flex;
+      gap: 0.25rem;
+    }
+    &.show.refresh {
+      button#pwa-refresh {
+        display: inline-block;
+      }
+    }
   }
 </style>

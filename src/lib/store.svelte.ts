@@ -1,24 +1,19 @@
-import type {
-  BuildingData,
-  ClassMapValue,
-  RoomData,
-  CollegeData,
-  DivisionData,
-  IFilterStore,
-} from "./types";
+import type { modalOptions } from "../constants/modal-states";
+import { SvelteMap } from "svelte/reactivity";
+import type { RecentSearch } from "./types";
 
-interface IModalStore {
+interface ModalStoreState {
   open: boolean;
-  type: "room-details" | "filters" | null;
+  type: (typeof modalOptions)[number] | null;
 }
 
-interface IRoomStore {
-  roomData: RoomData | null;
-  classesData: ClassMapValue[];
+export interface QueryStoreState {
+  type: "query" | "result";
+  category: "building" | "division" | "college" | "room" | null;
 }
 
 class ModalStore {
-  private _modalStore: IModalStore = $state({
+  private _modalStore: ModalStoreState = $state({
     open: false,
     type: null,
   });
@@ -26,7 +21,7 @@ class ModalStore {
   open = $derived(this._modalStore.open);
   type = $derived(this._modalStore.type);
 
-  openModal = (type: IModalStore["type"]) => {
+  openModal = (type: ModalStoreState["type"]) => {
     this._modalStore.open = true;
     this._modalStore.type = type;
   };
@@ -39,68 +34,78 @@ class ModalStore {
   };
 }
 
-class RoomStore {
-  private _roomStore: IRoomStore = $state({
-    roomData: null,
-    classesData: [],
+class QueryStore {
+  private _queryStore: QueryStoreState = $state({
+    category: null,
+    type: "query",
   });
+  recentSearches: RecentSearch[] = $state([]);
+  private _filters = new SvelteMap<
+    string,
+    Exclude<QueryStoreState["category"], null>
+  >();
+  value = $state("");
+  category = $derived(this._queryStore.category);
+  type = $derived(this._queryStore.type);
+  filterValues = $derived(
+    Array.from(
+      this._filters.entries().map(([value, category]) => ({
+        category,
+        value,
+      })),
+    ),
+  );
 
-  roomData = $derived(this._roomStore.roomData);
-  classesData = $derived(this._roomStore.classesData);
-
-  updateRoom = (roomData: RoomData) => {
-    this._roomStore.roomData = roomData;
+  // onclick of query buttons
+  updateQuery = (obj: QueryStoreState, value: string) => {
+    this._queryStore = obj;
+    this.value = value;
+    if (obj.type === "result" && obj.category !== null) {
+      this.addRecentSearch({
+        category: obj.category,
+        value
+      });
+    }
   };
 
-  updateClasses = (classesData: ClassMapValue[]) => {
-    this._roomStore.classesData = classesData;
-  };
-}
+  addRecentSearch(recentSearch: RecentSearch) {
+    const qIndex = this.recentSearches.findIndex(query => query.value === recentSearch.value && query.category === recentSearch.category);
+    if (qIndex !== -1)
+      this.recentSearches.splice(qIndex, 1);
+    else if (this.recentSearches.length > 4)
+      this.recentSearches.pop();
 
-class FilterStore {
-  private _filterStore: IFilterStore = $state({
-    filter: null,
-    type: null,
-    buildings: [],
-    colleges: [],
-    divisions: [],
-  });
+    this.recentSearches.unshift(recentSearch);
+  }
 
-  filterData = $derived({
-    type: this._filterStore.type,
-    filter: this._filterStore.filter,
-  });
-
-  getData = () => ({
-    buildings: this._filterStore.buildings,
-    colleges: this._filterStore.colleges,
-    divisions: this._filterStore.divisions,
-  });
-
-  setFilter = (type: IFilterStore["type"], filter: string | null) => {
-    this._filterStore.type = type;
-    this._filterStore.filter = filter;
-  };
-
-  setData = ([buildings, colleges, divisions]: [
-    BuildingData[],
-    CollegeData[],
-    DivisionData[],
-  ]) => {
-    this._filterStore.buildings = buildings;
-    this._filterStore.colleges = colleges;
-    this._filterStore.divisions = divisions;
-  };
-
-  resetFilter = () => {
-    this._filterStore = {
-      ...this._filterStore,
-      filter: null,
-      type: null,
+  // when clicking the x button
+  clearQuery = () => {
+    this._queryStore = {
+      category: null,
+      type: "query",
     };
+    this.value = "";
+  };
+
+  setType(type: typeof this.type) {
+    this.type = type;
+  }
+
+  addFilter = (
+    key: string,
+    category: Exclude<QueryStoreState["category"], null>,
+  ) => {
+    this._filters.set(key, category);
+  };
+
+  removeFilter = (key: string) => {
+    this._filters.delete(key);
+  };
+
+  clearFilter = () => {
+    this._filters.clear();
   };
 }
 
-export const filterStore = new FilterStore();
-export const currentRoomStore = new RoomStore();
+export const queryStore = new QueryStore();
 export const modalStore = new ModalStore();
