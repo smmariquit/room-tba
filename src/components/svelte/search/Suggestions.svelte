@@ -122,7 +122,7 @@
     opacity: 0;
   }
   .no-suggestions {
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 0.75rem;
   }
   .visible {
     pointer-events: auto;
