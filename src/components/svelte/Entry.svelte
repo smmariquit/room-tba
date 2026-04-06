@@ -1,8 +1,8 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { modalStore, queryStore } from "../../lib/store.svelte";
-  import Modal from "./Modal.svelte";
-  import SidePanel from "./SidePanel.svelte";
+  import Modal from "./modal/Modal.svelte";
+  import SidePanel from "./sidepanel/SidePanel.svelte";
   import Map from "./Map.svelte";
   import StatusBar from "./StatusBar.svelte";
   import type { RecentSearch } from "../../lib/types";

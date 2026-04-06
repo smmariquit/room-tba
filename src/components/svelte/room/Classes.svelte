@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { ClassMapValue } from "../../lib/types";
+  import type { ClassMapValue } from "../../../lib/types";
 
   interface Props {
     classes: ClassMapValue[];

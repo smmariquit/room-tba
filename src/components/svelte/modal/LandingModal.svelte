@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { modalStore } from "../../lib/store.svelte";
-  import { contributors } from "../../constants/contributors";
+  import { modalStore } from "../../../lib/store.svelte";
+  import { contributors } from "../../../constants/contributors";
 
   let dontShowAgain = $state(false);
 

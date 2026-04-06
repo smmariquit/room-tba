@@ -1,48 +1,48 @@
 <script lang="ts">
-  import { queryStore } from "../../lib/store.svelte";
-  import { getAppData } from "../../lib/context";
+  import { queryStore } from "../../../lib/store.svelte";
+  import { getAppData } from "../../../lib/context";
   import RoomDisplay from "./RoomDisplay.svelte";
 
-  const { rooms, classesMap, divisions } = getAppData();
+  const { rooms, classesMap, colleges } = getAppData();
 
   const MAX_DISPLAY_RESULT = 12;
   let paginateOffset = $state(0);
 
-  const division = $derived(
-    divisions.find((d) => d.division_name === queryStore.value),
+  const college = $derived(
+    colleges.find((c) => c.college_name === queryStore.value),
   );
 
-  const divisionRooms = $derived(
-    rooms.filter((room) => room.divisionName === queryStore.value),
+  const collegeRooms = $derived(
+    rooms.filter((room) => room.collegeName === queryStore.value),
   );
 
   const paginatedRooms = $derived(
-    divisionRooms.slice(
+    collegeRooms.slice(
       paginateOffset * MAX_DISPLAY_RESULT,
       (paginateOffset + 1) * MAX_DISPLAY_RESULT,
     ),
   );
 
   const maxPaginateOffset = $derived(
-    Math.max(1, Math.ceil(divisionRooms.length / MAX_DISPLAY_RESULT)),
+    Math.max(1, Math.ceil(collegeRooms.length / MAX_DISPLAY_RESULT)),
   );
 
   $effect(() => {
-    // Reset pagination when division changes
+    // Reset pagination when college changes
     queryStore.value;
     paginateOffset = 0;
   });
 </script>
 
 <div class="building-query-wrapper">
-  {#if division}
+  {#if college}
     <div class="building-header">
-      <h2 class="building-title">{division.division_name}</h2>
+      <h2 class="building-title">{college.college_name}</h2>
     </div>
   {/if}
 
   <div class="rooms-section">
-    <h3 class="rooms-subtitle">Rooms in this division</h3>
+    <h3 class="rooms-subtitle">Rooms in this college</h3>
     <div class="room-list">
       {#each paginatedRooms as room (room.id)}
         <RoomDisplay
@@ -52,8 +52,8 @@
         />
       {/each}
 
-      {#if divisionRooms.length === 0}
-        <div class="no-results">No rooms found for this division.</div>
+      {#if collegeRooms.length === 0}
+        <div class="no-results">No rooms found for this college.</div>
       {/if}
     </div>
   </div>

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { throttle } from "es-toolkit";
-  import { queryStore } from "../../lib/store.svelte";
+  import { queryStore } from "../../../lib/store.svelte";
   import Suggestions from "./Suggestions.svelte";
 
   let searchElement = $state<HTMLInputElement | null>(null);

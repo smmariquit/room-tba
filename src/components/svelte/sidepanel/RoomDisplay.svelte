@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { queryStore } from "../../lib/store.svelte";
-  import type { RoomData, ClassMapValue } from "../../lib/types";
+  import { queryStore } from "../../../lib/store.svelte";
+  import type { RoomData, ClassMapValue } from "../../../lib/types";
 
   type Props = {
     room: RoomData;

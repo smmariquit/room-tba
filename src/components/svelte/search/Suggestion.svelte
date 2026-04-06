@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { queryStore, type QueryStoreState } from "../../lib/store.svelte";
+  import { queryStore, type QueryStoreState } from "../../../lib/store.svelte";
 
   const suggestion: {
     value: string;

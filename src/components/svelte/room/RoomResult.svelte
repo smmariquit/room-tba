@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { modalStore, queryStore } from "../../lib/store.svelte";
-  import { getAppData } from "../../lib/context";
+  import { modalStore, queryStore } from "../../../lib/store.svelte";
+  import { getAppData } from "../../../lib/context";
   import Classes from "./Classes.svelte";
 
   const { rooms, classesMap } = getAppData();

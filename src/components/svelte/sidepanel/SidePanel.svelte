@@ -1,10 +1,10 @@
 <script lang="ts">
-  import Search from "./Search.svelte";
-  import { queryStore } from "../../lib/store.svelte";
+  import Search from "../search/Search.svelte";
+  import { queryStore } from "../../../lib/store.svelte";
   import BuildingResult from "./BuildingQuery.svelte";
   import CollegeResult from "./CollegeResult.svelte";
   import DivisionResult from "./DivisionResult.svelte";
-  import RoomResult from "./RoomResult.svelte";
+  import RoomResult from "../room/RoomResult.svelte";
 </script>
 
 <div class="side-panel-wrapper">

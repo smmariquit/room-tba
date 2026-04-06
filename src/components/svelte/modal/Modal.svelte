@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { modalStore } from "../../lib/store.svelte";
+  import { modalStore } from "../../../lib/store.svelte";
   import { fade, fly } from "svelte/transition";
   import LandingModal from "./LandingModal.svelte";
   import ScheduleModal from "./ScheduleModal.svelte";

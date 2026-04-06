@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { getAppData } from "../../lib/context";
-  import { queryStore, type QueryStoreState } from "../../lib/store.svelte";
+  import { getAppData } from "../../../lib/context";
+  import { queryStore, type QueryStoreState } from "../../../lib/store.svelte";
   import Suggestion from "./Suggestion.svelte";
   const { buildings, colleges, divisions, rooms } = getAppData();
 
