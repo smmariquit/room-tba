@@ -93,8 +93,23 @@
     <div class="schedule-section">
       <div class="schedule-section__header">
         <h3>Classes in this room</h3>
-        <button onclick={() => modalStore.openModal("schedule-expand")}
-          >Open schedule</button
+        <button
+          onclick={() => modalStore.openModal("schedule-expand")}
+          class="schedule-section__opener"
+          >Open schedule <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><line x1="7" y1="17" x2="17" y2="7"></line><polyline
+              points="7 7 17 7 17 17"
+            ></polyline></svg
+          ></button
         >
       </div>
       <Classes classes={classesData} />
@@ -208,16 +223,19 @@
     .schedule-section__header {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      button {
+      align-items: baseline;
+      button.schedule-section__opener {
         all: unset;
         font-size: 0.875rem;
         font-weight: 600;
-        padding: 0.25rem 1rem;
+        padding: 0.5rem 1rem;
         background-color: hsl(5, 53%, 32%);
         color: white;
         border-radius: 8px;
         cursor: pointer;
+        display: flex;
+        gap: 0.25rem;
+        align-items: center;
       }
     }
   }

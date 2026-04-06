@@ -37,8 +37,8 @@
   }
   .side-panel-content {
     background-color: white;
-    border-radius: 1.5rem; /* 24px */
-    padding: 1.125rem 1.5rem; /* 18px top/bottom, 24px left/right */
+    border-radius: 0.8125rem; /* 24px */
+    padding: 1.125rem; /* 18px top/bottom, 24px left/right */
     pointer-events: auto;
     display: flex;
     flex: 1 1 0;
