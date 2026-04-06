@@ -2,6 +2,12 @@
   import { getAppData } from "../../../lib/context";
   import { queryStore, type QueryStoreState } from "../../../lib/store.svelte";
   import Suggestion from "./Suggestion.svelte";
+
+  interface Props {
+    focused?: boolean;
+  }
+  const { focused = false }: Props = $props();
+
   const { buildings, colleges, divisions, rooms } = getAppData();
 
   const suggestedResult = $derived<
@@ -71,7 +77,7 @@
   $inspect(suggestedResult);
 </script>
 
-<div class="suggestions-container" class:visible={queryStore.type === "query"}>
+<div class="suggestions-container" class:visible={queryStore.type === "query"} class:mobile-hidden={!focused}>
   {#if queryStore.value === ""}
     {#if queryStore.recentSearches.length !== 0}
       <h2 class='suggestions-header'>Recent searches</h2>
@@ -117,6 +123,11 @@
   .visible {
     pointer-events: auto;
     opacity: 1;
+  }
+  @media screen and (max-width: 48rem) {
+    .mobile-hidden {
+      display: none;
+    }
   }
   .suggestions-header {
     font-size: 1rem;

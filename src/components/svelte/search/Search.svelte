@@ -5,6 +5,7 @@
 
   let searchElement = $state<HTMLInputElement | null>(null);
   let typing = $state(false);
+  let focused = $state(false);
 
   const throttleSearch = throttle((searchInput: string) => {
     queryStore.value = searchInput;
@@ -54,6 +55,8 @@
         bind:this={searchElement}
         class={typing ? "typing" : ""}
         oninput={handleInput}
+        onfocus={() => (focused = true)}
+        onblur={() => setTimeout(() => (focused = false), 200)}
         placeholder={"Search room code, building, division..."}
       />
       {#if typing}
@@ -151,7 +154,7 @@
       {/if}
     </div>
   </div>
-  <Suggestions />
+  <Suggestions {focused} />
 </div>
 
 <style>
