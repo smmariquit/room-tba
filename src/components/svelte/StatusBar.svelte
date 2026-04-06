@@ -1,5 +1,6 @@
 <script lang="ts">
   import { getAppData } from "../../lib/context";
+  import { modalStore } from "../../lib/store.svelte";
 
   const { directionCount, totalRooms } = getAppData();
   let isOpen = $state(false);
@@ -43,7 +44,12 @@
         Data sourced from <strong>UPLB AMIS</strong>. Last updated:
         <strong>January 2026.</strong>
       </div>
-      <div>Contributors</div>
+      <button
+        class="contributors-btn"
+        onclick={() => modalStore.openModal("landing")}
+      >
+        Contributors
+      </button>
       <div class="app-version">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -109,6 +115,18 @@
       }
       & > *:not(:first-child) {
         padding-left: 0.75rem;
+      }
+    }
+
+    .contributors-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      font: inherit;
+      cursor: pointer;
+      color: inherit;
+      &:hover {
+        text-decoration: underline;
       }
     }
     .app-version {
