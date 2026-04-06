@@ -44,30 +44,34 @@
         Data sourced from <strong>UPLB AMIS</strong>. Last updated:
         <strong>January 2026.</strong>
       </div>
-      <button
-        class="contributors-btn"
-        onclick={() => modalStore.openModal("landing")}
-      >
-        Contributors
-      </button>
-      <div class="app-version">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="18"
-          height="18"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="lucide lucide-git-fork-icon lucide-git-fork"
-          ><circle cx="12" cy="18" r="3"></circle><circle cx="6" cy="6" r="3"
-          ></circle><circle cx="18" cy="6" r="3"></circle><path
-            d="M18 9v2c0 .6-.4 1-1 1H7c-.6 0-1-.4-1-1V9"
-          ></path><path d="M12 12v3"></path></svg
+      <div>
+        <button
+          class="contributors-btn"
+          onclick={() => modalStore.openModal("landing")}
         >
-        <div>v1.0.0</div>
+          Contributors
+        </button>
+      </div>
+      <div class="app-version">
+        <a href="/changelog" class="changelog-link">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-git-fork-icon lucide-git-fork"
+            ><circle cx="12" cy="18" r="3"></circle><circle cx="6" cy="6" r="3"
+            ></circle><circle cx="18" cy="6" r="3"></circle><path
+              d="M18 9v2c0 .6-.4 1-1 1H7c-.6 0-1-.4-1-1V9"
+            ></path><path d="M12 12v3"></path></svg
+          >
+          <div>v1.0.0</div>
+        </a>
       </div>
     </div>
   </div>
@@ -109,6 +113,7 @@
       margin-left: auto;
       flex: 0 0 auto;
       display: flex;
+      align-items: center;
       & > *:not(:last-child) {
         border-right: 2px solid #aaa;
         padding-right: 0.75rem;
@@ -125,13 +130,24 @@
       font: inherit;
       cursor: pointer;
       color: inherit;
+      padding: 0.125rem 0.375rem;
       &:hover {
-        text-decoration: underline;
+        border-radius: 0.5rem;
+        background-color: hsla(0, 0%, 0%, 0.1);
       }
     }
     .app-version {
-      display: flex;
-      gap: 0.25rem;
+      .changelog-link {
+        display: flex;
+        gap: 0.25rem;
+        color: unset;
+        text-decoration: unset;
+        padding: 0.125rem 0.375rem;
+        &:hover {
+          border-radius: 0.5rem;
+          background-color: hsla(0, 0%, 0%, 0.1);
+        }
+      }
     }
     .data-updated {
       margin-left: auto;
