@@ -4,6 +4,7 @@
   import { getAppData } from "../../lib/context";
   import { queryStore } from "../../lib/store.svelte";
   import { untrack } from "svelte";
+  import { fade } from "svelte/transition";
 
   const { buildings, rooms } = getAppData();
   let mapInstance: maplibre.MapLibreMap | undefined = $state.raw();
@@ -12,6 +13,7 @@
   let isRotating = $state(false);
   let lastTimestamp = $state(0);
   let currentRotation = $state(0);
+  let zoomLevel = $state(0);
 
   function rotateCamera(timestamp: number) {
     if (!mapInstance || !isRotating) return;
@@ -44,16 +46,23 @@
     }
   }
 
+  function handleZoom() {
+    if (!mapInstance) return;
+    zoomLevel = mapInstance.getZoom();
+  }
+
   $effect(() => {
     if (mapInstance) {
       const map = mapInstance;
       map.on("mousedown", stopRotation);
       map.on("touchstart", stopRotation);
       map.on("wheel", stopRotation);
+      map.on("zoom", handleZoom);
       return () => {
         map.off("mousedown", stopRotation);
         map.off("touchstart", stopRotation);
         map.off("wheel", stopRotation);
+        map.off("zoom", handleZoom);
       };
     }
   });
@@ -140,6 +149,8 @@
         return null;
     }
   });
+
+  $inspect(zoomLevel);
 </script>
 
 <div class="map-container">
@@ -192,7 +203,30 @@
             class="pin"
             class:active={activeBuildingName === building.building_name}
             title={building.building_name}
-          ></div>
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              ><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z" /><path
+                d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"
+              /><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2" /><path
+                d="M10 6h4"
+              /><path d="M10 10h4" /><path d="M10 14h4" /><path
+                d="M10 18h4"
+              /></svg
+            >
+            <!-- {zoomLevel} -->
+            <div class="pin-label" transition:fade>
+              {building.building_name}
+            </div>
+          </div>
         </Marker>
       {/if}
     {/each}
@@ -210,10 +244,10 @@
   }
 
   .pin {
-    width: 1.25rem;
-    height: 1.25rem;
+    line-height: 0;
+    padding: 0.25rem;
+    color: white;
     background-color: hsl(5, 53%, 32%);
-    border: 2px solid white;
     border-radius: 50%;
     cursor: pointer;
     position: relative;
@@ -222,7 +256,6 @@
       transform 0.2s,
       scale 1.5s;
     &.active {
-      scale: 1.75;
       &::before {
         content: "";
         position: absolute;
@@ -235,6 +268,27 @@
         outline-offset: 0.25rem;
         animation: rotating 3s 1.5s linear infinite;
       }
+      .pin-label {
+        background-color: hsl(5, 53%, 32%);
+        color: white;
+        opacity: 1;
+      }
+    }
+    .pin-label {
+      line-height: initial;
+      color: black;
+      position: absolute;
+      bottom: calc(100% + 0.5rem);
+      left: 50%;
+      translate: -50% 0;
+      background-color: white;
+      border-radius: 0.5rem;
+      padding: 0.25rem 0.75rem;
+      width: max-content;
+      z-index: 60;
+      opacity: 0;
+      transition: opacity 0.2s;
+      pointer-events: none;
     }
   }
   @keyframes rotating {
@@ -247,7 +301,9 @@
   }
 
   .pin:hover {
-    transform: scale(1.2);
     background-color: hsl(5, 53%, 40%);
+    .pin-label {
+      opacity: 1;
+    }
   }
 </style>
