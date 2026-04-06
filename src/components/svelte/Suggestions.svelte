@@ -74,12 +74,12 @@
 <div class="suggestions-container" class:visible={queryStore.type === "query"}>
   {#if queryStore.value === ""}
     {#if queryStore.recentSearches.length !== 0}
-      <h2>Recent searches</h2>
+      <h2 class='suggestions-header'>Recent searches</h2>
       {#each queryStore.recentSearches as { category, value }}
         <Suggestion {value} {category} />
       {/each}
     {:else}
-      <h2>Trending searches</h2>
+      <h2 class='suggestions-header'>Trending searches</h2>
       <Suggestion value={"CAS Building"} category={"building"} />
       <Suggestion
         value={"Institute of Computer Science"}
@@ -102,7 +102,7 @@
     width: 100%;
     height: max-content;
     border-radius: 1rem;
-    padding: 0.25rem;
+    padding: 1.125rem 1.5rem;
     display: flex;
     flex-direction: column;
     background-color: white;
@@ -117,5 +117,8 @@
   .visible {
     pointer-events: auto;
     opacity: 1;
+  }
+  .suggestions-header {
+    font-size: 1rem;
   }
 </style>
