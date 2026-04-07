@@ -80,6 +80,12 @@ interface ContributorInfo {
   img_alt?: string;
 }
 
+interface DeveloperInfo {
+  name: string;
+  href?: string;
+  img_alt?: string;
+}
+
 interface RecentSearch {
   category: Exclude<QueryStoreState["category"], null>,
   value: string
