@@ -1,6 +1,6 @@
 <script lang="ts">
   import { modalStore } from "../../../lib/store.svelte";
-  import { contributors } from "../../../constants/contributors";
+  import { contributors, developers } from "../../../constants/contributors";
 
   let dontShowAgain = $state(false);
 
@@ -51,7 +51,43 @@
         View on GitHub
       </a>
     </div>
-
+    <div class="people-sections">
+    <div class="developers-section">
+      <h3>Developers</h3>
+      <div class="developers-list">
+        {#each developers as { name, href }}
+          {@const img_url = name.toLowerCase().split(" ").join("-")}
+          {#if href}
+            <a
+              class="developers-profile tooltip"
+              {href}
+              target="_blank"
+              data-tooltip={name}
+            >
+              <object
+                title="profile"
+                data={`/developers/images/${img_url}.png`}
+                type="image/jpeg"
+              >
+                <img src={"/profile.svg"} alt={name} title={name} />
+              </object>
+              <div class="name">{name}</div>
+            </a>
+          {:else}
+            <div class="developers-profile tooltip" data-tooltip={name}>
+              <object
+                title="forgot"
+                data={`/developers/images/${img_url}.png`}
+                type="image/png"
+              >
+                <img src={"/profile.svg"} alt={name} title={name} />
+              </object>
+              <div class="name">{name}</div>
+            </div>
+          {/if}
+        {/each}
+      </div>
+    </div>
     <div class="contributors-section">
       <h3>Contributors</h3>
       <div class="contributors-list">
@@ -87,6 +123,7 @@
           {/if}
         {/each}
       </div>
+    </div>
     </div>
 
     <div class="actions">
@@ -179,20 +216,34 @@
     background-color: #f5f5f5;
     border-color: #bbb;
   }
-  .contributors-section h3 {
+  .contributors-section h3, .developers-section h3 {
     margin: 0 0 0.75rem 0;
     font-size: 1rem;
     color: #333;
     font-weight: 600;
   }
-  .contributors-list {
+  .people-sections {
+    width: 100%;
+    max-width: 48rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    align-items: start;
+  }
+  .contributors-section,
+  .developers-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .contributors-list, .developers-list {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
     justify-content: center;
     max-width: 30rem;
   }
-  .contributor-profile {
+  .contributor-profile, .developers-profile {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -201,7 +252,10 @@
     color: inherit;
   }
   .contributor-profile object,
-  .contributor-profile img {
+  .contributor-profile img,
+  .developers-profile object,
+  .developers-profile img
+  {
     width: 2.25rem;
     height: 2.25rem;
     border: 1px solid #ccc;
@@ -209,7 +263,9 @@
     object-fit: cover;
     background-color: #f5f5f5;
   }
-  .contributor-profile .name {
+
+  .contributor-profile .name,
+  .developers-profile .name {
     font-size: 0.65rem;
     font-weight: 500;
     max-width: 3.5rem;
@@ -259,7 +315,12 @@
   }
 
   @media screen and (max-width: 768px) {
-    .contributor-profile .name {
+    .people-sections {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    .contributor-profile .name,
+    .developers-profile .name {
       display: block;
     }
     .tooltip::after,
