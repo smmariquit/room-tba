@@ -66,7 +66,7 @@
             >
               <object
                 title="profile"
-                data={`/developers/images/${img_url}.png`}
+                data={`/developers/${img_url}.png`}
                 type="image/jpeg"
               >
                 <img src={"/profile.svg"} alt={name} title={name} />
@@ -77,7 +77,7 @@
             <div class="developers-profile tooltip" data-tooltip={name}>
               <object
                 title="forgot"
-                data={`/developers/images/${img_url}.png`}
+                data={`/developers/${img_url}.png`}
                 type="image/png"
               >
                 <img src={"/profile.svg"} alt={name} title={name} />
@@ -102,7 +102,7 @@
             >
               <object
                 title="profile"
-                data={`/contributors/images/${img_url}.png`}
+                data={`/contributors/${img_url}.png`}
                 type="image/jpeg"
               >
                 <img src={"/profile.svg"} alt={name} title={name} />
@@ -113,7 +113,7 @@
             <div class="contributor-profile tooltip" data-tooltip={name}>
               <object
                 title="forgot"
-                data={`/contributors/images/${img_url}.png`}
+                data={`/contributors/${img_url}.png`}
                 type="image/png"
               >
                 <img src={"/profile.svg"} alt={name} title={name} />
