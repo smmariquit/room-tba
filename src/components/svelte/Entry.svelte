@@ -1,10 +1,11 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { modalStore, queryStore, locationStore } from "../../lib/store.svelte";
+  import { modalStore, queryStore, locationStore, toastStore } from "../../lib/store.svelte";
   import Modal from "./modal/Modal.svelte";
   import SidePanel from "./sidepanel/SidePanel.svelte";
   import Map from "./Map.svelte";
   import StatusBar from "./StatusBar.svelte";
+  import Toast from "./Toast.svelte";
   import type { RecentSearch } from "../../lib/types";
   import { isRecentSearch } from "../../lib/locStorage";
 
@@ -68,6 +69,13 @@
         <circle cx="12" cy="12" r="3" />
       </svg>
     </button>
+    {#if toastStore.message}
+      <Toast
+        message={toastStore.message}
+        type={toastStore.type}
+        onclose={() => toastStore.clear()}
+      />
+    {/if}
   </div>
   <Modal />
 </div>

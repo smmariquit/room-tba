@@ -63,17 +63,19 @@ class QueryStore {
     if (obj.type === "result" && obj.category !== null) {
       this.addRecentSearch({
         category: obj.category,
-        value
+        value,
       });
     }
   };
 
   addRecentSearch(recentSearch: RecentSearch) {
-    const qIndex = this.recentSearches.findIndex(query => query.value === recentSearch.value && query.category === recentSearch.category);
-    if (qIndex !== -1)
-      this.recentSearches.splice(qIndex, 1);
-    else if (this.recentSearches.length > 4)
-      this.recentSearches.pop();
+    const qIndex = this.recentSearches.findIndex(
+      (query) =>
+        query.value === recentSearch.value &&
+        query.category === recentSearch.category,
+    );
+    if (qIndex !== -1) this.recentSearches.splice(qIndex, 1);
+    else if (this.recentSearches.length > 4) this.recentSearches.pop();
 
     this.recentSearches.unshift(recentSearch);
   }
@@ -87,10 +89,6 @@ class QueryStore {
     this.value = "";
   };
 
-  setType(type: typeof this.type) {
-    this.type = type;
-  }
-
   addFilter = (
     key: string,
     category: Exclude<QueryStoreState["category"], null>,
@@ -102,42 +100,76 @@ class QueryStore {
     this._filters.delete(key);
   };
 
-  clearFilter = () => {
+  clearFilters = () => {
     this._filters.clear();
+  };
+}
+
+class ToastStore {
+  message: string | null = $state(null);
+  type: "info" | "error" | "success" = $state("info");
+
+  show = (message: string, type: "info" | "error" | "success" = "info") => {
+    this.message = message;
+    this.type = type;
+  };
+
+  clear = () => {
+    this.message = null;
   };
 }
 
 class LocationStore {
   coords: [number, number] | null = $state(null);
-  error: string | null = $state(null);
   isTracking: boolean = $state(false);
   destination: [number, number] | null = $state(null);
   private watchId: number | null = null;
 
   requestLocation = () => {
     if (!navigator.geolocation) {
-      this.error = "Geolocation is not supported by your browser.";
+      toastStore.show("Geolocation is not supported by your browser.", "error");
       return;
     }
 
-    if (this.isTracking) return;
+    if (this.isTracking) {
+      if (!this.coords) {
+        toastStore.show("Still getting your location...", "info");
+      }
+      return;
+    }
 
     this.isTracking = true;
-    this.error = null;
+    toastStore.show("Requesting location access...", "info");
 
     this.watchId = navigator.geolocation.watchPosition(
       (position) => {
+        const firstFix = !this.coords;
         this.coords = [position.coords.longitude, position.coords.latitude];
+        if (firstFix) {
+          toastStore.show("Location found!", "success");
+        }
       },
       (error) => {
-        this.error = error.message;
+        let msg = "An unknown error occurred while getting location.";
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            msg = "Location access denied. Please enable it in your settings.";
+            break;
+          case error.POSITION_UNAVAILABLE:
+            msg = "Location information is unavailable.";
+            break;
+          case error.TIMEOUT:
+            msg = "Location request timed out.";
+            break;
+        }
+        toastStore.show(msg, "error");
         this.isTracking = false;
         if (this.watchId !== null) {
           navigator.geolocation.clearWatch(this.watchId);
           this.watchId = null;
         }
       },
-      { enableHighAccuracy: true, maximumAge: 10000, timeout: 5000 }
+      { enableHighAccuracy: true, maximumAge: 10000, timeout: 10000 },
     );
   };
 
@@ -152,5 +184,5 @@ class LocationStore {
 
 export const queryStore = new QueryStore();
 export const modalStore = new ModalStore();
+export const toastStore = new ToastStore();
 export const locationStore = new LocationStore();
-
