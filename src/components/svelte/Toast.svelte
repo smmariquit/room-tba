@@ -56,17 +56,14 @@
   }
 
   .toast.error {
-    border-left: 4px solid #ef4444;
     color: #b91c1c;
   }
 
   .toast.info {
-    border-left: 4px solid #3b82f6;
     color: #1e40af;
   }
 
   .toast.success {
-    border-left: 4px solid #10b981;
     color: #065f46;
   }
 
