@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { modalStore, queryStore } from "../../../lib/store.svelte";
+  import { modalStore, queryStore, locationStore } from "../../../lib/store.svelte";
   import { getAppData } from "../../../lib/context";
   import Classes from "./Classes.svelte";
 
@@ -70,6 +70,15 @@
 
     {#if roomData.building?.lat && roomData.building?.lon}
       <div class="map-links">
+        <button class="get-directions-btn" onclick={() => {
+          if (roomData.building && roomData.building.lon && roomData.building.lat) {
+            locationStore.requestLocation();
+            locationStore.setDestination([roomData.building.lon, roomData.building.lat]);
+          }
+        }}>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
+          Get Directions
+        </button>
         <a
           href="https://www.google.com/maps?q={roomData.building.lat},{roomData
             .building.lon}"
@@ -78,23 +87,29 @@
         >
           Open in Google Maps
         </a>
-        <!-- <a
-          href="https://www.openstreetmap.org/?mlat={roomData.building
-            .lat}&mlon={roomData.building.lon}#map=18/{roomData.building
-            .lat}/{roomData.building.lon}"
-          target="_blank"
-          rel="noreferrer"
-        >
-          Open in OpenStreetMap
-        </a> -->
       </div>
     {/if}
 
     <div class="schedule-section">
       <div class="schedule-section__header">
         <h3>Classes in this room</h3>
-        <button onclick={() => modalStore.openModal("schedule-expand")}
-          >Open schedule</button
+        <button
+          onclick={() => modalStore.openModal("schedule-expand")}
+          class="schedule-section__opener"
+          >Open schedule <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><line x1="7" y1="17" x2="17" y2="7"></line><polyline
+              points="7 7 17 7 17 17"
+            ></polyline></svg
+          ></button
         >
       </div>
       <Classes classes={classesData} />
@@ -208,16 +223,19 @@
     .schedule-section__header {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      button {
+      align-items: baseline;
+      button.schedule-section__opener {
         all: unset;
         font-size: 0.875rem;
         font-weight: 600;
-        padding: 0.25rem 1rem;
+        padding: 0.5rem 1rem;
         background-color: hsl(5, 53%, 32%);
         color: white;
         border-radius: 8px;
         cursor: pointer;
+        display: flex;
+        gap: 0.25rem;
+        align-items: center;
       }
     }
   }
@@ -244,10 +262,31 @@
     border: 1px solid hsl(5, 53%, 32%);
     border-radius: 4px;
     text-decoration: none;
+    display: inline-flex;
+    align-items: center;
   }
   .map-links a:hover,
   .map-links a:focus-visible {
     background-color: hsl(5, 53%, 32%);
     color: white;
+  }
+
+  .get-directions-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.25rem 0.75rem;
+    background-color: hsl(5, 53%, 32%);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+
+  .get-directions-btn:hover {
+    background-color: hsl(5, 53%, 40%);
   }
 </style>

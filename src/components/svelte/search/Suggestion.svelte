@@ -91,7 +91,9 @@
         stroke-linejoin="round"
         ><path d="M13 4h3a2 2 0 0 1 2 2v14" /><path d="M2 20h3" /><path
           d="M13 20h9"
-        /><path d="M10 12v.01" /><path d="M13 4H4a2 2 0 0 0-2 2v14h11V4z" /></svg
+        /><path d="M10 12v.01" /><path
+          d="M13 4H4a2 2 0 0 0-2 2v14h11V4z"
+        /></svg
       >
     {/if}
   </span>
@@ -105,7 +107,7 @@
 <style>
   .suggestion {
     all: unset;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -121,7 +123,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #000; 
+    color: #000;
     flex-shrink: 0;
   }
 

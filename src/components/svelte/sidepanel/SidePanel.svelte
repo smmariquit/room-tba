@@ -27,7 +27,7 @@
 <style>
   .side-panel-wrapper {
     position: relative;
-    width: 25.75rem;
+    width: min(25.75rem, calc(50% - 4rem));
     max-width: calc(100% - 2.625rem);
     display: flex;
     flex-direction: column;
@@ -37,8 +37,8 @@
   }
   .side-panel-content {
     background-color: white;
-    border-radius: 1.5rem; /* 24px */
-    padding: 1.125rem 1.5rem; /* 18px top/bottom, 24px left/right */
+    border-radius: 0.8125rem; /* 24px */
+    padding: 1.125rem; /* 18px top/bottom, 24px left/right */
     pointer-events: auto;
     display: flex;
     flex: 1 1 0;
@@ -68,5 +68,4 @@
       box-shadow: 0px -4px 12px rgba(0, 0, 0, 0.1);
     }
   }
-
 </style>
