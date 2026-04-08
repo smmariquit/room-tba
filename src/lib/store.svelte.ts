@@ -127,6 +127,7 @@ class LocationStore {
   coords: [number, number] | null = $state(null);
   isTracking: boolean = $state(false);
   destination: [number, number] | null = $state(null);
+  routeOrigin: [number, number] | null = $state(null);
   private watchId: number | null = null;
 
   private readonly CAMPUS_BOUNDS = {
@@ -176,6 +177,12 @@ class LocationStore {
 
         const firstFix = !this.coords;
         this.coords = [longitude, latitude];
+        
+        // Update route origin if destination exists but origin hasn't been set
+        if (this.destination && !this.routeOrigin) {
+          this.routeOrigin = [longitude, latitude];
+        }
+
         if (firstFix) {
           toastStore.show("Location found!", "success");
         }
@@ -203,6 +210,7 @@ class LocationStore {
   private stopTracking() {
     this.isTracking = false;
     this.coords = null;
+    this.routeOrigin = null;
     if (this.watchId !== null) {
       navigator.geolocation.clearWatch(this.watchId);
       this.watchId = null;
@@ -211,10 +219,12 @@ class LocationStore {
 
   setDestination = (coords: [number, number]) => {
     this.destination = coords;
+    this.routeOrigin = this.coords;
   };
 
   clearDestination = () => {
     this.destination = null;
+    this.routeOrigin = null;
   };
 }
 

@@ -92,9 +92,9 @@
   $effect(() => {
     if (!directions) return;
     
-    if (locationStore.coords && locationStore.destination) {
+    if (locationStore.routeOrigin && locationStore.destination) {
       directions.setWaypoints([
-        locationStore.coords,
+        locationStore.routeOrigin,
         locationStore.destination
       ]);
     } else {
