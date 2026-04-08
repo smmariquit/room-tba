@@ -89,6 +89,10 @@ class QueryStore {
     this.value = "";
   };
 
+  setType = (type: QueryStoreState["type"]) => {
+    this._queryStore.type = type;
+  };
+
   addFilter = (
     key: string,
     category: Exclude<QueryStoreState["category"], null>,
