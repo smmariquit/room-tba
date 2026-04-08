@@ -2,14 +2,17 @@
   import { FillExtrusionLayer, MapLibre, Marker } from "svelte-maplibre";
   import * as maplibre from "maplibre-gl";
   import { getAppData } from "../../lib/context";
-  import { queryStore } from "../../lib/store.svelte";
+  import { queryStore, locationStore } from "../../lib/store.svelte";
   import { untrack } from "svelte";
   import { fade } from "svelte/transition";
+  import MapLibreGlDirections from "@maplibre/maplibre-gl-directions";
 
   const { buildings, rooms } = getAppData();
   let mapInstance: maplibre.MapLibreMap | undefined = $state.raw();
+  let directions: MapLibreGlDirections | undefined = $state.raw();
 
   let animationFrameId: number | null = $state(null);
+
   let isRotating = $state(false);
   let lastTimestamp = $state(0);
   let currentRotation = $state(0);
@@ -64,6 +67,38 @@
         map.off("wheel", stopRotation);
         map.off("zoom", handleZoom);
       };
+    }
+  });
+
+  $effect(() => {
+    if (mapInstance && !directions) {
+      const initDirections = () => {
+        if (!directions && mapInstance) {
+          directions = new MapLibreGlDirections(mapInstance, {
+            api: "https://routing.openstreetmap.de/routed-foot/route/v1",
+            profile: "foot"
+          });
+        }
+      };
+
+      if (mapInstance.isStyleLoaded()) {
+        initDirections();
+      } else {
+        mapInstance.once("load", initDirections);
+      }
+    }
+  });
+
+  $effect(() => {
+    if (!directions) return;
+    
+    if (locationStore.coords && locationStore.destination) {
+      directions.setWaypoints([
+        locationStore.coords,
+        locationStore.destination
+      ]);
+    } else {
+      directions.clear();
     }
   });
 
@@ -195,6 +230,11 @@
       }}
       filter={["==", "extrude", "true"]}
     />
+    {#if locationStore.coords}
+      <Marker lngLat={locationStore.coords}>
+        <div class="user-location-pin"></div>
+      </Marker>
+    {/if}
     {#each buildings as building}
       {#if building.lat && building.lon}
         <Marker
@@ -247,6 +287,33 @@
     width: 100%;
     height: 100%;
     z-index: 0;
+  }
+
+  .user-location-pin {
+    width: 1rem;
+    height: 1rem;
+    background-color: #4285F4;
+    border: 3px solid white;
+    border-radius: 50%;
+    box-shadow: 0 0 4px rgba(0,0,0,0.3);
+    position: relative;
+    z-index: 70;
+  }
+  .user-location-pin::after {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    border-radius: 50%;
+    border: 2px solid #4285F4;
+    animation: pulsate 2s ease-out infinite;
+    opacity: 0;
+  }
+  @keyframes pulsate {
+    0% { transform: scale(0.5); opacity: 1; }
+    100% { transform: scale(1.5); opacity: 0; }
   }
 
   .pin {

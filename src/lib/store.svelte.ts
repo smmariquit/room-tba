@@ -107,5 +107,50 @@ class QueryStore {
   };
 }
 
+class LocationStore {
+  coords: [number, number] | null = $state(null);
+  error: string | null = $state(null);
+  isTracking: boolean = $state(false);
+  destination: [number, number] | null = $state(null);
+  private watchId: number | null = null;
+
+  requestLocation = () => {
+    if (!navigator.geolocation) {
+      this.error = "Geolocation is not supported by your browser.";
+      return;
+    }
+
+    if (this.isTracking) return;
+
+    this.isTracking = true;
+    this.error = null;
+
+    this.watchId = navigator.geolocation.watchPosition(
+      (position) => {
+        this.coords = [position.coords.longitude, position.coords.latitude];
+      },
+      (error) => {
+        this.error = error.message;
+        this.isTracking = false;
+        if (this.watchId !== null) {
+          navigator.geolocation.clearWatch(this.watchId);
+          this.watchId = null;
+        }
+      },
+      { enableHighAccuracy: true, maximumAge: 10000, timeout: 5000 }
+    );
+  };
+
+  setDestination = (coords: [number, number]) => {
+    this.destination = coords;
+  };
+
+  clearDestination = () => {
+    this.destination = null;
+  };
+}
+
 export const queryStore = new QueryStore();
 export const modalStore = new ModalStore();
+export const locationStore = new LocationStore();
+

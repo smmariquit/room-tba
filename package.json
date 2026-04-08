@@ -13,6 +13,7 @@
   "dependencies": {
     "@astrojs/react": "^4.4.2",
     "@astrojs/svelte": "^7.2.5",
+    "@maplibre/maplibre-gl-directions": "^0.9.1",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-basic-ssl": "^2.2.0",

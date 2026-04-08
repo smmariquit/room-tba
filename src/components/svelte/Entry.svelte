@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { modalStore, queryStore } from "../../lib/store.svelte";
+  import { modalStore, queryStore, locationStore } from "../../lib/store.svelte";
   import Modal from "./modal/Modal.svelte";
   import SidePanel from "./sidepanel/SidePanel.svelte";
   import Map from "./Map.svelte";
@@ -43,6 +43,31 @@
       <SidePanel />
       <StatusBar />
     </div>
+    <button
+      class="my-location-btn"
+      onclick={() => locationStore.requestLocation()}
+      title="My Location"
+      aria-label="My Location"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <line x1="2" x2="5" y1="12" y2="12" />
+        <line x1="19" x2="22" y1="12" y2="12" />
+        <line x1="12" x2="12" y1="2" y2="5" />
+        <line x1="12" x2="12" y1="19" y2="22" />
+        <circle cx="12" cy="12" r="7" />
+        <circle cx="12" cy="12" r="3" />
+      </svg>
+    </button>
   </div>
   <Modal />
 </div>
@@ -77,6 +102,30 @@
     flex-direction: column;
     height: 100%;
     width: 100%;
+  }
+
+  .my-location-btn {
+    position: absolute;
+    bottom: 3.5rem;
+    right: 1.5rem;
+    pointer-events: auto;
+    background-color: white;
+    border: 1px solid #ececec;
+    border-radius: 50%;
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    color: hsl(5, 53%, 32%);
+    transition: background-color 0.2s, transform 0.2s;
+  }
+  
+  .my-location-btn:hover {
+    background-color: hsl(5, 53%, 98%);
+    transform: scale(1.05);
   }
 
   :global(*) {
