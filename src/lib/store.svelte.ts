@@ -125,6 +125,22 @@ class LocationStore {
   destination: [number, number] | null = $state(null);
   private watchId: number | null = null;
 
+  private readonly CAMPUS_BOUNDS = {
+    minLng: 121.225963,
+    minLat: 14.150106,
+    maxLng: 121.254638,
+    maxLat: 14.172678,
+  };
+
+  private isWithinBounds(lng: number, lat: number) {
+    return (
+      lng >= this.CAMPUS_BOUNDS.minLng &&
+      lng <= this.CAMPUS_BOUNDS.maxLng &&
+      lat >= this.CAMPUS_BOUNDS.minLat &&
+      lat <= this.CAMPUS_BOUNDS.maxLat
+    );
+  }
+
   requestLocation = () => {
     if (!navigator.geolocation) {
       toastStore.show("Geolocation is not supported by your browser.", "error");
@@ -143,8 +159,19 @@ class LocationStore {
 
     this.watchId = navigator.geolocation.watchPosition(
       (position) => {
+        const { longitude, latitude } = position.coords;
+
+        if (!this.isWithinBounds(longitude, latitude)) {
+          toastStore.show(
+            "You appear to be outside the UPLB Campus. Location features are limited to the campus area.",
+            "error",
+          );
+          this.stopTracking();
+          return;
+        }
+
         const firstFix = !this.coords;
-        this.coords = [position.coords.longitude, position.coords.latitude];
+        this.coords = [longitude, latitude];
         if (firstFix) {
           toastStore.show("Location found!", "success");
         }
@@ -163,15 +190,20 @@ class LocationStore {
             break;
         }
         toastStore.show(msg, "error");
-        this.isTracking = false;
-        if (this.watchId !== null) {
-          navigator.geolocation.clearWatch(this.watchId);
-          this.watchId = null;
-        }
+        this.stopTracking();
       },
       { enableHighAccuracy: true, maximumAge: 10000, timeout: 10000 },
     );
   };
+
+  private stopTracking() {
+    this.isTracking = false;
+    this.coords = null;
+    if (this.watchId !== null) {
+      navigator.geolocation.clearWatch(this.watchId);
+      this.watchId = null;
+    }
+  }
 
   setDestination = (coords: [number, number]) => {
     this.destination = coords;
