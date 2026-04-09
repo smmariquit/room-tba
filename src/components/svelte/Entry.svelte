@@ -32,7 +32,22 @@
   $effect(() => {
     updateData(queryStore.recentSearches);
   });
+
+  const handleKeydown = (e: KeyboardEvent) => {
+    if (e.key === "Escape") {
+      if (modalStore.open) {
+        modalStore.closeModal();
+      } else if (queryStore.value !== "" || queryStore.type === "result") {
+        queryStore.clearQuery();
+        if (locationStore.destination) {
+          locationStore.clearDestination();
+        }
+      }
+    }
+  }
 </script>
+
+<svelte:window onkeydown={handleKeydown} />
 
 <div class="app-layout">
   <Map />
