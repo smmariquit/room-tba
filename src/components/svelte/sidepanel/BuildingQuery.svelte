@@ -131,7 +131,7 @@
     align-items: center;
     gap: 0.375rem;
     padding: 0.375rem 0.75rem;
-    background-color: hsl(5, 53%, 32%);
+    background-color: #7B1113;
     color: white;
     border: none;
     border-radius: 0.5rem;
@@ -144,7 +144,7 @@
   }
 
   .get-directions-btn:hover {
-    background-color: hsl(5, 53%, 40%);
+    background-color: #9A1517;
   }
 
   .rooms-section {
@@ -192,21 +192,21 @@
   .pagination-btn {
     padding: 0.375rem 0.75rem;
     font-size: 0.875rem;
-    background-color: white;
-    border: 1px solid #ececec;
+    background-color: #7B1113;
+    border: 1px solid #7B1113;
     border-radius: 0.5rem;
     cursor: pointer;
     transition: all 0.125s;
-    color: black;
+    color: white;
   }
 
   .pagination-btn:hover:not(:disabled) {
-    border-color: hsl(5, 53%, 32%);
-    background-color: hsl(5, 53%, 98%);
+    background-color: #9A1517;
+    border-color: #9A1517;
   }
 
   .pagination-btn:disabled {
-    opacity: 0.5;
+    opacity: 0.3;
     cursor: not-allowed;
   }
 

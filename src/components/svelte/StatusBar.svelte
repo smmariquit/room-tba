@@ -169,7 +169,7 @@
           top: 0;
           left: 0;
           height: 100%;
-          background-color: #000;
+          background-color: #7B1113;
           border-radius: 0.5rem;
           width: calc(attr(data-value number) * 1%);
         }
