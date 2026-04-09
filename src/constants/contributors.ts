@@ -12,4 +12,4 @@ export const developers: DeveloperInfo[] = [
 export const contributors: ContributorInfo[] = [
   { name: "Niño Anthony Marmeto" },
   { name: "Rosh Almario" },
-]
+];

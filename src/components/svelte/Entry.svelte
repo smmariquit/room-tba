@@ -1,6 +1,11 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { modalStore, queryStore, locationStore, toastStore } from "../../lib/store.svelte";
+  import {
+    modalStore,
+    queryStore,
+    locationStore,
+    toastStore,
+  } from "../../lib/store.svelte";
   import Modal from "./modal/Modal.svelte";
   import SidePanel from "./sidepanel/SidePanel.svelte";
   import Map from "./Map.svelte";
@@ -33,7 +38,7 @@
     updateData(queryStore.recentSearches);
   });
 
-  const handleKeydown = (e: KeyboardEvent) => {
+  function handleKeydown(e: KeyboardEvent) {
     if (e.key === "Escape") {
       if (modalStore.open) {
         modalStore.closeModal();
@@ -44,7 +49,7 @@
         }
       }
     }
-  }
+  };
 </script>
 
 <svelte:window onkeydown={handleKeydown} />
@@ -143,9 +148,11 @@
     cursor: pointer;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     color: hsl(5, 53%, 32%);
-    transition: background-color 0.2s, transform 0.2s;
+    transition:
+      background-color 0.2s,
+      transform 0.2s;
   }
-  
+
   .my-location-btn:hover {
     background-color: hsl(5, 53%, 98%);
     transform: scale(1.05);

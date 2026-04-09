@@ -87,6 +87,6 @@ interface DeveloperInfo {
 }
 
 interface RecentSearch {
-  category: Exclude<QueryStoreState["category"], null>,
-  value: string
+  category: Exclude<QueryStoreState["category"], null>;
+  value: string;
 }

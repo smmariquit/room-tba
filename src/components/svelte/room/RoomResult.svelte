@@ -1,5 +1,9 @@
 <script lang="ts">
-  import { modalStore, queryStore, locationStore } from "../../../lib/store.svelte";
+  import {
+    modalStore,
+    queryStore,
+    locationStore,
+  } from "../../../lib/store.svelte";
   import { getAppData } from "../../../lib/context";
   import Classes from "./Classes.svelte";
 
@@ -70,13 +74,34 @@
 
     {#if roomData.building?.lat && roomData.building?.lon}
       <div class="map-links">
-        <button class="get-directions-btn" onclick={() => {
-          if (roomData.building && roomData.building.lon && roomData.building.lat) {
-            locationStore.requestLocation();
-            locationStore.setDestination([roomData.building.lon, roomData.building.lat]);
-          }
-        }}>
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
+        <button
+          class="get-directions-btn"
+          onclick={() => {
+            if (
+              roomData.building &&
+              roomData.building.lon &&
+              roomData.building.lat
+            ) {
+              locationStore.requestLocation();
+              locationStore.setDestination([
+                roomData.building.lon,
+                roomData.building.lat,
+              ]);
+            }
+          }}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg
+          >
           Get Directions
         </button>
         <a

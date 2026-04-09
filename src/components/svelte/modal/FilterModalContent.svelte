@@ -11,7 +11,10 @@
     filter_name: string,
   ) {
     return () => {
-      queryStore.updateQuery({ type: "result", category: filter_type }, filter_name);
+      queryStore.updateQuery(
+        { type: "result", category: filter_type },
+        filter_name,
+      );
       modalStore.closeModal();
     };
   }

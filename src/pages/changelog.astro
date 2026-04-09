@@ -24,25 +24,33 @@ const changelogEntries = [
       <p class="eyebrow">Release notes</p>
       <h1>Changelog</h1>
       <p>
-        Room TBA is a living document and is updated regularly, especially every term, to reflect latest changes in course offerings, room status, and other relevant information. Aside from the data itself, the website also undergoes improvements to provide a better user experience. Below are the major updates and changes made to Room TBA since its initial release.
+        Room TBA is a living document and is updated regularly, especially every
+        term, to reflect latest changes in course offerings, room status, and
+        other relevant information. Aside from the data itself, the website also
+        undergoes improvements to provide a better user experience. Below are
+        the major updates and changes made to Room TBA since its initial
+        release.
       </p>
     </header>
-    {changelogEntries.map(entry => (
-      <article class="entry">
-        <div class="entry-header">
-          <div>
-            <h2 class="hero">{entry.summary} </h2>
-            <p class="version">{entry.version}</p>
+    {
+      changelogEntries.map((entry) => (
+        <article class="entry">
+          <div class="entry-header">
+            <div>
+              <h2 class="hero">{entry.summary} </h2>
+              <p class="version">{entry.version}</p>
+            </div>
+            <p class="date">{entry.date}</p>
           </div>
-          <p class="date">{entry.date}</p>
-        </div>
 
           <ul>
-            {entry.changes.map((change) => <li>{change}</li>)}
+            {entry.changes.map((change) => (
+              <li>{change}</li>
+            ))}
           </ul>
         </article>
-      ))}
-    </section>
+      ))
+    }
   </main>
 </Layout>
 
@@ -51,7 +59,21 @@ const changelogEntries = [
     max-width: 48rem;
     margin: 0 auto;
     padding: 2rem 1rem 4rem;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif, "Times New Roman", Times, serif;
+    font-family:
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      Oxygen,
+      Ubuntu,
+      Cantarell,
+      "Open Sans",
+      "Helvetica Neue",
+      sans-serif,
+      "Times New Roman",
+      Times,
+      serif;
   }
 
   .back-link {

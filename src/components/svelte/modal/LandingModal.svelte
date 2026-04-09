@@ -52,78 +52,78 @@
       </a>
     </div>
     <div class="people-sections">
-    <div class="developers-section">
-      <h3>Developers</h3>
-      <div class="developers-list">
-        {#each developers as { name, href }}
-          {@const img_url = name.toLowerCase().split(" ").join("-")}
-          {#if href}
-            <a
-              class="developers-profile tooltip"
-              {href}
-              target="_blank"
-              data-tooltip={name}
-            >
-              <object
-                title="profile"
-                data={`/developers/${img_url}.png`}
-                type="image/jpeg"
+      <div class="developers-section">
+        <h3>Developers</h3>
+        <div class="developers-list">
+          {#each developers as { name, href }}
+            {@const img_url = name.toLowerCase().split(" ").join("-")}
+            {#if href}
+              <a
+                class="developers-profile tooltip"
+                {href}
+                target="_blank"
+                data-tooltip={name}
               >
-                <img src={"/profile.svg"} alt={name} title={name} />
-              </object>
-              <div class="name">{name}</div>
-            </a>
-          {:else}
-            <div class="developers-profile tooltip" data-tooltip={name}>
-              <object
-                title="forgot"
-                data={`/developers/${img_url}.png`}
-                type="image/png"
-              >
-                <img src={"/profile.svg"} alt={name} title={name} />
-              </object>
-              <div class="name">{name}</div>
-            </div>
-          {/if}
-        {/each}
+                <object
+                  title="profile"
+                  data={`/developers/${img_url}.png`}
+                  type="image/jpeg"
+                >
+                  <img src={"/profile.svg"} alt={name} title={name} />
+                </object>
+                <div class="name">{name}</div>
+              </a>
+            {:else}
+              <div class="developers-profile tooltip" data-tooltip={name}>
+                <object
+                  title="forgot"
+                  data={`/developers/${img_url}.png`}
+                  type="image/png"
+                >
+                  <img src={"/profile.svg"} alt={name} title={name} />
+                </object>
+                <div class="name">{name}</div>
+              </div>
+            {/if}
+          {/each}
+        </div>
       </div>
-    </div>
-    <div class="contributors-section">
-      <h3>Contributors</h3>
-      <div class="contributors-list">
-        {#each contributors as { name, href }}
-          {@const img_url = name.toLowerCase().split(" ").join("-")}
-          {#if href}
-            <a
-              class="contributor-profile tooltip"
-              {href}
-              target="_blank"
-              data-tooltip={name}
-            >
-              <object
-                title="profile"
-                data={`/contributors/${img_url}.png`}
-                type="image/jpeg"
+      <div class="contributors-section">
+        <h3>Contributors</h3>
+        <div class="contributors-list">
+          {#each contributors as { name, href }}
+            {@const img_url = name.toLowerCase().split(" ").join("-")}
+            {#if href}
+              <a
+                class="contributor-profile tooltip"
+                {href}
+                target="_blank"
+                data-tooltip={name}
               >
-                <img src={"/profile.svg"} alt={name} title={name} />
-              </object>
-              <div class="name">{name}</div>
-            </a>
-          {:else}
-            <div class="contributor-profile tooltip" data-tooltip={name}>
-              <object
-                title="forgot"
-                data={`/contributors/${img_url}.png`}
-                type="image/png"
-              >
-                <img src={"/profile.svg"} alt={name} title={name} />
-              </object>
-              <div class="name">{name}</div>
-            </div>
-          {/if}
-        {/each}
+                <object
+                  title="profile"
+                  data={`/contributors/${img_url}.png`}
+                  type="image/jpeg"
+                >
+                  <img src={"/profile.svg"} alt={name} title={name} />
+                </object>
+                <div class="name">{name}</div>
+              </a>
+            {:else}
+              <div class="contributor-profile tooltip" data-tooltip={name}>
+                <object
+                  title="forgot"
+                  data={`/contributors/${img_url}.png`}
+                  type="image/png"
+                >
+                  <img src={"/profile.svg"} alt={name} title={name} />
+                </object>
+                <div class="name">{name}</div>
+              </div>
+            {/if}
+          {/each}
+        </div>
       </div>
-    </div>
     </div>
 
     <div class="actions">
@@ -216,7 +216,8 @@
     background-color: #f5f5f5;
     border-color: #bbb;
   }
-  .contributors-section h3, .developers-section h3 {
+  .contributors-section h3,
+  .developers-section h3 {
     margin: 0 0 0.75rem 0;
     font-size: 1rem;
     color: #333;
@@ -236,14 +237,16 @@
     flex-direction: column;
     align-items: center;
   }
-  .contributors-list, .developers-list {
+  .contributors-list,
+  .developers-list {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
     justify-content: center;
     max-width: 30rem;
   }
-  .contributor-profile, .developers-profile {
+  .contributor-profile,
+  .developers-profile {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -254,8 +257,7 @@
   .contributor-profile object,
   .contributor-profile img,
   .developers-profile object,
-  .developers-profile img
-  {
+  .developers-profile img {
     width: 2.25rem;
     height: 2.25rem;
     border: 1px solid #ccc;

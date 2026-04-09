@@ -76,7 +76,7 @@
         if (!directions && mapInstance) {
           directions = new MapLibreGlDirections(mapInstance, {
             api: "https://routing.openstreetmap.de/routed-foot/route/v1",
-            profile: "foot"
+            profile: "foot",
           });
         }
       };
@@ -91,11 +91,11 @@
 
   $effect(() => {
     if (!directions) return;
-    
+
     if (locationStore.routeOrigin && locationStore.destination) {
       directions.setWaypoints([
         locationStore.routeOrigin,
-        locationStore.destination
+        locationStore.destination,
       ]);
     } else {
       directions.clear();
@@ -292,28 +292,34 @@
   .user-location-pin {
     width: 1rem;
     height: 1rem;
-    background-color: #4285F4;
+    background-color: #4285f4;
     border: 3px solid white;
     border-radius: 50%;
-    box-shadow: 0 0 4px rgba(0,0,0,0.3);
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
     position: relative;
     z-index: 70;
   }
   .user-location-pin::after {
-    content: '';
+    content: "";
     position: absolute;
     top: -5px;
     left: -5px;
     right: -5px;
     bottom: -5px;
     border-radius: 50%;
-    border: 2px solid #4285F4;
+    border: 2px solid #4285f4;
     animation: pulsate 2s ease-out infinite;
     opacity: 0;
   }
   @keyframes pulsate {
-    0% { transform: scale(0.5); opacity: 1; }
-    100% { transform: scale(1.5); opacity: 0; }
+    0% {
+      transform: scale(0.5);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1.5);
+      opacity: 0;
+    }
   }
 
   .pin {

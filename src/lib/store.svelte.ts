@@ -177,7 +177,7 @@ class LocationStore {
 
         const firstFix = !this.coords;
         this.coords = [longitude, latitude];
-        
+
         // Update route origin if destination exists but origin hasn't been set
         if (this.destination && !this.routeOrigin) {
           this.routeOrigin = [longitude, latitude];

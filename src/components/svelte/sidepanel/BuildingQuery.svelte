@@ -42,11 +42,25 @@
         <p class="building-desc">{building.directions}</p>
       {/if}
       {#if building.lon && building.lat}
-        <button class="get-directions-btn" onclick={() => {
-          locationStore.requestLocation();
-          locationStore.setDestination([building.lon, building.lat]);
-        }}>
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
+        <button
+          class="get-directions-btn"
+          onclick={() => {
+            locationStore.requestLocation();
+            locationStore.setDestination([building.lon, building.lat]);
+          }}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg
+          >
           Get Directions
         </button>
       {/if}
@@ -131,7 +145,7 @@
     align-items: center;
     gap: 0.375rem;
     padding: 0.375rem 0.75rem;
-    background-color: #7B1113;
+    background-color: #7b1113;
     color: white;
     border: none;
     border-radius: 0.5rem;
@@ -144,7 +158,7 @@
   }
 
   .get-directions-btn:hover {
-    background-color: #9A1517;
+    background-color: #9a1517;
   }
 
   .rooms-section {
@@ -192,8 +206,8 @@
   .pagination-btn {
     padding: 0.375rem 0.75rem;
     font-size: 0.875rem;
-    background-color: #7B1113;
-    border: 1px solid #7B1113;
+    background-color: #7b1113;
+    border: 1px solid #7b1113;
     border-radius: 0.5rem;
     cursor: pointer;
     transition: all 0.125s;
@@ -201,8 +215,8 @@
   }
 
   .pagination-btn:hover:not(:disabled) {
-    background-color: #9A1517;
-    border-color: #9A1517;
+    background-color: #9a1517;
+    border-color: #9a1517;
   }
 
   .pagination-btn:disabled {
