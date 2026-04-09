@@ -327,6 +327,7 @@
     padding: 0.25rem;
     color: white;
     background-color: hsl(5, 53%, 32%);
+    border: 2px solid white;
     border-radius: 50%;
     cursor: pointer;
     position: relative;
@@ -346,9 +347,8 @@
         width: 100%;
         height: 100%;
         border-radius: 50%;
-        outline: 0.125rem dashed hsl(5, 53%, 40%);
-        outline-offset: 0.25rem;
-        animation: rotating 3s 1.5s linear infinite;
+        outline: 0.125rem solid hsl(5, 53%, 40%);
+        outline-offset: 0.125rem;
       }
       .pin-label {
         background-color: hsl(5, 53%, 32%);
@@ -373,14 +373,6 @@
       &.active {
         opacity: 1;
       }
-    }
-  }
-  @keyframes rotating {
-    from {
-      rotate: 0deg;
-    }
-    to {
-      rotate: 360deg;
     }
   }
 
