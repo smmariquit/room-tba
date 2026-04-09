@@ -67,10 +67,21 @@
     padding: 1.125rem; /* 18px top/bottom, 24px left/right */
     pointer-events: auto;
     display: flex;
-    flex: 1 1 0;
     flex-direction: column;
     overflow: hidden;
+    height: 100%;
+    flex: 0 0 min(25.75rem, calc(50% - 4rem));
+
     box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
+  }
+  .side-panel-controls {
+    display: flex;
+    /* flex-direction: column; */
+    flex: 1;
+    align-items: flex-end;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    gap: 1rem;
   }
 
   /* Mobile responsiveness for side panel */
@@ -86,7 +97,16 @@
       flex-direction: column;
       justify-content: space-between; /* Space between search top and panel bottom */
     }
+    .side-panel-controls {
+      flex-direction: column;
+      justify-content: flex-end;
+      /* align-items: flex-end; */
+    }
 
+    .side-panel-content {
+      width: 100%;
+      flex: 0 0 50%;
+    }
     /* .side-panel-content {
       flex: none;
       margin-top: auto;

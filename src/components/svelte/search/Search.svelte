@@ -180,6 +180,9 @@
       pointer-events: auto;
       border-radius: 2rem; /* Pill shape for mobile */
     }
+    .search-filter-container {
+      width: 100%;
+    }
   }
 
   .search-container {
