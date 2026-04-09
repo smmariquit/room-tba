@@ -160,6 +160,7 @@
 <style>
   .search-filter-container {
     position: relative;
+    width: min(25.75rem, calc(50% - 4rem));
     pointer-events: auto;
   }
 
