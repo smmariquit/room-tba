@@ -14,7 +14,6 @@
       center: locationStore.coords,
       zoom: 17,
       offset: [0, -24],
-      pitch: 0,
       bearing: locationStore.bearing ?? 0,
       duration: 1500,
     });
