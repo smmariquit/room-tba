@@ -10,6 +10,7 @@ interface ModalStoreState {
 export interface QueryStoreState {
   type: "query" | "result";
   category: "building" | "division" | "college" | "room" | "class" | null;
+  value: string;
 }
 
 class ModalStore {
@@ -38,15 +39,17 @@ class QueryStore {
   private _queryStore: QueryStoreState = $state({
     category: null,
     type: "query",
+    value: ""
   });
   recentSearches: RecentSearch[] = $state([]);
   private _filters = new SvelteMap<
     string,
     Exclude<QueryStoreState["category"], null>
   >();
-  value = $state("");
+  inputValue = $state("");
   category = $derived(this._queryStore.category);
   type = $derived(this._queryStore.type);
+  queryValue = $derived(this._queryStore.value);
   filterValues = $derived(
     Array.from(
       this._filters.entries().map(([value, category]) => ({
@@ -57,13 +60,13 @@ class QueryStore {
   );
 
   // onclick of query buttons
-  updateQuery = (obj: QueryStoreState, value: string) => {
+  updateQuery = (obj: QueryStoreState) => {
     this._queryStore = obj;
-    this.value = value;
+    
     if (obj.type === "result" && obj.category !== null) {
       this.addRecentSearch({
         category: obj.category,
-        value,
+        value: obj.value
       });
     }
   };
@@ -85,13 +88,18 @@ class QueryStore {
     this._queryStore = {
       category: null,
       type: "query",
+      value: ""
     };
-    this.value = "";
+    this.inputValue = "";
   };
 
   setType = (type: QueryStoreState["type"]) => {
     this._queryStore.type = type;
   };
+
+  setCategory = (category: QueryStoreState["category"]) => {
+    this._queryStore.category = category
+  }
 
   addFilter = (
     key: string,
