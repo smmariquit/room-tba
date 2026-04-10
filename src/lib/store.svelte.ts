@@ -9,7 +9,7 @@ interface ModalStoreState {
 
 export interface QueryStoreState {
   type: "query" | "result";
-  category: "building" | "division" | "college" | "room" | null;
+  category: "building" | "division" | "college" | "room" | "class" | null;
 }
 
 class ModalStore {
