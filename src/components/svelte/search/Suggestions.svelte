@@ -1,6 +1,7 @@
 <script lang="ts">
   import { getAppData } from "../../../lib/context";
   import { queryStore, type QueryStoreState } from "../../../lib/store.svelte";
+  import SearchQuerySuggestion from "./SearchQuerySuggestion.svelte";
   import Suggestion from "./Suggestion.svelte";
 
   interface Props {
@@ -74,7 +75,6 @@
 
     return [...nonRoomResult, ...roomResult].slice(0, 5);
   }
-  $inspect(suggestedResult);
 </script>
 
 <div
@@ -102,7 +102,7 @@
       <Suggestion {...suggestion} />
     {/each}
   {:else}
-    <div class="no-suggestions">No results for your search</div>
+    <SearchQuerySuggestion />
   {/if}
 </div>
 
@@ -120,9 +120,6 @@
     box-shadow: 0rem 2px 0.25rem 0rem rgba(0, 0, 0, 0.25);
     margin-top: 0.5rem;
     opacity: 0;
-  }
-  .no-suggestions {
-    padding: 0.5rem 0.75rem;
   }
   .visible {
     pointer-events: auto;
