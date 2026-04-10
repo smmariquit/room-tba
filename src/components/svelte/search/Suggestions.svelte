@@ -79,7 +79,7 @@
 
 <div
   class="suggestions-container"
-  class:visible={queryStore.type === "query"}
+  class:visible={queryStore.type === "query" && queryStore.category !== "class"}
   class:mobile-hidden={!focused}
 >
   {#if queryStore.value === ""}
