@@ -9,11 +9,11 @@
   let paginateOffset = $state(0);
 
   const building = $derived(
-    buildings.find((b) => b.building_name === queryStore.inputValue),
+    buildings.find((b) => b.building_name === queryStore.queryValue),
   );
 
   const buildingRooms = $derived(
-    rooms.filter((room) => room.building?.name === queryStore.inputValue),
+    rooms.filter((room) => room.building?.name === queryStore.queryValue),
   );
 
   const paginatedRooms = $derived(
@@ -30,7 +30,6 @@
   $effect(() => {
     // Reset pagination when building changes
     queryStore.inputValue;
-    paginateOffset = 0;
   });
 </script>
 

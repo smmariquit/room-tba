@@ -22,8 +22,9 @@
     queryStore.updateQuery({
       type: "result",
       category,
-      value: queryStore.inputValue,
+      value,
     });
+    queryStore.inputValue = value;
   }
 </script>
 

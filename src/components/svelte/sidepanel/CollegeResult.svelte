@@ -9,11 +9,11 @@
   let paginateOffset = $state(0);
 
   const college = $derived(
-    colleges.find((c) => c.college_name === queryStore.inputValue),
+    colleges.find((c) => c.college_name === queryStore.queryValue),
   );
 
   const collegeRooms = $derived(
-    rooms.filter((room) => room.collegeName === queryStore.inputValue),
+    rooms.filter((room) => room.collegeName === queryStore.queryValue),
   );
 
   const paginatedRooms = $derived(
