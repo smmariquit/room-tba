@@ -79,8 +79,10 @@
 
 <div
   class="suggestions-container"
-  class:visible={queryStore.type === "query"}
-  class:mobile-hidden={!focused}
+  class:visible={(focused ||
+    suggestedResult.length !== 0 ||
+    queryStore.inputValue === "") &&
+    queryStore.type === "query"}
 >
   {#if queryStore.inputValue === ""}
     {#if queryStore.recentSearches.length !== 0}
@@ -101,7 +103,7 @@
     {#each suggestedResult as suggestion}
       <Suggestion {...suggestion} />
     {/each}
-  {:else}
+  {:else if suggestedResult.length === 0}
     <SearchQuerySuggestion />
   {/if}
 </div>
