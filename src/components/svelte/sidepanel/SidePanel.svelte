@@ -5,11 +5,12 @@
   import CollegeResult from "./CollegeResult.svelte";
   import DivisionResult from "./DivisionResult.svelte";
   import RoomResult from "../room/RoomResult.svelte";
+  import ClassQuery from "./ClassQuery.svelte";
 </script>
 
 <div class="side-panel-wrapper">
   <Search />
-  {#if queryStore.type === "result"}
+  {#if queryStore.category !== null}
     <div class="side-panel-content">
       {#if queryStore.category === "building"}
         <BuildingResult />
@@ -17,8 +18,10 @@
         <CollegeResult />
       {:else if queryStore.category === "division"}
         <DivisionResult />
-      {:else}
+      {:else if queryStore.category === "room"}
         <RoomResult />
+      {:else if queryStore.category === "class"}
+        <ClassQuery />
       {/if}
     </div>
   {/if}

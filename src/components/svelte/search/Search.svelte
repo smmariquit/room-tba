@@ -8,7 +8,7 @@
   let focused = $state(false);
 
   const throttleSearch = throttle((searchInput: string) => {
-    queryStore.value = searchInput;
+    queryStore.inputValue = searchInput;
     queryStore.setType("query");
   }, 500);
 
@@ -21,9 +21,8 @@
   function closeSearchContext() {
     queryStore.clearQuery();
     searchElement?.focus();
-    console.log(queryStore.value);
+    console.log(queryStore.inputValue);
   }
-  $inspect(queryStore.value);
 </script>
 
 <div class="search-filter-container">
@@ -51,7 +50,7 @@
         type="text"
         id="search"
         autocomplete="off"
-        value={queryStore.value}
+        value={queryStore.inputValue}
         bind:this={searchElement}
         class={typing ? "typing" : ""}
         oninput={handleInput}
@@ -126,7 +125,7 @@
           ><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" /></svg
         >
       </button>
-      {#if queryStore.value !== ""}
+      {#if queryStore.inputValue !== ""}
         <button
           onclick={closeSearchContext}
           type="button"

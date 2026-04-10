@@ -13,7 +13,7 @@
 
   const suggestedResult = $derived<
     { value: string; category: Exclude<QueryStoreState["category"], null> }[]
-  >(getSuggestions(queryStore.value));
+  >(getSuggestions(queryStore.inputValue));
 
   function getSuggestions(searchString: string): {
     value: string;
@@ -79,10 +79,10 @@
 
 <div
   class="suggestions-container"
-  class:visible={queryStore.type === "query" && queryStore.category !== "class"}
+  class:visible={queryStore.type === "query"}
   class:mobile-hidden={!focused}
 >
-  {#if queryStore.value === ""}
+  {#if queryStore.inputValue === ""}
     {#if queryStore.recentSearches.length !== 0}
       <h2 class="suggestions-header">Recent searches</h2>
       {#each queryStore.recentSearches as { category, value }}

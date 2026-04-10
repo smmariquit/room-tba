@@ -9,11 +9,11 @@
   let paginateOffset = $state(0);
 
   const division = $derived(
-    divisions.find((d) => d.division_name === queryStore.value),
+    divisions.find((d) => d.division_name === queryStore.inputValue),
   );
 
   const divisionRooms = $derived(
-    rooms.filter((room) => room.divisionName === queryStore.value),
+    rooms.filter((room) => room.divisionName === queryStore.inputValue),
   );
 
   const paginatedRooms = $derived(
@@ -29,7 +29,7 @@
 
   $effect(() => {
     // Reset pagination when division changes
-    queryStore.value;
+    queryStore.inputValue;
     paginateOffset = 0;
   });
 </script>

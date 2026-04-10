@@ -9,7 +9,9 @@
 
   const { rooms, classesMap } = getAppData();
 
-  const roomData = $derived(rooms.find((r) => r.code === queryStore.value));
+  const roomData = $derived(
+    rooms.find((r) => r.code === queryStore.inputValue),
+  );
 
   const classesData = $derived(
     roomData ? classesMap.get(roomData.code) || [] : [],

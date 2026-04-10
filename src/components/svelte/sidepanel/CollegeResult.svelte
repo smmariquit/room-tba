@@ -9,11 +9,11 @@
   let paginateOffset = $state(0);
 
   const college = $derived(
-    colleges.find((c) => c.college_name === queryStore.value),
+    colleges.find((c) => c.college_name === queryStore.inputValue),
   );
 
   const collegeRooms = $derived(
-    rooms.filter((room) => room.collegeName === queryStore.value),
+    rooms.filter((room) => room.collegeName === queryStore.inputValue),
   );
 
   const paginatedRooms = $derived(
@@ -29,7 +29,7 @@
 
   $effect(() => {
     // Reset pagination when college changes
-    queryStore.value;
+    queryStore.inputValue;
     paginateOffset = 0;
   });
 </script>

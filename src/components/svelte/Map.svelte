@@ -105,7 +105,7 @@
   $effect(() => {
     const category = queryStore.category;
     const type = queryStore.type;
-    const value = queryStore.value;
+    const value = queryStore.inputValue;
     const map = mapInstance;
 
     if (!map) return;
@@ -159,7 +159,7 @@
   });
 
   function handleMarkerClick(buildingName: string) {
-    if (buildingName === queryStore.value) return;
+    if (buildingName === queryStore.inputValue) return;
     queryStore.updateQuery(
       {
         category: "building",
@@ -173,10 +173,10 @@
     if (!queryStore.category || queryStore.type !== "result") return null;
     switch (queryStore.category) {
       case "building":
-        return queryStore.value;
+        return queryStore.inputValue;
       case "room": {
         const currentRoom = rooms.find(
-          (room) => room.code === queryStore.value,
+          (room) => room.code === queryStore.inputValue,
         );
         return currentRoom && currentRoom.building
           ? currentRoom.building.name
@@ -186,8 +186,6 @@
         return null;
     }
   });
-
-  $inspect(zoomLevel);
 </script>
 
 <div class="map-container">

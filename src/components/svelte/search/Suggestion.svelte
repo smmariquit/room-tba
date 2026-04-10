@@ -9,21 +9,21 @@
     category: Exclude<QueryStoreState["category"], null>;
   } = $props();
 
-  const pattern = $derived(new RegExp(`(${queryStore.value.trim()})`, "gi"));
+  const pattern = $derived(
+    new RegExp(`(${queryStore.inputValue.trim()})`, "gi"),
+  );
   function highlightSearch(original: string, pattern: RegExp): string {
-    return queryStore.value.length < 2
+    return queryStore.inputValue.length < 2
       ? original
       : original.replaceAll(pattern, (substr) => `<strong>${substr}</strong>`);
   }
 
   function handleSuggestionClick() {
-    queryStore.updateQuery(
-      {
-        type: "result",
-        category,
-      },
-      value,
-    );
+    queryStore.updateQuery({
+      type: "result",
+      category,
+      value: queryStore.inputValue,
+    });
   }
 </script>
 

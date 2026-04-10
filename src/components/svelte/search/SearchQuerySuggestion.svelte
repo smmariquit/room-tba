@@ -2,18 +2,18 @@
   import { queryStore } from "../../../lib/store.svelte";
 
   function handleRoomSearchSuggestion() {
-    queryStore.updateQuery(
-      {
-        category: "class",
-        type: "query",
-      },
-      queryStore.value,
-    );
+    queryStore.updateQuery({
+      category: "class",
+      type: "result",
+      value: queryStore.inputValue,
+    });
   }
 </script>
 
 <button onclick={handleRoomSearchSuggestion}>
-  <div>Search for classes of <strong>{queryStore.value}</strong> in rooms</div>
+  <div>
+    Search for classes of <strong>{queryStore.inputValue}</strong> in rooms
+  </div>
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="20"
