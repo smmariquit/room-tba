@@ -160,6 +160,7 @@
 <style>
   .search-filter-container {
     position: relative;
+    width: min(25.75rem, calc(50% - 4rem));
     pointer-events: auto;
   }
 
@@ -178,6 +179,9 @@
     .search-filter {
       pointer-events: auto;
       border-radius: 2rem; /* Pill shape for mobile */
+    }
+    .search-filter-container {
+      width: 100%;
     }
   }
 
