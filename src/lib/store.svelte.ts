@@ -1,5 +1,6 @@
 import type { modalOptions } from "../constants/modal-states";
 import { SvelteMap } from "svelte/reactivity";
+  import * as maplibre from "maplibre-gl";
 import type { RecentSearch } from "./types";
 
 interface ModalStoreState {
@@ -133,10 +134,12 @@ class ToastStore {
 
 class LocationStore {
   coords: [number, number] | null = $state(null);
+  bearing: number | null = $state(null);
   isTracking: boolean = $state(false);
   destination: [number, number] | null = $state(null);
   routeOrigin: [number, number] | null = $state(null);
   private watchId: number | null = null;
+
 
   private readonly CAMPUS_BOUNDS = {
     minLng: 121.225963,
@@ -172,7 +175,8 @@ class LocationStore {
 
     this.watchId = navigator.geolocation.watchPosition(
       (position) => {
-        const { longitude, latitude } = position.coords;
+
+        const { longitude, latitude, heading } = position.coords;
 
         if (!this.isWithinBounds(longitude, latitude)) {
           toastStore.show(
@@ -185,7 +189,7 @@ class LocationStore {
 
         const firstFix = !this.coords;
         this.coords = [longitude, latitude];
-
+        this.bearing = heading;
         // Update route origin if destination exists but origin hasn't been set
         if (this.destination && !this.routeOrigin) {
           this.routeOrigin = [longitude, latitude];
@@ -236,7 +240,12 @@ class LocationStore {
   };
 }
 
+class MapStore {
+  mapInstance: maplibre.MapLibreMap | undefined = $state.raw()
+}
+
 export const queryStore = new QueryStore();
 export const modalStore = new ModalStore();
 export const toastStore = new ToastStore();
 export const locationStore = new LocationStore();
+export const mapStore = new MapStore();

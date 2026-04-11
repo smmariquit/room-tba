@@ -1,14 +1,11 @@
 <script lang="ts">
   import { FillExtrusionLayer, MapLibre, Marker } from "svelte-maplibre";
-  import * as maplibre from "maplibre-gl";
   import { getAppData } from "../../lib/context";
-  import { queryStore, locationStore } from "../../lib/store.svelte";
+  import { queryStore, locationStore, mapStore } from "../../lib/store.svelte";
   import { untrack } from "svelte";
   import { fade } from "svelte/transition";
   import MapLibreGlDirections from "@maplibre/maplibre-gl-directions";
-
   const { buildings, rooms } = getAppData();
-  let mapInstance: maplibre.MapLibreMap | undefined = $state.raw();
   let directions: MapLibreGlDirections | undefined = $state.raw();
 
   let animationFrameId: number | null = $state(null);
@@ -19,24 +16,24 @@
   let zoomLevel = $state(0);
 
   function rotateCamera(timestamp: number) {
-    if (!mapInstance || !isRotating) return;
+    if (!mapStore.mapInstance || !isRotating) return;
 
     if (!lastTimestamp) lastTimestamp = timestamp;
     const delta = timestamp - lastTimestamp;
     lastTimestamp = timestamp;
 
     currentRotation = (currentRotation + delta / 150) % 360;
-    mapInstance.rotateTo(currentRotation, { duration: 0 });
+    mapStore.mapInstance.rotateTo(currentRotation, { duration: 0 });
 
     animationFrameId = requestAnimationFrame(rotateCamera);
   }
 
   function startRotation() {
     stopRotation();
-    if (!mapInstance) return;
+    if (!mapStore.mapInstance) return;
     isRotating = true;
     lastTimestamp = 0;
-    currentRotation = mapInstance.getBearing();
+    currentRotation = mapStore.mapInstance.getBearing();
     animationFrameId = requestAnimationFrame(rotateCamera);
   }
 
@@ -50,13 +47,13 @@
   }
 
   function handleZoom() {
-    if (!mapInstance) return;
-    zoomLevel = mapInstance.getZoom();
+    if (!mapStore.mapInstance) return;
+    zoomLevel = mapStore.mapInstance.getZoom();
   }
 
   $effect(() => {
-    if (mapInstance) {
-      const map = mapInstance;
+    if (mapStore.mapInstance) {
+      const map = mapStore.mapInstance;
       map.on("mousedown", stopRotation);
       map.on("touchstart", stopRotation);
       map.on("wheel", stopRotation);
@@ -71,20 +68,20 @@
   });
 
   $effect(() => {
-    if (mapInstance && !directions) {
+    if (mapStore.mapInstance && !directions) {
       const initDirections = () => {
-        if (!directions && mapInstance) {
-          directions = new MapLibreGlDirections(mapInstance, {
+        if (!directions && mapStore.mapInstance) {
+          directions = new MapLibreGlDirections(mapStore.mapInstance, {
             api: "https://routing.openstreetmap.de/routed-foot/route/v1",
             profile: "foot",
           });
         }
       };
 
-      if (mapInstance.isStyleLoaded()) {
+      if (mapStore.mapInstance.isStyleLoaded()) {
         initDirections();
       } else {
-        mapInstance.once("load", initDirections);
+        mapStore.mapInstance.once("load", initDirections);
       }
     }
   });
@@ -106,7 +103,7 @@
     const category = queryStore.category;
     const type = queryStore.type;
     const value = queryStore.inputValue;
-    const map = mapInstance;
+    const map = mapStore.mapInstance;
 
     if (!map) return;
 
@@ -204,7 +201,7 @@
     style="position:fixed; left:50%; top:50%; z-index: 100;">log map</button
   > -->
   <MapLibre
-    bind:map={mapInstance}
+    bind:map={mapStore.mapInstance}
     style="https://tiles.openfreemap.org/styles/liberty"
     maxBounds={[
       [121.225963, 14.150106],
