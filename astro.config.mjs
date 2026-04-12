@@ -14,8 +14,18 @@ export default defineConfig({
     sitemap(),
     AstroPWA({
       workbox: {
-        globPatterns: ["**/*.{js,css,html,ico,png,svg,webmanifest,json,jpg}"],
-        globIgnores: ["room/**/*.html", "building/**/*.html"],
+        globPatterns: ["**/*.{js,css,ico,png,svg,webmanifest,json,jpg}"],
+        globIgnores: ["room/**/*", "building/**/*"],
+        navigateFallbackDenylist: [/^\/room/, /^\/building/],
+        runtimeCaching: [
+          {
+            urlPattern: ({ request }) => request.mode === "navigate",
+            handler: "NetworkFirst",
+            options: {
+              cacheName: "pages",
+            },
+          },
+        ],
       },
       includeAssets: ["favicon.ico", "apple-touch-icon.png"],
       manifest: {

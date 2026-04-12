@@ -1,92 +1,13 @@
 ---
-import { db } from "../lib/db.ts";
-import {
-  buildingsTable,
-  classesTable,
-  collegesTable,
-  divisionsTable,
-  roomsTable,
-} from "../../drizzle/schema";
-// import Entry from "../components/svelte/Entry.svelte";
 import Layout from "../layouts/Layout.astro";
-import { count, eq, isNotNull } from "drizzle-orm";
 import AppProvider from "../components/svelte/AppProvider.svelte";
+import { getAppData } from "../lib/data";
 
-const rooms = await db
-  .select({
-    id: roomsTable.id,
-    code: roomsTable.room_code,
-    directions: roomsTable.directions,
-    building: {
-      name: buildingsTable.building_name,
-      lat: buildingsTable.lat,
-      lon: buildingsTable.lon,
-      directions: buildingsTable.directions,
-    },
-    collegeName: collegesTable.college_name,
-    divisionName: divisionsTable.division_name,
-  })
-  .from(roomsTable)
-  .leftJoin(buildingsTable, eq(buildingsTable.id, roomsTable.building_id))
-  .leftJoin(divisionsTable, eq(divisionsTable.id, roomsTable.division_id))
-  .leftJoin(collegesTable, eq(collegesTable.id, roomsTable.college_id));
-
-const classes = await db
-  .select({
-    courseCode: classesTable.course_code,
-    roomCode: roomsTable.room_code,
-    section: classesTable.section,
-    type: classesTable.type,
-    schedule: classesTable.schedule,
-    directions: roomsTable.directions,
-    courseTitle: classesTable.course_title,
-  })
-  .from(classesTable)
-  .leftJoin(roomsTable, eq(roomsTable.id, classesTable.room_id));
-
-const buildings = await db.select().from(buildingsTable);
-const colleges = await db.select().from(collegesTable);
-const divisions = await db.select().from(divisionsTable);
-
-const classesDict = new Map<string, (typeof classes)[number][]>();
-classes.forEach((classData) => {
-  const roomCode = classData.roomCode ?? "No room";
-  if (!classesDict.has(roomCode)) {
-    classesDict.set(roomCode, [classData]);
-  } else {
-    classesDict.get(roomCode)?.push(classData);
-  }
-});
-
-rooms.sort((a, b) => {
-  const countA = classesDict.get(a.code)?.length ?? 0;
-  const countB = classesDict.get(b.code)?.length ?? 0;
-  return countB - countA;
-});
-
-// @ts-ignore
-const [{ count: directionCount }] = await db
-  .select({ count: count() })
-  .from(roomsTable)
-  .where(isNotNull(roomsTable.directions));
-
-// @ts-ignore
-const [{ count: totalRooms }] = await db
-  .select({ count: count() })
-  .from(roomsTable);
+const appData = await getAppData();
 ---
 
 <Layout>
-  <AppProvider
-    buildings={buildings}
-    classesMap={classesDict}
-    colleges={colleges}
-    divisions={divisions}
-    rooms={rooms}
-    directionCount={directionCount}
-    totalRooms={totalRooms}
-    client:load
-  />
+  <AppProvider {...appData} client:load />
   <!-- <div class="directions-status">
     <div class="directions-header">Rooms with directions</div>
     <div class="directions-body">

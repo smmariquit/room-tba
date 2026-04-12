@@ -23,10 +23,10 @@
   
   let { initialQuery, ...restProps }: Props = $props();
   
-  // svelte-ignore state_referenced_locally
+  //svelte-ignore state_referenced_locally
   setAppData(restProps);
 
-  // svelte-ignore state_referenced_locally
+  //svelte-ignore state_referenced_locally
   if (initialQuery) {
     queryStore.updateQuery(initialQuery);
     queryStore.inputValue = initialQuery.value;
