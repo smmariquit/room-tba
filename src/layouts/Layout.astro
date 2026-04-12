@@ -48,7 +48,7 @@ const ogImageURL = new URL("/uplb-bg.webp", Astro.site);
     <meta property="twitter:description" content={description} />
     <meta property="twitter:image" content={ogImageURL} />
 
-    {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
+    {schema && <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />}
 
     {pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />}
     <style is:global>
