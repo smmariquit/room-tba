@@ -3,14 +3,19 @@ import { defineConfig } from "astro/config";
 import react from "@astrojs/react";
 import svelte from "@astrojs/svelte";
 import AstroPWA from "@vite-pwa/astro";
+import sitemap from "@astrojs/sitemap";
+
 // https://astro.build/config
 export default defineConfig({
+  site: "https://room-tba.stimmie.dev/",
   integrations: [
     react(),
     svelte(),
+    sitemap(),
     AstroPWA({
       workbox: {
         globPatterns: ["**/*.{js,css,html,ico,png,svg,webmanifest,json,jpg}"],
+        globIgnores: ["room/**/*.html", "building/**/*.html"],
       },
       includeAssets: ["favicon.ico", "apple-touch-icon.png"],
       manifest: {

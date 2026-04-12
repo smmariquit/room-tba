@@ -2,6 +2,21 @@
 import { pwaInfo } from "virtual:pwa-info";
 import ReloadPrompt from "../components/ReloadPrompt.astro";
 import "../styles/font-face.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+  schema?: any;
+}
+
+const { 
+  title = "Room TBA - Searching utility for finding rooms around UPLB", 
+  description = "An open-source website built to help UPLB students find their rooms across the Los Baños campus.",
+  schema
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const ogImageURL = new URL("/uplb-bg.webp", Astro.site);
 ---
 
 <!doctype html>
@@ -13,7 +28,28 @@ import "../styles/font-face.css";
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
     <meta name="theme-color" content="#a30e00" />
     <meta name="generator" content={Astro.generator} />
-    <title>Room TBA - Searching utility for finding rooms around UPLB</title>
+    
+    <!-- SEO Meta Tags -->
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={Astro.url} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImageURL} />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={Astro.url} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={ogImageURL} />
+
+    {schema && <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />}
+
     {pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />}
     <style is:global>
       * {
@@ -53,6 +89,7 @@ import "../styles/font-face.css";
     margin: 0;
     width: 100%;
     min-height: 100%;
+    background-color: #f5f5f5;
   }
 
   @media only screen and (max-width: 600px) {

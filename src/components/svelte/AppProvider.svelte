@@ -8,6 +8,7 @@
     RoomData,
   } from "../../lib/types";
   import Entry from "./Entry.svelte";
+  import { queryStore } from "../../lib/store.svelte";
 
   type Props = {
     rooms: RoomData[];
@@ -17,10 +18,20 @@
     classesMap: Map<string, ClassMapValue[]>;
     totalRooms: number;
     directionCount: number;
+    initialQuery?: any;
   };
-  const appData: Props = $props();
+  
+  let { initialQuery, ...restProps }: Props = $props();
+  
   // svelte-ignore state_referenced_locally
-  setAppData(appData);
+  setAppData(restProps);
+
+  $effect(() => {
+    if (initialQuery) {
+      queryStore.updateQuery(initialQuery);
+      queryStore.inputValue = initialQuery.value;
+    }
+  });
 </script>
 
 <Entry />
