@@ -6,7 +6,7 @@ import { generateBuildingSchema } from "../../lib/schema-helpers";
 
 export async function getStaticPaths() {
   const buildings = await getAllBuildings();
-  return buildings.map((b: any) => ({
+  return buildings.map((b) => ({
     params: { slug: b.slug },
     props: { building: b },
   }));
