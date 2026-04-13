@@ -7,9 +7,10 @@ import {
   divisionsTable,
   roomsTable,
 } from "../../drizzle/schema";
-import Entry from "../components/svelte/Entry.svelte";
+// import Entry from "../components/svelte/Entry.svelte";
 import Layout from "../layouts/Layout.astro";
-import { count, eq, isNotNull, isNull } from "drizzle-orm";
+import { count, eq, isNotNull } from "drizzle-orm";
+import AppProvider from "../components/svelte/AppProvider.svelte";
 
 const rooms = await db
   .select({
@@ -63,28 +64,30 @@ rooms.sort((a, b) => {
   return countB - countA;
 });
 
+// @ts-ignore
 const [{ count: directionCount }] = await db
   .select({ count: count() })
   .from(roomsTable)
   .where(isNotNull(roomsTable.directions));
 
+// @ts-ignore
 const [{ count: totalRooms }] = await db
   .select({ count: count() })
   .from(roomsTable);
-console.log({ directionCount, totalRooms });
 ---
 
 <Layout>
-  <a href="#main-content" class="skip-content">Skip Content</a>
-  <Entry
-    rooms={rooms}
-    classesMap={classesDict}
+  <AppProvider
     buildings={buildings}
+    classesMap={classesDict}
     colleges={colleges}
     divisions={divisions}
+    rooms={rooms}
+    directionCount={directionCount}
+    totalRooms={totalRooms}
     client:load
   />
-  <div class="directions-status">
+  <!-- <div class="directions-status">
     <div class="directions-header">Rooms with directions</div>
     <div class="directions-body">
       <div>{directionCount} / {totalRooms}</div>
@@ -99,7 +102,7 @@ console.log({ directionCount, totalRooms });
     <div>
       <a href="/contribute" target="_blank">Contribute to Room TBA</a>
     </div>
-  </div>
+  </div> -->
 </Layout>
 
 <style>
@@ -114,9 +117,9 @@ console.log({ directionCount, totalRooms });
     border-radius: 1rem;
     box-shadow: 0 2px 0.5rem 0 hsla(0, 0%, 0%, 0.2);
     background-color: white;
-    width: min(20rem, 90%);
+    width: min(20rem, calc(100% - (2 * 0.5rem)));
     font-size: 0.875rem;
-    z-index: 100;
+    z-index: 20;
 
     .directions-header {
       font-weight: 600;
@@ -154,21 +157,6 @@ console.log({ directionCount, totalRooms });
         background-color: hsl(5, 53%, 32%);
       }
       color: white;
-    }
-  }
-  a.skip-content {
-    outline: unset;
-    position: fixed;
-    top: -42px;
-    color: white;
-    background-color: hsl(5, 53%, 32%);
-    padding: 0.5rem 1.25rem;
-    text-decoration: none;
-    transition: all 0.25s;
-    z-index: 100;
-    border-radius: 0.5rem;
-    &:focus-within {
-      top: 0;
     }
   }
 </style>

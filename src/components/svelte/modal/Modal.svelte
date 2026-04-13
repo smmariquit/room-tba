@@ -1,7 +1,8 @@
 <script lang="ts">
-  import { modalStore } from "../../lib/store.svelte";
+  import { modalStore } from "../../../lib/store.svelte";
   import { fade, fly } from "svelte/transition";
-  import RoomModalContent from "./RoomModalContent.svelte";
+  import LandingModal from "./LandingModal.svelte";
+  import ScheduleModal from "./ScheduleModal.svelte";
   import FilterModalContent from "./FilterModalContent.svelte";
 </script>
 
@@ -11,23 +12,24 @@
     <button
       class="overlay"
       onclick={() => modalStore.closeModal()}
-      transition:fade={{ duration: 100 }}
+      transition:fade={{ duration: 200 }}
     ></button>
     <div
-      class="modal-content"
+      class="modal-content {modalStore.type === 'landing'
+        ? 'landing-modal-container'
+        : ''}"
       id="modal-content"
-      in:fly={{
+      transition:fly={{
         duration: 200,
         delay: 50,
         y: 50,
       }}
-      out:fade={{
-        duration: 75,
-      }}
     >
-      {#if modalStore.type === "room-details"}
-        <RoomModalContent />
-      {:else}
+      {#if modalStore.type === "landing"}
+        <LandingModal />
+      {:else if modalStore.type === "schedule-expand"}
+        <ScheduleModal />
+      {:else if modalStore.type === "filter"}
         <FilterModalContent />
       {/if}
     </div>
@@ -50,16 +52,16 @@
     left: 50%;
     translate: -50% -50%;
     padding: 0.75rem;
-    width: 100vw;
-    height: 100vh;
-    z-index: 50;
+    width: 100%;
+    height: 100dvh;
+    z-index: 100;
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 100;
+    box-sizing: border-box;
   }
   .modal-content {
-    flex: 0 1 1024px;
+    flex: 0 1 64rem;
     max-height: 90dvh;
     background-color: white;
     z-index: inherit;
@@ -68,9 +70,17 @@
     display: flex;
     flex-flow: column nowrap;
   }
-  @media only screen and (max-width: 500px) {
+  .landing-modal-container {
+    flex: 0 1 48rem;
+    padding: 0;
+    overflow: hidden;
+  }
+  @media only screen and (max-width: 31.25rem) {
     .modal-content {
       padding: 1rem;
+    }
+    .landing-modal-container {
+      padding: 0;
     }
   }
   .overlay {
