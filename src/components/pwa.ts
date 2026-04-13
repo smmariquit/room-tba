@@ -35,7 +35,6 @@ window.addEventListener("load", () => {
   pwaCloseBtn.addEventListener("click", () => hidePwaToast(true));
 
   refreshSW = registerSW({
-    immediate: true,
     onOfflineReady() {
       pwaToastMessage.textContent = "App ready to work offline";
       showPwaToast(true);

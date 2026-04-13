@@ -1,0 +1,32 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import AppProvider from "../../components/svelte/AppProvider.svelte";
+import { getAllBuildings,  getAppData } from "../../lib/data";
+import { generateBuildingSchema } from "../../lib/schema-helpers";
+
+export async function getStaticPaths() {
+  const buildings = await getAllBuildings();
+  return buildings.map((b) => ({
+    params: { slug: b.slug },
+    props: { building: b },
+  }));
+}
+
+const { building } = Astro.props;
+const appData = await getAppData();
+
+const title = `Where is ${building.building_name}? - Room TBA`;
+const description = `Find directions and room information for ${building.building_name} at UPLB.`;
+const schema = generateBuildingSchema(building, Astro.url.href);
+
+const initialQuery = {
+  value: building.building_name,
+  type: "result",
+  category: "building",
+  item: building
+};
+---
+
+<Layout title={title} description={description} schema={schema}>
+  <AppProvider {...appData} initialQuery={initialQuery} client:load />
+</Layout>

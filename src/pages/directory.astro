@@ -1,0 +1,72 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { getAllBuildings, getAllRooms } from "../lib/data";
+
+const buildings = await getAllBuildings();
+const rooms = await getAllRooms();
+
+const title = "Directory - Room TBA";
+const description = "Complete directory of buildings and rooms at UPLB.";
+---
+
+<Layout title={title} description={description}>
+  <main class="directory-container">
+    <h1>UPLB Room & Building Directory</h1>
+    
+    <section>
+      <h2>Buildings</h2>
+      <ul class="directory-list">
+        {buildings.map((b: any) => (
+          <li>
+            <a href={`/building/${b.slug}`}>{b.building_name}</a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section>
+      <h2>Rooms</h2>
+      <ul class="directory-list">
+        {rooms.map((r: any) => (
+          <li>
+            <a href={`/room/${r.room_code}`}>{r.room_code} - {r.building_name}</a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  .directory-container {
+    padding: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+    color: #333;
+    background: white;
+    min-height: 100vh;
+  }
+  h1 {
+    color: #7B1113;
+    margin-bottom: 2rem;
+  }
+  h2 {
+    border-bottom: 2px solid #eee;
+    padding-bottom: 0.5rem;
+    margin-top: 2rem;
+  }
+  .directory-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    list-style: none;
+    padding: 0;
+  }
+  .directory-list a {
+    text-decoration: none;
+    color: #0066cc;
+  }
+  .directory-list a:hover {
+    text-decoration: underline;
+  }
+</style>

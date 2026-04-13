@@ -1,0 +1,36 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import AppProvider from "../../components/svelte/AppProvider.svelte";
+import { getAllRooms, getRoomByCode, getAppData } from "../../lib/data";
+import { generateRoomSchema } from "../../lib/schema-helpers";
+
+export async function getStaticPaths() {
+  const rooms = await getAllRooms();
+  return rooms.map((r: any) => ({
+    params: { code: r.room_code },
+  }));
+}
+
+const { code } = Astro.params;
+const room = await getRoomByCode(code);
+const appData = await getAppData();
+
+if (!room) {
+  return Astro.redirect('/404');
+}
+
+const title = `Where is ${room.code} in ${room.building?.name}? - Room TBA`;
+const description = `Find directions and class schedules for room ${room.code} in ${room.building?.name} at UPLB.`;
+const schema = generateRoomSchema(room, Astro.url.href);
+
+const initialQuery = {
+  value: room.code,
+  type: "result",
+  category: "room",
+  item: room
+};
+---
+
+<Layout title={title} description={description} schema={schema}>
+  <AppProvider {...appData} initialQuery={initialQuery} client:load />
+</Layout>
