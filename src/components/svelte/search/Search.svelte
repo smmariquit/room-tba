@@ -25,7 +25,10 @@
   }
 </script>
 
-<div class="search-filter-container">
+<div
+  class="search-filter-container"
+  class:search-focused={queryStore.type !== "result"}
+>
   <div class="search-filter">
     <div class="search-container">
       <svg
@@ -160,6 +163,11 @@
   .search-filter-container {
     position: relative;
     width: min(25.75rem, calc(50% - 4rem));
+    pointer-events: auto;
+  }
+
+  .search-focused:focus-within :first-child + :global(*) {
+    opacity: 1;
     pointer-events: auto;
   }
 

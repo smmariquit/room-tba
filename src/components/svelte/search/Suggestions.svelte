@@ -77,12 +77,10 @@
   }
 </script>
 
+<!-- class:visible={queryStore.inputValue === ""} -->
 <div
   class="suggestions-container"
-  class:visible={(focused ||
-    suggestedResult.length !== 0 ||
-    queryStore.inputValue === "") &&
-    queryStore.type === "query"}
+  class:force-visible={queryStore.inputValue === ""}
 >
   {#if queryStore.inputValue === ""}
     {#if queryStore.recentSearches.length !== 0}
@@ -123,9 +121,9 @@
     margin-top: 0.5rem;
     opacity: 0;
   }
-  .visible {
-    pointer-events: auto;
+  .force-visible {
     opacity: 1;
+    pointer-events: auto;
   }
   @media screen and (max-width: 48rem) {
     .mobile-hidden {
