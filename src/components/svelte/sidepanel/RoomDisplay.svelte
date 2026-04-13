@@ -17,7 +17,12 @@
   }
 
   function openRoomData() {
-    queryStore.updateQuery({ type: "result", category: "room" }, room.code);
+    queryStore.updateQuery({
+      type: "result",
+      category: "room",
+      value: room.code,
+    });
+    queryStore.inputValue = room.code;
   }
 </script>
 

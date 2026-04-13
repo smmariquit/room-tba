@@ -42,7 +42,7 @@
     if (e.key === "Escape") {
       if (modalStore.open) {
         modalStore.closeModal();
-      } else if (queryStore.value !== "" || queryStore.type === "result") {
+      } else if (queryStore.inputValue !== "" || queryStore.type === "result") {
         queryStore.clearQuery();
         if (locationStore.destination) {
           locationStore.clearDestination();

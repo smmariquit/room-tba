@@ -1,10 +1,11 @@
 <script lang="ts">
   import Search from "../search/Search.svelte";
   import { queryStore } from "../../../lib/store.svelte";
-  import BuildingResult from "./BuildingQuery.svelte";
+  import BuildingResult from "./BuildingResult.svelte";
   import CollegeResult from "./CollegeResult.svelte";
   import DivisionResult from "./DivisionResult.svelte";
   import RoomResult from "../room/RoomResult.svelte";
+  import ClassQuery from "./ClassQuery.svelte";
   import LocationButton from "../LocationButton.svelte";
 </script>
 
@@ -12,7 +13,7 @@
   <Search />
   <div class="side-panel-controls">
     <LocationButton />
-    {#if queryStore.type === "result"}
+    {#if queryStore.category !== null}
       <div class="side-panel-content">
         {#if queryStore.category === "building"}
           <BuildingResult />
@@ -20,8 +21,10 @@
           <CollegeResult />
         {:else if queryStore.category === "division"}
           <DivisionResult />
-        {:else}
+        {:else if queryStore.category === "room"}
           <RoomResult />
+        {:else if queryStore.category === "class"}
+          <ClassQuery />
         {/if}
       </div>
     {/if}
@@ -45,11 +48,13 @@
     pointer-events: auto;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
     height: 100%;
     flex: 0 0 min(25.75rem, calc(50% - 4rem));
-
     box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
+    & > :global(*) {
+      scrollbar-width: thin;
+      scrollbar-color: hsl(6, 63%, 48%) hsl(0, 0%, 98%);
+    }
   }
   .side-panel-controls {
     display: flex;

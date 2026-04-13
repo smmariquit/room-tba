@@ -1,37 +1,17 @@
 <script lang="ts">
   import { queryStore } from "../../../lib/store.svelte";
   import { getAppData } from "../../../lib/context";
-  import RoomDisplay from "./RoomDisplay.svelte";
+  import ResultDisplay from "./ResultDisplay.svelte";
 
-  const { rooms, classesMap, divisions } = getAppData();
-
-  const MAX_DISPLAY_RESULT = 12;
-  let paginateOffset = $state(0);
+  const { rooms, divisions } = getAppData();
 
   const division = $derived(
-    divisions.find((d) => d.division_name === queryStore.value),
+    divisions.find((d) => d.division_name === queryStore.queryValue),
   );
 
   const divisionRooms = $derived(
-    rooms.filter((room) => room.divisionName === queryStore.value),
+    rooms.filter((room) => room.divisionName === queryStore.queryValue),
   );
-
-  const paginatedRooms = $derived(
-    divisionRooms.slice(
-      paginateOffset * MAX_DISPLAY_RESULT,
-      (paginateOffset + 1) * MAX_DISPLAY_RESULT,
-    ),
-  );
-
-  const maxPaginateOffset = $derived(
-    Math.max(1, Math.ceil(divisionRooms.length / MAX_DISPLAY_RESULT)),
-  );
-
-  $effect(() => {
-    // Reset pagination when division changes
-    queryStore.value;
-    paginateOffset = 0;
-  });
 </script>
 
 <div class="building-query-wrapper">
@@ -41,44 +21,7 @@
     </div>
   {/if}
 
-  <div class="rooms-section">
-    <h3 class="rooms-subtitle">Rooms in this division</h3>
-    <div class="room-list">
-      {#each paginatedRooms as room (room.id)}
-        <RoomDisplay
-          {room}
-          searchInput=""
-          classes={classesMap.get(room.code) || []}
-        />
-      {/each}
-
-      {#if divisionRooms.length === 0}
-        <div class="no-results">No rooms found for this division.</div>
-      {/if}
-    </div>
-  </div>
-
-  {#if maxPaginateOffset > 1}
-    <div class="pagination">
-      <button
-        class="pagination-btn"
-        disabled={paginateOffset === 0}
-        onclick={() => (paginateOffset -= 1)}
-      >
-        Previous
-      </button>
-      <span class="page-info">
-        {paginateOffset + 1} of {maxPaginateOffset}
-      </span>
-      <button
-        class="pagination-btn"
-        disabled={paginateOffset === maxPaginateOffset - 1}
-        onclick={() => (paginateOffset += 1)}
-      >
-        Next
-      </button>
-    </div>
-  {/if}
+  <ResultDisplay filteredRooms={divisionRooms} />
 </div>
 
 <style>
@@ -87,8 +30,8 @@
     flex-direction: column;
     gap: 0.75rem; /* 12px gap from design */
     width: 100%;
-    flex: 1;
-    overflow: hidden;
+    flex: 1 1 0;
+    overflow-y: auto;
   }
 
   .building-header {

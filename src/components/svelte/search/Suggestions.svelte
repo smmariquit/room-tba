@@ -1,18 +1,14 @@
 <script lang="ts">
   import { getAppData } from "../../../lib/context";
   import { queryStore, type QueryStoreState } from "../../../lib/store.svelte";
+  import SearchQuerySuggestion from "./SearchQuerySuggestion.svelte";
   import Suggestion from "./Suggestion.svelte";
-
-  interface Props {
-    focused?: boolean;
-  }
-  const { focused = false }: Props = $props();
 
   const { buildings, colleges, divisions, rooms } = getAppData();
 
   const suggestedResult = $derived<
     { value: string; category: Exclude<QueryStoreState["category"], null> }[]
-  >(getSuggestions(queryStore.value));
+  >(getSuggestions(queryStore.inputValue));
 
   function getSuggestions(searchString: string): {
     value: string;
@@ -74,15 +70,14 @@
 
     return [...nonRoomResult, ...roomResult].slice(0, 5);
   }
-  $inspect(suggestedResult);
 </script>
 
+<!-- class:visible={queryStore.inputValue === ""} -->
 <div
   class="suggestions-container"
-  class:visible={queryStore.type === "query"}
-  class:mobile-hidden={!focused}
+  class:force-visible={queryStore.inputValue === ""}
 >
-  {#if queryStore.value === ""}
+  {#if queryStore.inputValue === ""}
     {#if queryStore.recentSearches.length !== 0}
       <h2 class="suggestions-header">Recent searches</h2>
       {#each queryStore.recentSearches as { category, value }}
@@ -101,8 +96,8 @@
     {#each suggestedResult as suggestion}
       <Suggestion {...suggestion} />
     {/each}
-  {:else}
-    <div class="no-suggestions">No results for your search</div>
+  {:else if suggestedResult.length === 0}
+    <SearchQuerySuggestion />
   {/if}
 </div>
 
@@ -121,12 +116,9 @@
     margin-top: 0.5rem;
     opacity: 0;
   }
-  .no-suggestions {
-    padding: 0.5rem 0.75rem;
-  }
-  .visible {
-    pointer-events: auto;
+  .force-visible {
     opacity: 1;
+    pointer-events: auto;
   }
   @media screen and (max-width: 48rem) {
     .mobile-hidden {

@@ -9,7 +9,9 @@
 
   const { rooms, classesMap } = getAppData();
 
-  const roomData = $derived(rooms.find((r) => r.code === queryStore.value));
+  const roomData = $derived(
+    rooms.find((r) => r.code === queryStore.queryValue),
+  );
 
   const classesData = $derived(
     roomData ? classesMap.get(roomData.code) || [] : [],
@@ -114,6 +116,7 @@
         </a>
       </div>
     {/if}
+    <hr />
 
     <div class="schedule-section">
       <div class="schedule-section__header">
@@ -145,13 +148,16 @@
 </div>
 
 <style>
+  hr {
+    margin-block: 0;
+  }
   .room-details-container {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
     overflow-y: auto;
     width: 100%;
-    flex: 1;
+    flex: 1 1 0;
   }
 
   .header-section {
@@ -253,7 +259,7 @@
         all: unset;
         font-size: 0.875rem;
         font-weight: 600;
-        padding: 0.5rem 1rem;
+        padding: 0.25rem 1rem;
         background-color: hsl(5, 53%, 32%);
         color: white;
         border-radius: 8px;
