@@ -12,9 +12,9 @@ A web app to help UPLB students find rooms on campus. "Saan sa UPLB ang \_\_\_?"
 - Mobile-responsive design with accessibility features
 - Offline support in cases where data is not accessible
 
-## Data Source
+## Data
 
-Data is sourced from UPLB AMIS for 2nd Semester AY 2025-2026.
+Course and room listings are maintained for UPLB students and updated each term; they currently reflect 2nd Semester AY 2025–2026.
 
 ## Development/Contribution
 

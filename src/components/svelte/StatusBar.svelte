@@ -42,7 +42,7 @@
     </div>
     <div class="metadata">
       <div class="data-updated">
-        Data sourced from <strong>UPLB AMIS</strong>. Last updated:
+        Course and room information is updated regularly. Last updated:
         <strong>January 2026.</strong>
       </div>
       <div>
