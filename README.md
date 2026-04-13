@@ -42,6 +42,18 @@ This project uses [Astro](https://astro.build), and may have the following folde
 - `/src/assets` - All other internal assets used by the program
 - `/src/lib` - where helper Typescript functions are located
 
+## Releases and versioning
+
+Versions follow [Semantic Versioning](https://semver.org/). [semantic-release](https://semantic-release.gitbook.io/) runs on every push to `main` (skipping commits that include `[skip ci]`). It reads [Conventional Commits](https://www.conventionalcommits.org/) messages, bumps `package.json`, updates `CHANGELOG.md`, creates a Git tag, and publishes a GitHub release.
+
+Use prefixes such as `fix:`, `feat:`, or `feat!:` / `BREAKING CHANGE:` so the next version is chosen correctly. To preview what would ship without changing anything:
+
+```
+bun run release:dry
+```
+
+The footer and status bar show `v{version}` from `package.json` at build time.
+
 ## License
 
 [MIT License](LICENSE)

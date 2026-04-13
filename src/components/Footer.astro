@@ -1,5 +1,6 @@
 ---
 import { contributors } from "../constants/contributors";
+import { APP_VERSION_LABEL } from "../constants/version";
 import Contributor from "./Contributor.astro";
 ---
 
@@ -22,7 +23,7 @@ import Contributor from "./Contributor.astro";
           d="M18 9v2c0 .6-.4 1-1 1H7c-.6 0-1-.4-1-1V9"></path><path d="M12 12v3"
         ></path></svg
       >
-      <a href="/changelog">v1.0.0</a>
+      <a href="/changelog">{APP_VERSION_LABEL}</a>
     </div>
     <p class="data-updated">
       Data sourced from <strong>UPLB AMIS</strong>. Last updated: <strong
@@ -58,6 +59,15 @@ import Contributor from "./Contributor.astro";
     display: flex;
     align-items: center;
     gap: 0.25rem;
+
+    a {
+      color: inherit;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
   }
   .website-data {
     display: flex;

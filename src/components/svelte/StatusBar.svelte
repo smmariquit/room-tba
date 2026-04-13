@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { APP_VERSION_LABEL } from "../../constants/version";
   import { getAppData } from "../../lib/context";
   import { modalStore } from "../../lib/store.svelte";
 
@@ -70,7 +71,7 @@
               d="M18 9v2c0 .6-.4 1-1 1H7c-.6 0-1-.4-1-1V9"
             ></path><path d="M12 12v3"></path></svg
           >
-          <div>v1.0.0</div>
+          <div>{APP_VERSION_LABEL}</div>
         </a>
       </div>
     </div>
