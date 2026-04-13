@@ -7,3 +7,6 @@ bun.lockb
 
 # Miscellaneous
 /static/
+
+# Maintained by semantic-release
+CHANGELOG.md
