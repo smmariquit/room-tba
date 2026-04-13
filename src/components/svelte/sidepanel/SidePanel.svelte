@@ -48,11 +48,13 @@
     pointer-events: auto;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
     height: 100%;
     flex: 0 0 min(25.75rem, calc(50% - 4rem));
-
     box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
+    & > :global(*) {
+      scrollbar-width: thin;
+      scrollbar-color: hsl(6, 63%, 48%) hsl(0, 0%, 98%);
+    }
   }
   .side-panel-controls {
     display: flex;

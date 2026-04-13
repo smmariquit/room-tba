@@ -153,7 +153,7 @@
     gap: 0.75rem;
     overflow-y: auto;
     width: 100%;
-    flex: 1;
+    flex: 1 1 0;
   }
 
   .header-section {

@@ -4,11 +4,6 @@
   import SearchQuerySuggestion from "./SearchQuerySuggestion.svelte";
   import Suggestion from "./Suggestion.svelte";
 
-  interface Props {
-    focused?: boolean;
-  }
-  const { focused = false }: Props = $props();
-
   const { buildings, colleges, divisions, rooms } = getAppData();
 
   const suggestedResult = $derived<

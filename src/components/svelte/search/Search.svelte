@@ -156,7 +156,7 @@
       {/if}
     </div>
   </div>
-  <Suggestions {focused} />
+  <Suggestions />
 </div>
 
 <style>

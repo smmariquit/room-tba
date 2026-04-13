@@ -1,12 +1,9 @@
 <script lang="ts">
   import { queryStore } from "../../../lib/store.svelte";
   import { getAppData } from "../../../lib/context";
-  import RoomDisplay from "./RoomDisplay.svelte";
+  import ResultDisplay from "./ResultDisplay.svelte";
 
-  const { rooms, classesMap, colleges } = getAppData();
-
-  const MAX_DISPLAY_RESULT = 12;
-  let paginateOffset = $state(0);
+  const { rooms, colleges } = getAppData();
 
   const college = $derived(
     colleges.find((c) => c.college_name === queryStore.queryValue),
@@ -15,23 +12,6 @@
   const collegeRooms = $derived(
     rooms.filter((room) => room.collegeName === queryStore.queryValue),
   );
-
-  const paginatedRooms = $derived(
-    collegeRooms.slice(
-      paginateOffset * MAX_DISPLAY_RESULT,
-      (paginateOffset + 1) * MAX_DISPLAY_RESULT,
-    ),
-  );
-
-  const maxPaginateOffset = $derived(
-    Math.max(1, Math.ceil(collegeRooms.length / MAX_DISPLAY_RESULT)),
-  );
-
-  $effect(() => {
-    // Reset pagination when college changes
-    queryStore.inputValue;
-    paginateOffset = 0;
-  });
 </script>
 
 <div class="building-query-wrapper">
@@ -41,44 +21,7 @@
     </div>
   {/if}
 
-  <div class="rooms-section">
-    <h3 class="rooms-subtitle">Rooms in this college</h3>
-    <div class="room-list">
-      {#each paginatedRooms as room (room.id)}
-        <RoomDisplay
-          {room}
-          searchInput=""
-          classes={classesMap.get(room.code) || []}
-        />
-      {/each}
-
-      {#if collegeRooms.length === 0}
-        <div class="no-results">No rooms found for this college.</div>
-      {/if}
-    </div>
-  </div>
-
-  {#if maxPaginateOffset > 1}
-    <div class="pagination">
-      <button
-        class="pagination-btn"
-        disabled={paginateOffset === 0}
-        onclick={() => (paginateOffset -= 1)}
-      >
-        Previous
-      </button>
-      <span class="page-info">
-        {paginateOffset + 1} of {maxPaginateOffset}
-      </span>
-      <button
-        class="pagination-btn"
-        disabled={paginateOffset === maxPaginateOffset - 1}
-        onclick={() => (paginateOffset += 1)}
-      >
-        Next
-      </button>
-    </div>
-  {/if}
+  <ResultDisplay filteredRooms={collegeRooms} />
 </div>
 
 <style>
