@@ -116,6 +116,7 @@
         </a>
       </div>
     {/if}
+    <hr />
 
     <div class="schedule-section">
       <div class="schedule-section__header">
@@ -147,6 +148,9 @@
 </div>
 
 <style>
+  hr {
+    margin-block: 0;
+  }
   .room-details-container {
     display: flex;
     flex-direction: column;
@@ -255,7 +259,7 @@
         all: unset;
         font-size: 0.875rem;
         font-weight: 600;
-        padding: 0.5rem 1rem;
+        padding: 0.25rem 1rem;
         background-color: hsl(5, 53%, 32%);
         color: white;
         border-radius: 8px;
