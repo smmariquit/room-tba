@@ -44,7 +44,7 @@ This project uses [Astro](https://astro.build), and may have the following folde
 
 ## License
 
-MIT
+[MIT License](LICENSE)
 
 ## Author
 
