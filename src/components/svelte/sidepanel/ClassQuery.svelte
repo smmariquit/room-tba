@@ -46,9 +46,10 @@
   .class-query-container {
     display: flex;
     flex-direction: column;
+    flex: 1 1 0;
     gap: 1rem;
     height: 100%;
-    overflow: hidden;
+    overflow: auto;
   }
 
   .header {
