@@ -56,7 +56,7 @@ The footer and status bar show `v{version}` from `package.json` at build time.
 
 ## License
 
-MIT
+[MIT License](LICENSE)
 
 ## Author
 
