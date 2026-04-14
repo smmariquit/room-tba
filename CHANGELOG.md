@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/smmariquit/room-tba/compare/v1.0.0...v1.0.1) (2026-04-14)
+
+
+### Bug Fixes
+
+* reloadPrompt unable to show reload button ([5d7ee5d](https://github.com/smmariquit/room-tba/commit/5d7ee5da195ed1e0daf97826f2522b1a7fd82c22))
+
 # 1.0.0 (2026-04-14)
 
 
