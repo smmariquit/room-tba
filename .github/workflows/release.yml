@@ -14,6 +14,9 @@ jobs:
   release:
     runs-on: ubuntu-latest
     if: "${{ !contains(github.event.head_commit.message, '[skip ci]') }}"
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
