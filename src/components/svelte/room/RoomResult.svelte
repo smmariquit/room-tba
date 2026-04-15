@@ -93,8 +93,8 @@
             }
           }}
         >
-          <CornerRightUp size={18} />
           Get Directions
+          <CornerRightUp size={18} />
         </button>
         <a
           href="https://www.google.com/maps?q={roomData.building.lat},{roomData
