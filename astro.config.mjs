@@ -14,8 +14,7 @@ export default defineConfig({
       },
       includeAssets: ["favicon.ico", "apple-touch-icon.png"],
       manifest: {
-        name: "Room TBA - Finally Answered",
-        short_name: "Room TBA",
+        name: "Room TBA",
         description:
           "An open-source website built to help UPLB students find their rooms across the Los Baños campus",
         theme_color: "#a30e00",
@@ -31,6 +30,7 @@ export default defineConfig({
             type: "image/png",
           },
         ],
+        display_override: ["standalone"]
       },
     }),
   ],
