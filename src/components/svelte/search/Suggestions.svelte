@@ -120,11 +120,6 @@
     opacity: 1;
     pointer-events: auto;
   }
-  @media screen and (max-width: 48rem) {
-    .mobile-hidden {
-      display: none;
-    }
-  }
   .suggestions-header {
     font-size: 1rem;
     margin-bottom: 0.5rem;
