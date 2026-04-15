@@ -19,6 +19,7 @@
     "@maplibre/maplibre-gl-directions": "^0.9.1",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
+    "@vercel/analytics": "^2.0.1",
     "@vitejs/plugin-basic-ssl": "^2.2.0",
     "astro": "^5.18.1",
     "better-sqlite3": "^12.8.0",
