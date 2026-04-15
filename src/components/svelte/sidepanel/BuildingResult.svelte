@@ -33,9 +33,8 @@
             ]);
           }}
         >
-          <CornerRightUp size={18} />
-
           Get Directions
+          <CornerRightUp size={18} />
         </button>
       {/if}
     </div>
