@@ -29,8 +29,8 @@ export class ScheduleRenderer {
     fonts: {
       header: "bold 13px Arial, sans-serif",
       time: "10px Arial, sans-serif",
-      course: "bold 9px Arial, sans-serif",
-      section: "8px Arial, sans-serif",
+      course: "bold 12px Inter, Arial, sans-serif",
+      section: "10px Inter, Arial, sans-serif",
     },
   };
   courses: Course[] = [];
@@ -44,31 +44,7 @@ export class ScheduleRenderer {
     }
     this.ctx = this.canvas.getContext("2d") as CanvasRenderingContext2D;
 
-    this.config = {
-      width: 800,
-      height: 450,
-      headerHeight: 32,
-      timeColumnWidth: 55,
-      startHour: 7,
-      endHour: 20,
-      days: ["M", "T", "W", "Th", "F", "S"],
-      colors: {
-        background: "#FFFFFF",
-        header: "#1a1a1a",
-        headerText: "#FFFFFF",
-        grid: "#e5e5e5",
-        gridLight: "#f0f0f0",
-        timeColumn: "#333333",
-        timeText: "#FFFFFF",
-      },
-      fonts: {
-        header: "bold 13px Arial, sans-serif",
-        time: "10px Arial, sans-serif",
-        course: "bold 9px Arial, sans-serif",
-        section: "8px Arial, sans-serif",
-      },
-      ...config,
-    };
+    this.config = {...this.config, ...config};
 
     this.courses = [];
     this.init();

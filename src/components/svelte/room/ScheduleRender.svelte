@@ -11,7 +11,6 @@
     classes: ClassMapValue[];
   }
   const { roomCode, classes }: Props = $props();
-  // svelte-ignore state_referenced_locally
   const canvasId = $derived(`schedule-${roomCode}`);
   const renderer = $derived(
     new ScheduleRenderer(canvasId, {
@@ -51,5 +50,7 @@
   canvas {
     width: 100%;
     height: auto;
+    overflow: hidden;
+    border-radius: 0.5rem;
   }
 </style>
