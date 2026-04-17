@@ -200,8 +200,8 @@
     padding: 0.75rem 1rem;
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
-    border-left: 4px solid hsl(103, 100%, 27%);
-    background-color: hsla(103, 100%, 89%, 0.5);
+    border-left: 4px solid hsl(5, 53%, 32%);
+    background-color: hsla(5, 53%, 89%, 0.5);
   }
 
   .building-note-title {
