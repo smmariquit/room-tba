@@ -14,10 +14,10 @@
   );
 </script>
 
-<div class="building-query-wrapper">
+<div class="division-query-wrapper">
   {#if division}
-    <div class="building-header">
-      <h2 class="building-title">{division.division_name}</h2>
+    <div class="division-header">
+      <h2 class="division-title">{division.division_name}</h2>
     </div>
   {/if}
 
@@ -25,7 +25,7 @@
 </div>
 
 <style>
-  .building-query-wrapper {
+  .division-query-wrapper {
     display: flex;
     flex-direction: column;
     gap: 0.75rem; /* 12px gap from design */
@@ -34,7 +34,7 @@
     overflow-y: auto;
   }
 
-  .building-header {
+  .division-header {
     display: flex;
     flex-direction: column;
     gap: 0.25rem; /* 4px gap */
@@ -42,7 +42,7 @@
     flex-shrink: 0;
   }
 
-  .building-title {
+  .division-title {
     font-size: 1.125rem; /* 18px */
     font-weight: bold;
     color: black;

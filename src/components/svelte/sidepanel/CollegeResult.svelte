@@ -14,10 +14,10 @@
   );
 </script>
 
-<div class="building-query-wrapper">
+<div class="college-query-wrapper">
   {#if college}
-    <div class="building-header">
-      <h2 class="building-title">{college.college_name}</h2>
+    <div class="college-header">
+      <h2 class="college-title">{college.college_name}</h2>
     </div>
   {/if}
 
@@ -25,16 +25,16 @@
 </div>
 
 <style>
-  .building-query-wrapper {
+  .college-query-wrapper {
     display: flex;
     flex-direction: column;
     gap: 0.75rem; /* 12px gap from design */
     width: 100%;
-    flex: 1;
-    overflow: hidden;
+    flex: 1 1 0;
+    overflow-y: auto;
   }
 
-  .building-header {
+  .college-header {
     display: flex;
     flex-direction: column;
     gap: 0.25rem; /* 4px gap */
@@ -42,7 +42,7 @@
     flex-shrink: 0;
   }
 
-  .building-title {
+  .college-title {
     font-size: 1.125rem; /* 18px */
     font-weight: bold;
     color: black;
