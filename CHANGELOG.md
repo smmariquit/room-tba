@@ -3,6 +3,15 @@
 
 ### Features
 
+* add changelog.md to /changelog route ([82f9612](https://github.com/smmariquit/room-tba/commit/82f9612cf623f04630fd075004b26781cf3c8d33))
+* update icons with lucide-icons ([5d841b0](https://github.com/smmariquit/room-tba/commit/5d841b02af4a9e489d165a874ef9ecda5519d928))
+* update icons with lucide-icons ([3a9ed78](https://github.com/smmariquit/room-tba/commit/3a9ed78917fb89a3f8bc3eb9425f6be0dd862e67))
+
+# [1.2.0](https://github.com/smmariquit/room-tba/compare/v1.1.0...v1.2.0) (2026-04-17)
+
+
+### Features
+
 * update icons with lucide-icons ([5d841b0](https://github.com/smmariquit/room-tba/commit/5d841b02af4a9e489d165a874ef9ecda5519d928))
 * update icons with lucide-icons ([3a9ed78](https://github.com/smmariquit/room-tba/commit/3a9ed78917fb89a3f8bc3eb9425f6be0dd862e67))
 
