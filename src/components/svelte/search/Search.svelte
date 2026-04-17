@@ -108,26 +108,6 @@
     </div>
 
     <div class="search-buttons">
-      <button
-        onclick={() => modalStore.openModal("filter")}
-        type="button"
-        class="filter-btn"
-        aria-label="Open Filters"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="lucide lucide-filter"
-          ><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" /></svg
-        >
-      </button>
       {#if queryStore.inputValue !== ""}
         <button
           onclick={closeSearchContext}
@@ -177,7 +157,7 @@
     box-shadow: 0rem 2px 0.25rem 0rem rgba(0, 0, 0, 0.25);
     display: flex;
     align-items: center;
-    padding: 0.75rem 1rem;
+    padding: 0.875rem 1rem;
     gap: 0.5rem;
     flex-shrink: 0;
   }
@@ -235,7 +215,6 @@
     align-items: center;
     justify-content: center;
     color: black;
-    padding: 0.25rem;
     border-radius: 0.25rem;
     transition: background-color 0.125s;
   }
