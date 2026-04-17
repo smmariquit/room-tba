@@ -88,4 +88,9 @@
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+  @media (max-width: 425px) {
+    .suggestion {
+      padding: 0.5rem;
+    }
+  }
 </style>
