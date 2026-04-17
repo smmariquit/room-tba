@@ -100,7 +100,7 @@
   }
   @media only screen and (max-width: 31.25rem) {
     .modal-content {
-      padding: 1rem;
+      padding: 0.25rem;
     }
     .landing-modal-container {
       padding: 0;
