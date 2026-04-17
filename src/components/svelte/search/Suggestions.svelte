@@ -85,12 +85,19 @@
       {/each}
     {:else}
       <h2 class="suggestions-header">Trending searches</h2>
-      <Suggestion value={"CAS Building"} category={"building"} />
+      <Suggestion value={"Physical Science Building"} category={"building"} />
       <Suggestion
         value={"Institute of Computer Science"}
         category={"division"}
       />
-      <Suggestion value={"MMM LH"} category={"room"} />
+      <Suggestion
+        value={"Institute of Biological Sciences"}
+        category={"division"}
+      />
+      <Suggestion
+        value={"College of Engineering and Agro-Industrial Technology"}
+        category={"college"}
+      />
     {/if}
   {:else if suggestedResult.length !== 0}
     {#each suggestedResult as suggestion}
