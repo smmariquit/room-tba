@@ -85,7 +85,7 @@
       {/each}
     {:else}
       <h2 class="suggestions-header">Trending searches</h2>
-      <Suggestion value={"Physical Science Building"} category={"building"} />
+      <Suggestion value={"Physical Sciences Building"} category={"building"} />
       <Suggestion
         value={"Institute of Computer Science"}
         category={"division"}
