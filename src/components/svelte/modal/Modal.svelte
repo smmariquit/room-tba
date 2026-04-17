@@ -4,6 +4,7 @@
   import LandingModal from "./LandingModal.svelte";
   import ScheduleModal from "./ScheduleModal.svelte";
   import FilterModalContent from "./FilterModalContent.svelte";
+  import { X } from "@lucide/svelte";
 </script>
 
 {#if modalStore.open}
@@ -28,6 +29,12 @@
       {#if modalStore.type === "landing"}
         <LandingModal />
       {:else if modalStore.type === "schedule-expand"}
+        <button
+          class="modal-content__close-icon"
+          onclick={() => modalStore.closeModal()}
+        >
+          <X size={20} />
+        </button>
         <ScheduleModal />
       {:else if modalStore.type === "filter"}
         <FilterModalContent />
@@ -61,14 +68,30 @@
     box-sizing: border-box;
   }
   .modal-content {
+    position: relative;
     flex: 0 1 64rem;
     max-height: 90dvh;
     background-color: white;
     z-index: inherit;
     border-radius: 1rem;
-    padding: 1.5rem;
+    padding: 0.5rem;
     display: flex;
     flex-flow: column nowrap;
+    .modal-content__close-icon {
+      position: absolute;
+      right: 0.25rem;
+      top: 0.25rem;
+      color: hsl(0, 0%, 18%);
+      padding: 0.375rem;
+      border-radius: 0.25rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #fff;
+      &:hover {
+        background-color: #f0f0f0;
+      }
+    }
   }
   .landing-modal-container {
     flex: 0 1 48rem;
