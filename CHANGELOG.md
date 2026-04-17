@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/smmariquit/room-tba/compare/v1.1.0...v1.2.0) (2026-04-17)
+
+
+### Features
+
+* update icons with lucide-icons ([3a9ed78](https://github.com/smmariquit/room-tba/commit/3a9ed78917fb89a3f8bc3eb9425f6be0dd862e67))
+
 # [1.1.0](https://github.com/smmariquit/room-tba/compare/v1.0.1...v1.1.0) (2026-04-15)
 
 
