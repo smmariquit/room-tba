@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/smmariquit/room-tba/compare/v1.0.1...v1.1.0) (2026-04-15)
+
+
+### Features
+
+* add vercel analytics ([20aab87](https://github.com/smmariquit/room-tba/commit/20aab87545aa0afe5d622e2fff68b648d45f3b9b))
+
 ## [1.0.1](https://github.com/smmariquit/room-tba/compare/v1.0.0...v1.0.1) (2026-04-14)
 
 
