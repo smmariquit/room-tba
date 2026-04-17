@@ -5,7 +5,6 @@ export const developers: DeveloperInfo[] = [
   { name: "Ken Daniele Ramiscal", href: "https://kendan.dev" },
   { name: "Kalinaw Lukas Aom Bebis", href: "https://lukasbebis.com" },
   { name: "Eunice Almeyda" },
-  { name: "Dandel Oliver Prado" },
   { name: "Mary Gwyneth Telmosa" },
 ];
 
