@@ -1,19 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
-
-const changelogEntries = [
-  {
-    version: "v1.0.0",
-    date: "April 2026",
-    summary: "Initial public release of Room TBA.",
-    changes: [
-      "Initial course and room dataset for 2nd Semester AY 2025-2026.",
-      "Simply search for a course, room, or building to view its details, including schedule, room status, and other relevant information.",
-      "Implemented a responsive design to ensure a seamless experience across different devices.",
-      "Add directions to all buildings listed on the website, making it easier for users to navigate the campus.",
-    ],
-  },
-];
+import * as changelog from "../../CHANGELOG.md";
 ---
 
 <Layout>
@@ -32,29 +19,28 @@ const changelogEntries = [
         release.
       </p>
     </header>
-    {
-      changelogEntries.map((entry) => (
-        <article class="entry">
-          <div class="entry-header">
-            <div>
-              <h2 class="hero">{entry.summary} </h2>
-              <p class="version">{entry.version}</p>
-            </div>
-            <p class="date">{entry.date}</p>
-          </div>
-
-          <ul>
-            {entry.changes.map((change) => (
-              <li>{change}</li>
-            ))}
-          </ul>
-        </article>
-      ))
-    }
+    <!-- <main> -->
+    <div set:html={changelog.compiledContent()} class="entries" />
   </main>
+  <script is:inline>
+    const changelogContainer = document.querySelector("div.entries");
+    const changelogArticles = document.createElement("DIV");
+    let currentArticle = null;
+    changelogContainer.childNodes.forEach((val) => {
+      if (val.nodeName == "H1" || val.nodeName == "H2") {
+        currentArticle = document.createElement("ARTICLE");
+        currentArticle.classList.add("entry");
+        changelogArticles.appendChild(currentArticle);
+      }
+
+      currentArticle.appendChild(changelogContainer.removeChild(val));
+    });
+    changelogContainer.append(...changelogArticles.childNodes);
+    console.log(changelogContainer);
+  </script>
 </Layout>
 
-<style>
+<style is:global>
   .changelog-page {
     max-width: 48rem;
     margin: 0 auto;
@@ -124,6 +110,21 @@ const changelogEntries = [
     padding: 1.25rem;
     background: white;
     box-shadow: 0 2px 0.5rem 0 hsla(0, 0%, 0%, 0.06);
+    h1,h2 {
+      font-size:1.5rem;
+    }
+    > :is(h3) {
+      margin-block:.5rem;
+    }
+    > :is(h1, h2) {
+      margin-block:1rem;
+    }
+    > ul {
+      margin-bottom:1rem;
+    }
+    h3 {
+      font-size:1rem;
+    }
   }
 
   .entry-header {
@@ -134,20 +135,11 @@ const changelogEntries = [
     margin-bottom: 1rem;
   }
 
-  .entry h2 {
-    margin: 0.25rem 0 0;
-    font-size: 1.25rem;
-  }
-
   ul {
     margin: 0;
     padding-left: 1.25rem;
     color: hsl(0, 0%, 25%);
     line-height: 1.65;
-  }
-
-  li + li {
-    margin-top: 0.35rem;
   }
 
   @media screen and (max-width: 600px) {
