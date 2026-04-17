@@ -1,6 +1,8 @@
 <script lang="ts">
+  import { Locate, LocateFixed } from "@lucide/svelte";
   import { locationStore, mapStore, toastStore } from "../../lib/store.svelte";
 
+  let centered: boolean = $state(false);
   const handleLocationClick = () => {
     if (!locationStore.coords) {
       locationStore.requestLocation();
@@ -10,6 +12,8 @@
       toastStore.show("Map component is still initializing", "info");
       return;
     }
+
+    centered = true;
     mapStore.mapInstance.flyTo({
       center: locationStore.coords,
       zoom: 17,
@@ -26,24 +30,11 @@
   title="My Location"
   aria-label="My Location"
 >
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="2"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-  >
-    <line x1="2" x2="5" y1="12" y2="12" />
-    <line x1="19" x2="22" y1="12" y2="12" />
-    <line x1="12" x2="12" y1="2" y2="5" />
-    <line x1="12" x2="12" y1="19" y2="22" />
-    <circle cx="12" cy="12" r="7" />
-    <circle cx="12" cy="12" r="3" />
-  </svg>
+  {#if centered}
+    <LocateFixed />
+  {:else}
+    <Locate />
+  {/if}
 </button>
 
 <style>
