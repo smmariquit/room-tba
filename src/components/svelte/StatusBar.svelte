@@ -148,8 +148,7 @@
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      flex-shrink: 1;
-      flex-basis: 25rem;
+      flex: 0 0 24rem;
       .progress-bar {
         height: 0.75rem;
         flex: 1 0 0;
@@ -174,7 +173,6 @@
       padding: 0.5rem 1rem;
       gap: 0.5rem;
       flex-direction: column;
-      max-width: calc(100% - 1rem);
 
       .status-toggle {
         display: flex;
@@ -219,6 +217,11 @@
           justify-content: flex-start;
         }
       }
+    }
+  }
+  @media (max-width: 1200px) {
+    .data-updated {
+      display: none;
     }
   }
 </style>
