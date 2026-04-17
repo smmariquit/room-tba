@@ -29,6 +29,7 @@
     "maplibre-gl": "^5.21.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
+    "svelte": "^5.55.4",
     "svelte-maplibre": "^1.2.6",
     "typescript": "^5.9.3"
   },
