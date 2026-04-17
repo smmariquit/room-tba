@@ -15,7 +15,7 @@
   const renderer = $derived(
     new ScheduleRenderer(canvasId, {
       width: 1000,
-      height: 450,
+      height: 600,
     }),
   );
   $effect(() => {
@@ -49,7 +49,7 @@
 <style>
   canvas {
     width: 100%;
-    height: auto;
+    aspect-ratio: 10/6;
     overflow: hidden;
     border-radius: 0.5rem;
   }
