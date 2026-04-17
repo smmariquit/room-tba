@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { ChevronDown, ChevronRight } from "@lucide/svelte";
   import { APP_VERSION_LABEL } from "../../constants/version";
   import { getAppData } from "../../lib/context";
   import { modalStore } from "../../lib/store.svelte";
@@ -9,21 +10,11 @@
 
 <div class="status-bar" class:is-open={isOpen}>
   <button class="status-toggle" onclick={() => (isOpen = !isOpen)}>
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="20"
-      height="20"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      class="lucide lucide-info"
-      ><circle cx="12" cy="12" r="10" /><path d="M12 16v-4" /><path
-        d="M12 8h.01"
-      /></svg
-    >
+    {#if isOpen}
+      <ChevronDown size={20} />
+    {:else}
+      <ChevronRight size={20} />
+    {/if}
     <span>Status</span>
   </button>
 
@@ -178,9 +169,10 @@
     }
   }
 
-  @media (max-width: 1000px) {
+  @media (max-width: 800px) {
     div.status-bar {
       padding: 0.5rem 1rem;
+      gap: 0.5rem;
       flex-direction: column;
       max-width: calc(100% - 1rem);
 
@@ -191,7 +183,7 @@
       .content-wrapper {
         display: none;
         flex-direction: column;
-        gap: 0.75rem;
+        gap: 0.25rem;
         padding-top: 0.5rem;
         border-top: 1px solid #eee;
         width: 100%;
@@ -209,7 +201,8 @@
 
       .metadata {
         width: 100%;
-        flex-direction: column;
+        align-items: center;
+        flex-wrap: wrap;
         gap: 0.25rem;
 
         & > *:not(:last-child),
@@ -220,14 +213,10 @@
 
         .data-updated {
           margin-left: 0;
-          font-size: 0.75rem;
-          color: #666;
         }
 
         .app-version {
           justify-content: flex-start;
-          font-size: 0.75rem;
-          opacity: 0.8;
         }
       }
     }
