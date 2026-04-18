@@ -1,3 +1,21 @@
+# [1.2.0](https://github.com/smmariquit/room-tba/compare/v1.1.0...v1.2.0) (2026-04-18)
+
+
+### Bug Fixes
+
+* update changelog ([4f54450](https://github.com/smmariquit/room-tba/commit/4f544506bccb81b4442372a166d312f08e75333f))
+* update suggestion for trending searches ([b1eeaa1](https://github.com/smmariquit/room-tba/commit/b1eeaa1dbb382a5f93045030384a94031afb1564))
+
+
+### Features
+
+* add changelog.md to /changelog route ([5bbb4e2](https://github.com/smmariquit/room-tba/commit/5bbb4e2afcd3a47af625af5ad753507cb1ae58c8))
+* add close button to the modal when schedule is open ([8221c2b](https://github.com/smmariquit/room-tba/commit/8221c2b77a04bb2b149eb4649af2faffa17b117c))
+* add more suggestions to trending searches ([5cb42d3](https://github.com/smmariquit/room-tba/commit/5cb42d30fa3500fa55daad52b7ccd18b2629007c))
+* add reactive icons if the location is centered ([407a16f](https://github.com/smmariquit/room-tba/commit/407a16fea19edee596c33d406c325682fa9d8864))
+* update icons with lucide-icons ([5d841b0](https://github.com/smmariquit/room-tba/commit/5d841b02af4a9e489d165a874ef9ecda5519d928))
+* update icons with lucide-icons ([3a9ed78](https://github.com/smmariquit/room-tba/commit/3a9ed78917fb89a3f8bc3eb9425f6be0dd862e67))
+
 # [1.1.0](https://github.com/smmariquit/room-tba/compare/v1.0.1...v1.1.0) (2026-04-15)
 
 
