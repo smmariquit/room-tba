@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/smmariquit/room-tba/compare/v1.2.0...v1.2.1) (2026-04-18)
+
+
+### Bug Fixes
+
+* resolve missing images on landing page ([b935329](https://github.com/smmariquit/room-tba/commit/b93532994827d0f2c26809c8a86387205d142096))
+
 # [1.2.0](https://github.com/smmariquit/room-tba/compare/v1.1.0...v1.2.0) (2026-04-18)
 
 
