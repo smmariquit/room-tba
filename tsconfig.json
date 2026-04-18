@@ -1,10 +1,9 @@
 {
-  "extends": "astro/tsconfigs/strict",
+  // "extends": "@astrojs/ts-plugin/tsconfigs/strict",
   "include": [".astro/types.d.ts", "**/*"],
   "exclude": ["dist"],
   "compilerOptions": {
     "strict": true,
-    "types": ["vite-plugin-pwa/client", "vite-plugin-pwa/info"],
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "allowUnusedLabels": false,

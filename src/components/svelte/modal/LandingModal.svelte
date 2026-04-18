@@ -64,24 +64,26 @@
                 target="_blank"
                 data-tooltip={name}
               >
-                <object
-                  title="profile"
-                  data={`/developers/${img_url}.png`}
-                  type="image/jpeg"
-                >
-                  <img src={"/profile.svg"} alt={name} title={name} />
-                </object>
+                <img
+                  src={`/developers/${img_url}.png`}
+                  alt={name}
+                  title={name}
+                  onerror={(event) =>
+                    ((event.currentTarget as HTMLImageElement).src =
+                      "/profile.svg")}
+                />
                 <div class="name">{name}</div>
               </a>
             {:else}
               <div class="developers-profile tooltip" data-tooltip={name}>
-                <object
-                  title="forgot"
-                  data={`/developers/${img_url}.png`}
-                  type="image/png"
-                >
-                  <img src={"/profile.svg"} alt={name} title={name} />
-                </object>
+                <img
+                  src={`/developers/${img_url}.png`}
+                  alt={name}
+                  title={name}
+                  onerror={(event) =>
+                    ((event.currentTarget as HTMLImageElement).src =
+                      "/profile.svg")}
+                />
                 <div class="name">{name}</div>
               </div>
             {/if}
@@ -100,24 +102,26 @@
                 target="_blank"
                 data-tooltip={name}
               >
-                <object
-                  title="profile"
-                  data={`/contributors/${img_url}.png`}
-                  type="image/jpeg"
-                >
-                  <img src={"/profile.svg"} alt={name} title={name} />
-                </object>
+                <img
+                  src={`/contributors/${img_url}.png`}
+                  alt={name}
+                  title={name}
+                  onerror={(event) =>
+                    ((event.currentTarget as HTMLImageElement).src =
+                      "/profile.svg")}
+                />
                 <div class="name">{name}</div>
               </a>
             {:else}
               <div class="contributor-profile tooltip" data-tooltip={name}>
-                <object
-                  title="forgot"
-                  data={`/contributors/${img_url}.png`}
-                  type="image/png"
-                >
-                  <img src={"/profile.svg"} alt={name} title={name} />
-                </object>
+                <img
+                  src={`/contributors/${img_url}.png`}
+                  alt={name}
+                  title={name}
+                  onerror={(event) =>
+                    ((event.currentTarget as HTMLImageElement).src =
+                      "/profile.svg")}
+                />
                 <div class="name">{name}</div>
               </div>
             {/if}
@@ -254,9 +258,7 @@
     text-decoration: none;
     color: inherit;
   }
-  .contributor-profile object,
   .contributor-profile img,
-  .developers-profile object,
   .developers-profile img {
     width: 2.25rem;
     height: 2.25rem;
@@ -264,6 +266,7 @@
     border-radius: 50%;
     object-fit: cover;
     background-color: #f5f5f5;
+    overflow: hidden;
   }
 
   .contributor-profile .name,
@@ -321,23 +324,23 @@
       grid-template-columns: 1fr;
       gap: 1rem;
     }
-    .contributor-profile .name,
+    /* .contributor-profile .name,
     .developers-profile .name {
       display: block;
     }
     .tooltip::after,
     .tooltip::before {
       display: none;
-    }
+    } */
     .hero-image {
       min-height: 12rem;
     }
     .hero-overlay {
       padding: 1.5rem 1rem;
     }
-    .hero-overlay h2 {
+    /* .hero-overlay h2 {
       font-size: 1.5rem;
-    }
+    } */
     .content-body {
       padding: 1rem;
       gap: 1rem;
