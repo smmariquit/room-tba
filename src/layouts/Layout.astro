@@ -1,8 +1,7 @@
 ---
-import { pwaInfo } from "virtual:pwa-info";
 import ReloadPrompt from "../components/ReloadPrompt.astro";
 import "../styles/font-face.css";
-import Analytics from '@vercel/analytics/astro';
+// import Analytics from '@vercel/analytics/astro';
 ---
 
 <!doctype html>
@@ -15,7 +14,6 @@ import Analytics from '@vercel/analytics/astro';
     <meta name="theme-color" content="#a30e00" />
     <meta name="generator" content={Astro.generator} />
     <title>Room TBA - Searching utility for finding rooms around UPLB</title>
-    {pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />}
     <style is:global>
       * {
         font-family:
@@ -45,7 +43,7 @@ import Analytics from '@vercel/analytics/astro';
   <body>
     <slot />
     <ReloadPrompt />
-    <Analytics />
+    <!-- <Analytics /> -->
   </body>
 </html>
 

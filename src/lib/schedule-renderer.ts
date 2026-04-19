@@ -44,7 +44,7 @@ export class ScheduleRenderer {
     }
     this.ctx = this.canvas.getContext("2d") as CanvasRenderingContext2D;
 
-    this.config = {...this.config, ...config};
+    this.config = { ...this.config, ...config };
 
     this.courses = [];
     this.init();

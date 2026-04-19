@@ -1,6 +1,6 @@
 import type { modalOptions } from "../constants/modal-states";
 import { SvelteMap } from "svelte/reactivity";
-  import * as maplibre from "maplibre-gl";
+import * as maplibre from "maplibre-gl";
 import type { RecentSearch } from "./types";
 
 interface ModalStoreState {
@@ -40,7 +40,7 @@ class QueryStore {
   private _queryStore: QueryStoreState = $state({
     category: null,
     type: "query",
-    value: ""
+    value: "",
   });
   recentSearches: RecentSearch[] = $state([]);
   private _filters = new SvelteMap<
@@ -63,11 +63,11 @@ class QueryStore {
   // onclick of query buttons
   updateQuery = (obj: QueryStoreState) => {
     this._queryStore = obj;
-    
+
     if (obj.type === "result" && obj.category !== null) {
       this.addRecentSearch({
         category: obj.category,
-        value: obj.value
+        value: obj.value,
       });
     }
   };
@@ -89,7 +89,7 @@ class QueryStore {
     this._queryStore = {
       category: null,
       type: "query",
-      value: ""
+      value: "",
     };
     this.inputValue = "";
   };
@@ -99,8 +99,8 @@ class QueryStore {
   };
 
   setCategory = (category: QueryStoreState["category"]) => {
-    this._queryStore.category = category
-  }
+    this._queryStore.category = category;
+  };
 
   addFilter = (
     key: string,
@@ -140,7 +140,6 @@ class LocationStore {
   routeOrigin: [number, number] | null = $state(null);
   private watchId: number | null = null;
 
-
   private readonly CAMPUS_BOUNDS = {
     minLng: 121.225963,
     minLat: 14.150106,
@@ -175,7 +174,6 @@ class LocationStore {
 
     this.watchId = navigator.geolocation.watchPosition(
       (position) => {
-
         const { longitude, latitude, heading } = position.coords;
 
         if (!this.isWithinBounds(longitude, latitude)) {
@@ -241,7 +239,7 @@ class LocationStore {
 }
 
 class MapStore {
-  mapInstance: maplibre.MapLibreMap | undefined = $state.raw()
+  mapInstance: maplibre.MapLibreMap | undefined = $state.raw();
 }
 
 export const queryStore = new QueryStore();

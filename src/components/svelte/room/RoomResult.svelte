@@ -6,7 +6,7 @@
   } from "../../../lib/store.svelte";
   import { getAppData } from "../../../lib/context";
   import Classes from "./Classes.svelte";
-  import { CornerRightUp } from "@lucide/svelte";
+  // import { CornerRightUp } from "@lucide/svelte";
 
   const { rooms, classesMap } = getAppData();
 
@@ -94,7 +94,18 @@
           }}
         >
           Get Directions
-          <CornerRightUp size={18} />
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            width="18"
+            height="18"
+          >
+            <polyline points="9,18 15,12 9,6" />
+          </svg>
         </button>
         <a
           href="https://www.google.com/maps?q={roomData.building.lat},{roomData

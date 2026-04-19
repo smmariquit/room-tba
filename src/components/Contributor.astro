@@ -1,8 +1,12 @@
 ---
-import type { ContributorInfo } from "../lib/types";
+// import type { ContributorInfo } from "../lib/types";
 
-type Props = Record<string, any>;
-const { name, href, img_alt }: ContributorInfo = Astro.props;
+interface Props {
+  name: string;
+  href?: string;
+  img_alt?: string;
+}
+const { name, href, img_alt } = Astro.props;
 const img_url = name.toLowerCase().split(" ").join("-");
 /// <references />
 ---
@@ -15,23 +19,28 @@ const img_url = name.toLowerCase().split(" ").join("-");
       target="_blank"
       data-tooltip={name}
     >
-      <object data={`/contributors/images/${img_url}.png`} type="image/jpeg">
-        <img src={"/profile.svg"} alt={img_alt} title={name} />
-      </object>
+      <img
+        src={`/contributors/${img_url}.png`}
+        alt={img_alt}
+        title={name}
+        onerror="this.src='/profile.svg'"
+      />
       <div>{name}</div>
     </a>
   ) : (
     <div class="contributor-profile tooltip" data-tooltip={name}>
-      <object data={`/contributors/images/${img_url}.png`} type="image/png">
-        <img src={"/profile.svg"} alt={img_alt} title={name} />
-      </object>
+      <img
+        src={`/contributors/${img_url}.png`}
+        alt={img_alt}
+        title={name}
+        onerror="this.src='/profile.svg'"
+      />
       <div>{name}</div>
     </div>
   )
 }
 
 <style>
-  object,
   img {
     margin: unset;
     padding: unset;

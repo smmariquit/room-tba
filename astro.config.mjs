@@ -30,7 +30,7 @@ export default defineConfig({
             type: "image/png",
           },
         ],
-        display_override: ["standalone"]
+        display_override: ["standalone"],
       },
     }),
   ],

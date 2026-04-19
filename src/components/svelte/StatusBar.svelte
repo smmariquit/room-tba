@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ChevronDown, ChevronRight } from "@lucide/svelte";
+  // import { ChevronDown, ChevronRight } from "@lucide/svelte";
   import { APP_VERSION_LABEL } from "../../constants/version";
   import { getAppData } from "../../lib/context";
   import { modalStore } from "../../lib/store.svelte";
@@ -11,9 +11,31 @@
 <div class="status-bar" class:is-open={isOpen}>
   <button class="status-toggle" onclick={() => (isOpen = !isOpen)}>
     {#if isOpen}
-      <ChevronDown size={20} />
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        width="20"
+        height="20"
+      >
+        <path d="M6 9l6 6 6-6" />
+      </svg>
     {:else}
-      <ChevronRight size={20} />
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        width="20"
+        height="20"
+      >
+        <path d="M9 18l6-6-6-6" />
+      </svg>
     {/if}
     <span>Status</span>
   </button>
