@@ -203,7 +203,7 @@
   > -->
   <MapLibre
     bind:map={mapStore.mapInstance}
-    style="https://tiles.openfreemap.org/styles/liberty"
+    style="/liberty-customized.json"
     maxBounds={[
       [121.22951431520816, 14.143739048514412],
       [121.28117994803134, 14.18059150108623],
@@ -212,7 +212,7 @@
     zoom={15.24}
     pitch={20}
     bearing={-154.48}
-    minZoom={15.5}
+    minZoom={13}
     class="map"
   >
     <FillExtrusionLayer
