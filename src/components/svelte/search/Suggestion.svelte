@@ -54,7 +54,7 @@
 <button class="suggestion" onclick={handleSuggestionClick}>
   {@render icon(category)}
   <div class="text">{@html highlightSearch(value, pattern)}</div>
-  <ArrowUpRight size={20} style={"margin-left:auto"} />
+  <ArrowUpRight size={20} style={"margin-left:auto"} class="icon" />
 </button>
 
 <style>
@@ -72,7 +72,7 @@
     }
   }
 
-  .icon {
+  :global(.icon) {
     display: flex;
     align-items: center;
     justify-content: center;
