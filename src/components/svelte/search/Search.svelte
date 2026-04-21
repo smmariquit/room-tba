@@ -1,11 +1,10 @@
 <script lang="ts">
   import { throttle } from "es-toolkit";
-  import { queryStore, modalStore } from "../../../lib/store.svelte";
+  import { queryStore } from "../../../lib/store.svelte";
   import Suggestions from "./Suggestions.svelte";
 
   let searchElement = $state<HTMLInputElement | null>(null);
   let typing = $state(false);
-  let focused = $state(false);
 
   const throttleSearch = throttle((searchInput: string) => {
     queryStore.inputValue = searchInput;
@@ -57,8 +56,6 @@
         bind:this={searchElement}
         class={typing ? "typing" : ""}
         oninput={handleInput}
-        onfocus={() => (focused = true)}
-        onblur={() => setTimeout(() => (focused = false), 200)}
         placeholder={"Search room code, building, division..."}
       />
       {#if typing}

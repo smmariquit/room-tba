@@ -5,7 +5,7 @@
   import { untrack } from "svelte";
   import { fade } from "svelte/transition";
   import MapLibreGlDirections from "@maplibre/maplibre-gl-directions";
-  import { Building, GraduationCap, University } from "@lucide/svelte";
+  import { University } from "@lucide/svelte";
   const { buildings, rooms } = getAppData();
   let directions: MapLibreGlDirections | undefined = $state.raw();
 
@@ -205,8 +205,8 @@
     bind:map={mapStore.mapInstance}
     style="https://tiles.openfreemap.org/styles/liberty"
     maxBounds={[
-      [121.225963, 14.150106],
-      [121.254638, 14.172678],
+      [121.22951431520816, 14.143739048514412],
+      [121.28117994803134, 14.18059150108623],
     ]}
     center={[121.24224620509085, 14.16283754850545]}
     zoom={15.24}
