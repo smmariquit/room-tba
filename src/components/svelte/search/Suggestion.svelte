@@ -3,12 +3,11 @@
   import {
     ArrowUpRight,
     BookText,
-    Building,
     DoorClosed,
     GraduationCap,
     School,
     University,
-  } from "@lucide/svelte/icons";
+  } from "@lucide/svelte";
   let {
     value,
     category,
