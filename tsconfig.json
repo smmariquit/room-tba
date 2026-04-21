@@ -4,6 +4,7 @@
   "exclude": ["dist"],
   "compilerOptions": {
     "strict": true,
+    "types": ["vite-plugin-pwa/client", "vite-plugin-pwa/info"],
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "allowUnusedLabels": false,
