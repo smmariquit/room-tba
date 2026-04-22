@@ -1,3 +1,17 @@
+# [1.3.0](https://github.com/smmariquit/room-tba/compare/v1.2.2...v1.3.0) (2026-04-22)
+
+
+### Bug Fixes
+
+* change minZoom and update map style ([e51bbda](https://github.com/smmariquit/room-tba/commit/e51bbdae6d44e6491c2ba1480c9a6d0ad371b36b))
+* update map bounds ([f02e7db](https://github.com/smmariquit/room-tba/commit/f02e7dbbe7651ce1bc44e2e64790dccdd94ad426))
+
+
+### Features
+
+* Add veterinary hospital building ([9f0426a](https://github.com/smmariquit/room-tba/commit/9f0426adacfa71eb268d235853e5df591bc7512b))
+* update flyout ([708e944](https://github.com/smmariquit/room-tba/commit/708e944121dec1120fd92b2e8a005066f01929ab))
+
 ## [1.2.2](https://github.com/smmariquit/room-tba/compare/v1.2.1...v1.2.2) (2026-04-22)
 
 
