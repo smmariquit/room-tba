@@ -5,7 +5,7 @@
   import { untrack } from "svelte";
   import { fade } from "svelte/transition";
   import MapLibreGlDirections from "@maplibre/maplibre-gl-directions";
-  import { Building, GraduationCap, University } from "@lucide/svelte";
+  import { University } from "@lucide/svelte";
   const { buildings, rooms } = getAppData();
   let directions: MapLibreGlDirections | undefined = $state.raw();
 
@@ -129,8 +129,8 @@
         }
       } else if (category === null) {
         map.flyTo({
-          center: [121.24224620509085, 14.16283754850545],
-          zoom: 15.24,
+          center: [121.24125948460573, 14.16323736946326],
+          zoom: 15.81,
           pitch: 60,
           bearing: -154.48,
           duration: 1500,
@@ -203,16 +203,16 @@
   > -->
   <MapLibre
     bind:map={mapStore.mapInstance}
-    style="https://tiles.openfreemap.org/styles/liberty"
+    style="/liberty-customized.json"
     maxBounds={[
-      [121.225963, 14.150106],
-      [121.254638, 14.172678],
+      [121.22951431520816, 14.143739048514412],
+      [121.28117994803134, 14.18059150108623],
     ]}
     center={[121.24224620509085, 14.16283754850545]}
     zoom={15.24}
     pitch={20}
     bearing={-154.48}
-    minZoom={15.5}
+    minZoom={13}
     class="map"
   >
     <FillExtrusionLayer
