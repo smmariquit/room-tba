@@ -129,8 +129,8 @@
         }
       } else if (category === null) {
         map.flyTo({
-          center: [121.24224620509085, 14.16283754850545],
-          zoom: 15.24,
+          center: [121.24125948460573, 14.16323736946326],
+          zoom: 15.81,
           pitch: 60,
           bearing: -154.48,
           duration: 1500,
