@@ -24,7 +24,7 @@
       <div class="progress-bar">
         <div
           class="progress-bar__value"
-          data-value={Math.floor((directionCount / totalRooms) * 100)}
+          style:width={`${Math.floor((directionCount / totalRooms) * 100)}%`}
         ></div>
       </div>
       <div>
@@ -162,7 +162,6 @@
           height: 100%;
           background-color: #7b1113;
           border-radius: 0.5rem;
-          width: calc(attr(data-value number) * 1%);
         }
       }
     }
