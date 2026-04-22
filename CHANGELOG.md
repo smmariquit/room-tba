@@ -1,3 +1,11 @@
+## [1.2.2](https://github.com/smmariquit/room-tba/compare/v1.2.1...v1.2.2) (2026-04-22)
+
+
+### Bug Fixes
+
+* remove shrink property from icon to prevent a smaller arrow ([1c0c3f5](https://github.com/smmariquit/room-tba/commit/1c0c3f564910153ac2b90d477a3fb06576d74968))
+* update progress bar styling for compatibility ([a21fbb5](https://github.com/smmariquit/room-tba/commit/a21fbb521f78c3eb89edca9685462a1e90827127))
+
 ## [1.2.1](https://github.com/smmariquit/room-tba/compare/v1.2.0...v1.2.1) (2026-04-18)
 
 
