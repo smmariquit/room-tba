@@ -6,6 +6,8 @@
   import { fade } from "svelte/transition";
   import MapLibreGlDirections from "@maplibre/maplibre-gl-directions";
   import { University } from "@lucide/svelte";
+  import { MediaQuery } from "svelte/reactivity";
+  import * as mapGl from "maplibre-gl";
   const { buildings, rooms } = getAppData();
   let directions: MapLibreGlDirections | undefined = $state.raw();
 
@@ -15,6 +17,21 @@
   let lastTimestamp = $state(0);
   let currentRotation = $state(0);
   let zoomLevel = $state(0);
+  const SIDEPANEL_WIDTH = 25.75 * 16;
+  const md = new MediaQuery("max-width:48rem");
+
+  const calculatePadding = (md: boolean): mapGl.PaddingOptions => {
+    if (md) {
+      return {
+        bottom: window.innerWidth / 2,
+        left: 0,
+      };
+    }
+    return {
+      left: SIDEPANEL_WIDTH,
+      bottom: 0,
+    };
+  };
 
   function rotateCamera(timestamp: number) {
     if (!mapStore.mapInstance || !isRotating) return;
@@ -24,7 +41,10 @@
     lastTimestamp = timestamp;
 
     currentRotation = (currentRotation + delta / 150) % 360;
-    mapStore.mapInstance.rotateTo(currentRotation, { duration: 0 });
+    mapStore.mapInstance.rotateTo(currentRotation, {
+      duration: 0,
+      padding: calculatePadding(untrack(() => md.current)),
+    });
 
     animationFrameId = requestAnimationFrame(rotateCamera);
   }
@@ -122,7 +142,7 @@
             center: [currentBuilding.lon, currentBuilding.lat],
             zoom: 18,
             pitch: 60,
-            offset: [0, -24],
+            padding: calculatePadding(md.current),
             duration: 1500,
           });
           map.once("moveend", startRotation);
@@ -146,8 +166,8 @@
           map.flyTo({
             center: [currentRoom.building.lon, currentRoom.building.lat],
             zoom: 18,
-            offset: [0, -24],
             pitch: 60,
+            padding: calculatePadding(md.current),
             duration: 1500,
           });
           map.once("moveend", startRotation);
