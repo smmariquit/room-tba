@@ -1,3 +1,10 @@
+## [1.3.1](https://github.com/smmariquit/room-tba/compare/v1.3.0...v1.3.1) (2026-04-23)
+
+
+### Bug Fixes
+
+* add padding to map when navigating ([0eb16b2](https://github.com/smmariquit/room-tba/commit/0eb16b2f2c79036f128f49c3e7f125b54b72c911))
+
 # [1.3.0](https://github.com/smmariquit/room-tba/compare/v1.2.2...v1.3.0) (2026-04-22)
 
 
