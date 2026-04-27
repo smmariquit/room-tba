@@ -66,5 +66,7 @@ Developed by [Simonee Ezekiel Mariquit](https://stimmie.dev)
 
 - **Niño Anthony Marmeto** - Helped with Electrical Engineering building information
 - **Rosh Almario** - Helped with Institute of Chemistry room directions
-- **Ken Ramiscal** - Helped with Developing the UI and offline support
-- **Kalinaw Lukas Aom Bebis** - Helped with developing the UI and bug fixing
+- **Ken Ramiscal** - Helped with Developing the UI, offline support, and map functionalities
+- **Kalinaw Lukas Aom Bebis** - Helped with developing the UI, bug fixing, and map functionalities
+- **Eunice Almeyda** - Logo Designer
+- **Mary Gwyneth Telmosa** - UI Designer
