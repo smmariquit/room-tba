@@ -2,7 +2,7 @@
 import { pwaInfo } from "virtual:pwa-info";
 import ReloadPrompt from "../components/ReloadPrompt.astro";
 import "../styles/font-face.css";
-import Analytics from '@vercel/analytics/astro';
+import Analytics from "@vercel/analytics/astro";
 ---
 
 <!doctype html>
@@ -15,6 +15,38 @@ import Analytics from '@vercel/analytics/astro';
     <meta name="theme-color" content="#a30e00" />
     <meta name="generator" content={Astro.generator} />
     <title>Room TBA - Searching utility for finding rooms around UPLB</title>
+    <meta
+      name="description"
+      content="Room TBA is an open-source website built to help UPLB students find
+        their rooms across the Los Baños campus."
+    />
+
+    <meta property="og:url" content="https://room-tba.stimmie.dev" />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:title"
+      content="Room TBA - Searching utility for finding rooms around UPLB"
+    />
+    <meta
+      property="og:description"
+      content="Room TBA is an open-source website built to help UPLB students find
+        their rooms across the Los Baños campus."
+    />
+    <meta property="og:image" content="/socmed.png" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="twitter:domain" content="room-tba.stimmie.dev" />
+    <meta property="twitter:url" content="https://room-tba.stimmie.dev" />
+    <meta
+      name="twitter:title"
+      content="Room TBA - Searching utility for finding rooms around UPLB"
+    />
+    <meta
+      name="twitter:description"
+      content="Room TBA is an open-source website built to help UPLB students find
+        their rooms across the Los Baños campus."
+    />
+    <meta name="twitter:image" content="/socmed.png" />
     {pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />}
     <style is:global>
       * {
