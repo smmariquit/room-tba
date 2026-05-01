@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ChevronDown, ChevronRight } from "@lucide/svelte";
+  import { ChevronDown, ChevronRight, MessageCircle } from "@lucide/svelte";
   import { APP_VERSION_LABEL } from "../../constants/version";
   import { getAppData } from "../../lib/context";
   import { modalStore } from "../../lib/store.svelte";
@@ -35,6 +35,12 @@
       <div class="data-updated">
         Course and room information is updated regularly. Last updated:
         <strong>January 2026.</strong>
+      </div>
+      <div>
+        <a href="/messenger" target="_blank" rel="noopener noreferrer" class="messenger-link">
+          <MessageCircle size={18} />
+          <div>Contact</div>
+        </a>
       </div>
       <div>
         <button
@@ -115,6 +121,18 @@
       }
     }
 
+    .messenger-link {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      text-decoration: none;
+      color: inherit;
+      padding: 0.125rem 0.375rem;
+      &:hover {
+        border-radius: 0.5rem;
+        background-color: hsla(0, 0%, 0%, 0.1);
+      }
+    }
     .contributors-btn {
       background: none;
       border: none;
