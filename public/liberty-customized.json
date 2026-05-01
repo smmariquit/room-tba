@@ -1280,7 +1280,13 @@
       "minzoom": 13,
       "maxzoom": 14,
       "paint": {
-        "fill-color": "hsl(35, 8%, 85%)",
+        "fill-color": [
+          "match",
+          ["get", "class"],
+          ["education", "school", "university", "college"],
+          "#e6a8a8",
+          "hsl(35, 8%, 85%)"
+        ],
         "fill-outline-color": {
           "base": 1,
           "stops": [[13, "hsla(35, 6%, 79%, 0.32)"], [14, "hsl(35, 6%, 79%)"]]
@@ -1294,7 +1300,13 @@
       "source-layer": "building",
       "minzoom": 14,
       "paint": {
-        "fill-extrusion-color": "rgba(247, 242, 235, 1)",
+        "fill-extrusion-color": [
+          "match",
+          ["get", "class"],
+          ["education", "school", "university", "college"],
+          "#e6a8a8",
+          "rgba(247, 242, 235, 1)"
+        ],
         "fill-extrusion-height": {
           "property": "render_height",
           "type": "identity"

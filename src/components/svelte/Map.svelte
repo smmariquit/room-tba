@@ -238,7 +238,13 @@
     <FillExtrusionLayer
       sourceLayer="building"
       paint={{
-        "fill-extrusion-color": "#aaa",
+        "fill-extrusion-color": [
+          "match",
+          ["get", "class"],
+          ["education", "school", "university", "college"],
+          "#e6a8a8",
+          "#aaa"
+        ],
         "fill-extrusion-height": ["get", "render_height"],
         "fill-extrusion-base": ["get", "render_min_height"],
         "fill-extrusion-opacity": 0.6,
