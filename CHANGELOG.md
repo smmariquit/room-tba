@@ -1,3 +1,11 @@
+# [1.4.0](https://github.com/smmariquit/room-tba/compare/v1.3.1...v1.4.0) (2026-05-01)
+
+
+### Features
+
+* add messenger contact link to status bar ([2a6d822](https://github.com/smmariquit/room-tba/commit/2a6d822f0d9b23073f3cc9b8ddc34d29700fcd7b))
+* add messenger redirect ([bda4177](https://github.com/smmariquit/room-tba/commit/bda417718264db438cec65c9b590536a572ba05c))
+
 ## [1.3.1](https://github.com/smmariquit/room-tba/compare/v1.3.0...v1.3.1) (2026-04-23)
 
 
