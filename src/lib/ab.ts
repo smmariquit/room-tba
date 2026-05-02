@@ -15,6 +15,7 @@ export type SearchClassCtaVariant =
 
 const STORAGE_PREFIX = "ab-test:";
 const OVERRIDE_PREFIX = "ab-";
+const CLIENT_ID_KEY = `${STORAGE_PREFIX}client-id`;
 
 const canUseBrowser = typeof window !== "undefined";
 
@@ -60,6 +61,22 @@ const persistVariant = (testName: string, variant: string) => {
   }
 };
 
+const getClientId = () => {
+  if (!canUseBrowser) return null;
+  try {
+    const existing = localStorage.getItem(CLIENT_ID_KEY);
+    if (existing) return existing;
+    const generated =
+      typeof crypto?.randomUUID === "function"
+        ? crypto.randomUUID()
+        : `fallback-${Date.now()}-${Math.random()}`;
+    localStorage.setItem(CLIENT_ID_KEY, generated);
+    return generated;
+  } catch {
+    return null;
+  }
+};
+
 const hasExposure = (testName: string, variant: string) => {
   if (!canUseBrowser) return false;
   try {
@@ -78,11 +95,28 @@ const markExposure = (testName: string, variant: string) => {
   }
 };
 
-const pickVariant = <T extends readonly string[]>(variants: T): T[number] => {
-  const index = Math.floor(Math.random() * variants.length);
-  return variants[index];
+const hashString = (value: string) => {
+  let hash = 0x811c9dc5;
+  for (let i = 0; i < value.length; i += 1) {
+    hash ^= value.charCodeAt(i);
+    hash = Math.imul(hash, 0x01000193);
+  }
+  return hash >>> 0;
 };
 
+const pickVariant = <T extends readonly string[]>(
+  variants: T,
+  seed: string,
+): T[number] => {
+  const hash = hashString(seed);
+  return variants[hash % variants.length];
+};
+
+/**
+ * Assigns a variant for the provided test, optionally tracking exposure.
+ * Uses URL overrides (ab-<testName>=variant), persisted client IDs, and
+ * local storage to keep assignments stable across sessions.
+ */
 export const assignAbTest = <T extends readonly string[]>(
   config: AbTestConfig<T>,
   options?: { trackExposure?: boolean },
@@ -94,7 +128,10 @@ export const assignAbTest = <T extends readonly string[]>(
   let variant = override ?? stored;
 
   if (!variant) {
-    variant = pickVariant(config.variants);
+    const clientId = getClientId();
+    variant = clientId
+      ? pickVariant(config.variants, `${config.name}:${clientId}`)
+      : config.variants[0];
   }
 
   if (override || !stored) {
