@@ -19,6 +19,8 @@ const OVERRIDE_PREFIX = "ab-";
 const canUseBrowser = typeof window !== "undefined";
 
 const getStorageKey = (testName: string) => `${STORAGE_PREFIX}${testName}`;
+const getExposureKey = (testName: string) =>
+  `${STORAGE_PREFIX}${testName}:exposed`;
 
 const getOverrideVariant = <T extends readonly string[]>(
   testName: string,
@@ -58,6 +60,24 @@ const persistVariant = (testName: string, variant: string) => {
   }
 };
 
+const hasExposure = (testName: string, variant: string) => {
+  if (!canUseBrowser) return false;
+  try {
+    return sessionStorage.getItem(getExposureKey(testName)) === variant;
+  } catch {
+    return false;
+  }
+};
+
+const markExposure = (testName: string, variant: string) => {
+  if (!canUseBrowser) return;
+  try {
+    sessionStorage.setItem(getExposureKey(testName), variant);
+  } catch {
+    // ignore storage failures
+  }
+};
+
 const pickVariant = <T extends readonly string[]>(variants: T): T[number] => {
   const index = Math.floor(Math.random() * variants.length);
   return variants[index];
@@ -81,11 +101,12 @@ export const assignAbTest = <T extends readonly string[]>(
     persistVariant(config.name, variant);
   }
 
-  if (options?.trackExposure ?? true) {
+  if ((options?.trackExposure ?? true) && !hasExposure(config.name, variant)) {
     track("ab_exposure", {
       test: config.name,
       variant,
     });
+    markExposure(config.name, variant);
   }
 
   return variant;
