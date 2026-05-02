@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { track } from "@vercel/analytics";
   import { queryStore, type QueryStoreState } from "../../../lib/store.svelte";
   import {
     ArrowUpRight,
@@ -11,9 +12,13 @@
   let {
     value,
     category,
+    abTestName,
+    abVariant,
   }: {
     value: string;
     category: Exclude<QueryStoreState["category"], null>;
+    abTestName?: string;
+    abVariant?: string;
   } = $props();
 
   const pattern = $derived(
@@ -26,6 +31,11 @@
   }
 
   function handleSuggestionClick() {
+    track("search_suggestion_selected", {
+      category,
+      test: abTestName,
+      variant: abVariant,
+    });
     queryStore.updateQuery({
       type: "result",
       category,

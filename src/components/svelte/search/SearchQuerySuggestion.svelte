@@ -1,7 +1,15 @@
 <script lang="ts">
+  import { track } from "@vercel/analytics";
   import { queryStore } from "../../../lib/store.svelte";
 
+  let { abTestName, abVariant }: { abTestName?: string; abVariant?: string } =
+    $props();
+
   function handleRoomSearchSuggestion() {
+    track("search_class_cta_selected", {
+      test: abTestName,
+      variant: abVariant,
+    });
     queryStore.updateQuery({
       category: "class",
       type: "result",

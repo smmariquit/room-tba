@@ -1,4 +1,10 @@
 <script lang="ts">
+  import { onMount } from "svelte";
+  import {
+    assignAbTest,
+    searchClassCtaTest,
+    type SearchClassCtaVariant,
+  } from "../../../lib/ab";
   import { getAppData } from "../../../lib/context";
   import { queryStore, type QueryStoreState } from "../../../lib/store.svelte";
   import SearchQuerySuggestion from "./SearchQuerySuggestion.svelte";
@@ -9,6 +15,13 @@
   const suggestedResult = $derived<
     { value: string; category: Exclude<QueryStoreState["category"], null> }[]
   >(getSuggestions(queryStore.inputValue));
+
+  let classSearchCtaVariant = $state<SearchClassCtaVariant>("control");
+  const showClassSearchCta = $derived(classSearchCtaVariant === "cta-always");
+
+  onMount(() => {
+    classSearchCtaVariant = assignAbTest(searchClassCtaTest);
+  });
 
   function getSuggestions(searchString: string): {
     value: string;
@@ -81,30 +94,59 @@
     {#if queryStore.recentSearches.length !== 0}
       <h2 class="suggestions-header">Recent searches</h2>
       {#each queryStore.recentSearches as { category, value }}
-        <Suggestion {value} {category} />
+        <Suggestion
+          {value}
+          {category}
+          abTestName={searchClassCtaTest.name}
+          abVariant={classSearchCtaVariant}
+        />
       {/each}
     {:else}
       <h2 class="suggestions-header">Trending searches</h2>
-      <Suggestion value={"Physical Sciences Building"} category={"building"} />
+      <Suggestion
+        value={"Physical Sciences Building"}
+        category={"building"}
+        abTestName={searchClassCtaTest.name}
+        abVariant={classSearchCtaVariant}
+      />
       <Suggestion
         value={"Institute of Computer Science"}
         category={"division"}
+        abTestName={searchClassCtaTest.name}
+        abVariant={classSearchCtaVariant}
       />
       <Suggestion
         value={"Institute of Biological Sciences"}
         category={"division"}
+        abTestName={searchClassCtaTest.name}
+        abVariant={classSearchCtaVariant}
       />
       <Suggestion
         value={"College of Engineering and Agro-Industrial Technology"}
         category={"college"}
+        abTestName={searchClassCtaTest.name}
+        abVariant={classSearchCtaVariant}
       />
     {/if}
   {:else if suggestedResult.length !== 0}
     {#each suggestedResult as suggestion}
-      <Suggestion {...suggestion} />
+      <Suggestion
+        {...suggestion}
+        abTestName={searchClassCtaTest.name}
+        abVariant={classSearchCtaVariant}
+      />
     {/each}
+    {#if showClassSearchCta}
+      <SearchQuerySuggestion
+        abTestName={searchClassCtaTest.name}
+        abVariant={classSearchCtaVariant}
+      />
+    {/if}
   {:else if suggestedResult.length === 0}
-    <SearchQuerySuggestion />
+    <SearchQuerySuggestion
+      abTestName={searchClassCtaTest.name}
+      abVariant={classSearchCtaVariant}
+    />
   {/if}
 </div>
 
