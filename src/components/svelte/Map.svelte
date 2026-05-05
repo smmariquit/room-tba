@@ -155,6 +155,7 @@
           bearing: -154.48,
           duration: 1500,
         });
+        if (directions) directions.clear();
       } else if (category === "room") {
         const currentRoom = rooms.find((room) => room.code === value);
         if (
