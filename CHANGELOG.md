@@ -1,3 +1,17 @@
+# [1.6.0](https://github.com/smmariquit/room-tba/compare/v1.5.0...v1.6.0) (2026-05-08)
+
+
+### Bug Fixes
+
+* change visibility of suggestions to avoid cluttering half of the map ([3103d51](https://github.com/smmariquit/room-tba/commit/3103d5123dd8dcc962f8e47314d05a0c66af9328))
+* remove waypoints when the map is not pointing to building ([d3a462d](https://github.com/smmariquit/room-tba/commit/d3a462dca74c521feffa78b14ea29bbd6b38ec5a))
+
+
+### Features
+
+* add jeepney route menu with mock Kaliwa/Kanan and Forestry routes ([98fb7e8](https://github.com/smmariquit/room-tba/commit/98fb7e8ad0b9cd2dda7c16a4e761c596ae8d390a))
+* add x button to give users the option to remove the options ([2ace62b](https://github.com/smmariquit/room-tba/commit/2ace62b67db3d2a733e7b8877b7678bd6866f250))
+
 # [1.5.0](https://github.com/smmariquit/room-tba/compare/v1.4.0...v1.5.0) (2026-05-08)
 
 
