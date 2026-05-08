@@ -5,12 +5,14 @@
     queryStore,
     locationStore,
     toastStore,
+    building3DStore,
   } from "../../lib/store.svelte";
   import Modal from "./modal/Modal.svelte";
   import SidePanel from "./sidepanel/SidePanel.svelte";
   import Map from "./Map.svelte";
   import StatusBar from "./StatusBar.svelte";
   import Toast from "./Toast.svelte";
+  import Building3DViewer from "./Building3DViewer.svelte";
   import type { RecentSearch } from "../../lib/types";
   import { isRecentSearch } from "../../lib/locStorage";
 
@@ -73,6 +75,9 @@
     {/if}
   </div>
   <Modal />
+  {#if building3DStore.buildingName}
+    <Building3DViewer name={building3DStore.buildingName} />
+  {/if}
 </div>
 
 <style>

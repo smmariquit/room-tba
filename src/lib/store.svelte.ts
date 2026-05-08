@@ -248,6 +248,18 @@ class MapStore {
   mapInstance: maplibre.MapLibreMap | undefined = $state.raw()
 }
 
+class Building3DStore {
+  buildingName: string | null = $state(null);
+
+  open = (name: string) => {
+    this.buildingName = name;
+  };
+
+  close = () => {
+    this.buildingName = null;
+  };
+}
+
 class JeepneyStore {
   selectedRouteId: string | null = $state(null);
   menuOpen: boolean = $state(false);
@@ -276,3 +288,4 @@ export const toastStore = new ToastStore();
 export const locationStore = new LocationStore();
 export const mapStore = new MapStore();
 export const jeepneyStore = new JeepneyStore();
+export const building3DStore = new Building3DStore();
