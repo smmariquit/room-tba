@@ -13,10 +13,65 @@
   import Toast from "./Toast.svelte";
   import type { RecentSearch } from "../../lib/types";
   import { isRecentSearch } from "../../lib/locStorage";
+  import { getAppData } from "../../lib/context";
+
+  const { rooms, buildings } = getAppData();
 
   const updateData = (queryHistory: RecentSearch[]) => {
     localStorage.setItem("recent-search", JSON.stringify(queryHistory));
   };
+
+  /**
+   * Honor /?building=<name>, /?room=<code>, and /?q=<text> from URL on first
+   * load so links from the static SEO landing pages (or anywhere else) deep
+   * link into the SPA with the right thing pre-selected.
+   */
+  function applyDeepLinkFromQuery() {
+    if (typeof window === "undefined") return false;
+    const params = new URL(window.location.href).searchParams;
+    const buildingParam = params.get("building");
+    const roomParam = params.get("room");
+    const qParam = params.get("q");
+
+    if (buildingParam) {
+      const match = buildings.find(
+        (b) =>
+          b.building_name.toLowerCase() === buildingParam.toLowerCase(),
+      );
+      if (match) {
+        queryStore.updateQuery({
+          category: "building",
+          type: "result",
+          value: match.building_name,
+        });
+        queryStore.inputValue = match.building_name;
+        return true;
+      }
+    }
+
+    if (roomParam) {
+      const match = rooms.find(
+        (r) => r.code.toLowerCase() === roomParam.toLowerCase(),
+      );
+      if (match) {
+        queryStore.updateQuery({
+          category: "room",
+          type: "result",
+          value: match.code,
+        });
+        queryStore.inputValue = match.code;
+        return true;
+      }
+    }
+
+    if (qParam) {
+      queryStore.inputValue = qParam;
+      return true;
+    }
+
+    return false;
+  }
+
   onMount(() => {
     const hideLanding = localStorage.getItem("hideLandingModal");
     const recentSearchesLS = localStorage.getItem("recent-search");
@@ -30,7 +85,9 @@
     } catch (e) {
       queryStore.recentSearches = [];
     }
-    if (hideLanding !== "true") {
+
+    const usedDeepLink = applyDeepLinkFromQuery();
+    if (hideLanding !== "true" && !usedDeepLink) {
       modalStore.openModal("landing");
     }
   });

@@ -1,0 +1,343 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { db } from "../../lib/db";
+import {
+  buildingsTable,
+  classesTable,
+  collegesTable,
+  divisionsTable,
+  roomsTable,
+} from "../../../drizzle/schema";
+import { eq } from "drizzle-orm";
+import {
+  buildingJsonLd,
+  buildingPath,
+  homeUrl,
+  roomPath,
+  slugify,
+} from "../../lib/seo";
+
+export async function getStaticPaths() {
+  const buildings = await db.select().from(buildingsTable);
+  const rooms = await db
+    .select({
+      id: roomsTable.id,
+      code: roomsTable.room_code,
+      buildingId: roomsTable.building_id,
+      collegeName: collegesTable.college_name,
+      divisionName: divisionsTable.division_name,
+    })
+    .from(roomsTable)
+    .leftJoin(collegesTable, eq(collegesTable.id, roomsTable.college_id))
+    .leftJoin(divisionsTable, eq(divisionsTable.id, roomsTable.division_id));
+
+  const classes = await db
+    .select({
+      roomId: classesTable.room_id,
+      courseCode: classesTable.course_code,
+    })
+    .from(classesTable);
+
+  const classCountByRoom = new Map<number, number>();
+  for (const c of classes) {
+    classCountByRoom.set(c.roomId, (classCountByRoom.get(c.roomId) ?? 0) + 1);
+  }
+
+  return buildings.map((b) => {
+    const buildingRooms = rooms
+      .filter((r) => r.buildingId === b.id)
+      .map((r) => ({
+        code: r.code,
+        collegeName: r.collegeName,
+        divisionName: r.divisionName,
+        classCount: classCountByRoom.get(r.id) ?? 0,
+      }))
+      .sort((a, b) => a.code.localeCompare(b.code));
+
+    const colleges = Array.from(
+      new Set(
+        buildingRooms
+          .map((r) => r.collegeName)
+          .filter((c): c is string => c !== null),
+      ),
+    );
+
+    return {
+      params: { slug: slugify(b.building_name) },
+      props: {
+        building: b,
+        rooms: buildingRooms,
+        colleges,
+      },
+    };
+  });
+}
+
+const { building, rooms, colleges } = Astro.props;
+
+const description = building.directions
+  ? `${building.building_name} on the UPLB Los Baños campus. ${building.directions} View its ${rooms.length} rooms and class schedules on Room TBA.`
+  : `${building.building_name} on the UPLB Los Baños campus. View its ${rooms.length} rooms and class schedules on Room TBA.`;
+
+const jsonLd = buildingJsonLd({
+  name: building.building_name,
+  lat: building.lat,
+  lon: building.lon,
+  directions: building.directions,
+  rooms,
+});
+
+const mapDeepLink = `/?building=${encodeURIComponent(building.building_name)}`;
+---
+
+<Layout
+  title={building.building_name}
+  description={description}
+  canonical={buildingPath(building.building_name)}
+  ogType="article"
+  jsonLd={jsonLd}
+>
+  <main class="page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="/">Room TBA</a>
+      <span aria-hidden="true">/</span>
+      <a href="/buildings">Buildings</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">{building.building_name}</span>
+    </nav>
+
+    <header class="hero">
+      <p class="kicker">UPLB · Building</p>
+      <h1>{building.building_name}</h1>
+      {
+        building.directions && (
+          <p class="building-desc">{building.directions}</p>
+        )
+      }
+      <div class="hero-actions">
+        <a class="cta primary" href={mapDeepLink}>Open in interactive map</a>
+        {
+          building.lat && building.lon && (
+            <a
+              class="cta"
+              href={`https://www.google.com/maps?q=${building.lat},${building.lon}`}
+              rel="noopener"
+              target="_blank"
+            >
+              Get directions
+            </a>
+          )
+        }
+      </div>
+    </header>
+
+    <section class="meta-grid">
+      <div>
+        <dt>Rooms on file</dt>
+        <dd>{rooms.length}</dd>
+      </div>
+      {
+        colleges.length > 0 && (
+          <div>
+            <dt>Colleges</dt>
+            <dd>{colleges.join(", ")}</dd>
+          </div>
+        )
+      }
+      {
+        building.lat && building.lon && (
+          <div>
+            <dt>Coordinates</dt>
+            <dd>
+              {building.lat.toFixed(5)}, {building.lon.toFixed(5)}
+            </dd>
+          </div>
+        )
+      }
+    </section>
+
+    <section class="rooms-section">
+      <h2>Rooms in this building</h2>
+      {
+        rooms.length === 0 ? (
+          <p class="empty">No rooms recorded yet for this building.</p>
+        ) : (
+          <ul class="room-grid">
+            {rooms.map((room) => (
+              <li>
+                <a class="room-card" href={roomPath(room.code)}>
+                  <span class="room-code">{room.code}</span>
+                  <span class="room-meta">
+                    {room.classCount > 0
+                      ? `${room.classCount} class${room.classCount === 1 ? "" : "es"}`
+                      : "No classes scheduled"}
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </section>
+
+    <footer class="page-footer">
+      <a href="/">← Back to Room TBA</a>
+    </footer>
+  </main>
+</Layout>
+
+<style>
+  .page {
+    max-width: 60rem;
+    margin: 0 auto;
+    padding: 2rem 1.25rem 4rem;
+    color: hsl(0, 0%, 12%);
+  }
+  .breadcrumbs {
+    font-size: 0.8125rem;
+    color: hsl(0, 0%, 45%);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+  }
+  .breadcrumbs a {
+    color: hsl(5, 53%, 32%);
+    text-decoration: none;
+  }
+  .breadcrumbs a:hover {
+    text-decoration: underline;
+  }
+  .breadcrumbs [aria-current="page"] {
+    color: hsl(0, 0%, 30%);
+  }
+  .hero {
+    margin-top: 1.25rem;
+  }
+  .kicker {
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    color: hsl(5, 53%, 32%);
+    font-weight: 600;
+    margin: 0;
+  }
+  .hero h1 {
+    font-size: clamp(1.75rem, 3vw, 2.4rem);
+    margin: 0.4rem 0 0.5rem;
+  }
+  .building-desc {
+    color: hsl(0, 0%, 35%);
+    font-size: 1rem;
+    line-height: 1.5;
+    margin: 0;
+  }
+  .hero-actions {
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.55rem 1rem;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.875rem;
+    background-color: white;
+    color: hsl(5, 53%, 32%);
+    border: 1px solid hsl(5, 30%, 80%);
+  }
+  .cta:hover {
+    background-color: hsl(5, 53%, 97%);
+  }
+  .cta.primary {
+    background-color: hsl(5, 53%, 32%);
+    color: white;
+    border-color: hsl(5, 53%, 32%);
+  }
+  .cta.primary:hover {
+    background-color: hsl(5, 53%, 26%);
+  }
+
+  .meta-grid {
+    margin-top: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    gap: 1rem;
+    background-color: hsl(0, 0%, 98%);
+    border: 1px solid hsl(0, 0%, 92%);
+    border-radius: 0.875rem;
+    padding: 1rem 1.25rem;
+  }
+  .meta-grid dt {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: hsl(0, 0%, 45%);
+    margin: 0;
+  }
+  .meta-grid dd {
+    margin: 0.2rem 0 0;
+    font-weight: 600;
+    color: hsl(0, 0%, 15%);
+  }
+
+  .rooms-section {
+    margin-top: 2rem;
+  }
+  .rooms-section h2 {
+    font-size: 1.125rem;
+    margin: 0 0 0.75rem;
+  }
+  .empty {
+    color: hsl(0, 0%, 50%);
+    font-size: 0.9rem;
+  }
+  .room-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+    gap: 0.5rem;
+  }
+  .room-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.65rem 0.85rem;
+    border-radius: 0.625rem;
+    background-color: white;
+    border: 1px solid hsl(0, 0%, 90%);
+    color: hsl(0, 0%, 15%);
+    text-decoration: none;
+    transition:
+      border-color 0.15s,
+      transform 0.15s;
+  }
+  .room-card:hover {
+    border-color: hsl(5, 53%, 50%);
+    transform: translateY(-1px);
+  }
+  .room-code {
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+  .room-meta {
+    font-size: 0.75rem;
+    color: hsl(0, 0%, 45%);
+  }
+
+  .page-footer {
+    margin-top: 2.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid hsl(0, 0%, 90%);
+  }
+  .page-footer a {
+    color: hsl(5, 53%, 32%);
+    text-decoration: none;
+    font-weight: 500;
+  }
+</style>

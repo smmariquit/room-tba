@@ -11,6 +11,7 @@ import {
 import Layout from "../layouts/Layout.astro";
 import { count, eq, isNotNull } from "drizzle-orm";
 import AppProvider from "../components/svelte/AppProvider.svelte";
+import { siteJsonLd } from "../lib/seo";
 
 const rooms = await db
   .select({
@@ -76,7 +77,7 @@ const [{ count: totalRooms }] = await db
   .from(roomsTable);
 ---
 
-<Layout>
+<Layout jsonLd={siteJsonLd()}>
   <AppProvider
     buildings={buildings}
     classesMap={classesDict}

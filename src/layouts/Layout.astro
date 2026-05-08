@@ -3,6 +3,60 @@ import { pwaInfo } from "virtual:pwa-info";
 import ReloadPrompt from "../components/ReloadPrompt.astro";
 import "../styles/font-face.css";
 import Analytics from "@vercel/analytics/astro";
+import { SITE_URL, SITE_NAME, DEFAULT_OG_IMAGE } from "../lib/seo";
+
+type Props = {
+  /** Used for <title> and og:title. Site name is appended automatically unless includeSiteSuffix is false. */
+  title?: string;
+  description?: string;
+  /**
+   * Path or absolute URL of the canonical page. If a path is given, SITE_URL
+   * is prepended. Defaults to the current page's URL.
+   */
+  canonical?: string;
+  ogType?: "website" | "article";
+  ogImage?: string;
+  /** A JSON-LD object (or array) inserted as <script type="application/ld+json">. */
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  /** Append "· Room TBA" to <title>. Defaults to true. */
+  includeSiteSuffix?: boolean;
+  /** Hide from indexing (e.g. dev pages). */
+  noindex?: boolean;
+};
+
+const {
+  title = "Room TBA - Searching utility for finding rooms around UPLB",
+  description = "Room TBA is an open-source website built to help UPLB students find their rooms across the Los Baños campus.",
+  canonical,
+  ogType = "website",
+  ogImage = DEFAULT_OG_IMAGE,
+  jsonLd,
+  includeSiteSuffix = true,
+  noindex = false,
+} = Astro.props as Props;
+
+const fullTitle =
+  includeSiteSuffix && !title.includes(SITE_NAME)
+    ? `${title} · ${SITE_NAME}`
+    : title;
+
+const canonicalUrl = (() => {
+  if (canonical) {
+    if (canonical.startsWith("http")) return canonical;
+    return `${SITE_URL}${canonical.startsWith("/") ? "" : "/"}${canonical}`;
+  }
+  return new URL(Astro.url.pathname, SITE_URL).toString();
+})();
+
+const ogImageUrl = ogImage.startsWith("http")
+  ? ogImage
+  : `${SITE_URL}${ogImage.startsWith("/") ? "" : "/"}${ogImage}`;
+
+const jsonLdEntries = jsonLd
+  ? Array.isArray(jsonLd)
+    ? jsonLd
+    : [jsonLd]
+  : [];
 ---
 
 <!doctype html>
@@ -14,37 +68,37 @@ import Analytics from "@vercel/analytics/astro";
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
     <meta name="theme-color" content="#a30e00" />
     <meta name="generator" content={Astro.generator} />
-    <title>Room TBA - Searching utility for finding rooms around UPLB</title>
-    <meta
-      name="description"
-      content="Room TBA is an open-source website built to help UPLB students find their rooms across the Los Baños campus."
-    />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    {noindex && <meta name="robots" content="noindex,nofollow" />}
 
-    <meta property="og:url" content="https://room-tba.stimmie.dev" />
-    <meta property="og:type" content="website" />
-    <meta
-      property="og:title"
-      content="Room TBA - Searching utility for finding rooms around UPLB"
-    />
-    <meta
-      property="og:description"
-      content="Room TBA is an open-source website built to help UPLB students find their rooms across the Los Baños campus."
-    />
-    <meta property="og:image" content="/socmed.png" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImageUrl} />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta property="twitter:domain" content="room-tba.stimmie.dev" />
-    <meta property="twitter:url" content="https://room-tba.stimmie.dev" />
-    <meta
-      name="twitter:title"
-      content="Room TBA - Searching utility for finding rooms around UPLB"
-    />
-    <meta
-      name="twitter:description"
-      content="Room TBA is an open-source website built to help UPLB students find their rooms across the Los Baños campus."
-    />
-    <meta name="twitter:image" content="/socmed.png" />
+    <meta property="twitter:url" content={canonicalUrl} />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
     {pwaInfo && <Fragment set:html={pwaInfo.webManifest.linkTag} />}
+
+    {
+      jsonLdEntries.map((entry) => (
+        <script
+          type="application/ld+json"
+          set:html={JSON.stringify(entry)}
+          is:inline
+        />
+      ))
+    }
+
     <style is:global>
       * {
         font-family:
