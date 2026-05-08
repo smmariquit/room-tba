@@ -73,10 +73,8 @@
 </script>
 
 <!-- class:visible={queryStore.inputValue === ""} -->
-<div
-  class="suggestions-container"
-  class:force-visible={queryStore.inputValue === ""}
->
+<div class="suggestions-container">
+  <!-- class:force-visible={queryStore.inputValue === ""} -->
   {#if queryStore.inputValue === ""}
     {#if queryStore.recentSearches.length !== 0}
       <h2 class="suggestions-header">Recent searches</h2>
@@ -123,10 +121,10 @@
     margin-top: 0.5rem;
     opacity: 0;
   }
-  .force-visible {
+  /* .force-visible {
     opacity: 1;
     pointer-events: auto;
-  }
+  } */
   .suggestions-header {
     font-size: 1rem;
     margin-bottom: 0.5rem;
