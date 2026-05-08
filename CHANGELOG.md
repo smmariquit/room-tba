@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/smmariquit/room-tba/compare/v1.4.0...v1.5.0) (2026-05-08)
+
+
+### Features
+
+* **map:** highlight dataset buildings yellow on 3D OSM map ([6b573c0](https://github.com/smmariquit/room-tba/commit/6b573c0282f12978b42f9269c366de4cfaa94fff))
+
 # [1.4.0](https://github.com/smmariquit/room-tba/compare/v1.3.1...v1.4.0) (2026-05-01)
 
 
