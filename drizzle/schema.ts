@@ -27,6 +27,17 @@ export const roomsTable = sqliteTable("rooms", (s) => ({
   division_id: s.integer("division_id").references(() => divisionsTable.id),
 }));
 
+export const roomPositionsTable = sqliteTable("room_positions", (s) => ({
+  room_id: s
+    .integer("room_id")
+    .primaryKey()
+    .references(() => roomsTable.id),
+  floor: s.integer("floor").notNull(),
+  x: s.real("x").notNull(),
+  y: s.real("y").notNull(),
+  updated_at: s.integer("updated_at").notNull(),
+}));
+
 export const classesTable = sqliteTable("classes", (s) => ({
   id: s.integer("id").primaryKey({ autoIncrement: true }),
   course_code: s.text("course_code").notNull(),

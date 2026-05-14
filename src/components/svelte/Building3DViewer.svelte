@@ -1,10 +1,11 @@
 <script lang="ts">
   import { onMount, untrack } from "svelte";
   import { fade } from "svelte/transition";
-  import { X, Building2, Loader, RotateCcw } from "@lucide/svelte";
-  import { building3DStore } from "../../lib/store.svelte";
+  import { X, Building2, Loader, RotateCcw, Pencil, Save, Undo2 } from "@lucide/svelte";
+  import { building3DStore, adminAuthStore, toastStore } from "../../lib/store.svelte";
   import { getAppData } from "../../lib/context";
   import { fetchBuildingFootprint } from "../../lib/overpass";
+  import { fetchBasemap } from "../../lib/osm-basemap";
   import {
     footprintToLocalPolygon,
     placeRooms,
@@ -21,6 +22,7 @@
   const FLOOR_HEIGHT = 3.5;
   const ROOM_COLOR = 0xdc2626;
   const ROOM_HIGHLIGHT_COLOR = 0xfacc15;
+  const ROOM_EDIT_COLOR = 0x2563eb;
   const SHELL_COLOR = 0xb89e84;
   const SHELL_OPACITY = 0.18;
   const FLOOR_SLAB_COLOR = 0xf5efe6;
@@ -37,12 +39,21 @@
   let hoveredRoomCode = $state<string | null>(null);
   let footprintNote = $state<string | null>(null);
 
+  // Editor state
+  let editMode = $state(false);
+  let savedOverrides = $state<Map<string, { floor: number; x: number; y: number }>>(
+    new Map(),
+  );
+  let dirty = $state<Map<string, { floor: number; x: number; y: number }>>(new Map());
+  let saving = $state(false);
+
   // Three.js objects (not reactive — just refs we hand off to render loop / cleanup).
   let scene: any = null;
   let camera: any = null;
   let renderer: any = null;
   let labelRenderer: any = null;
   let controls: any = null;
+  let dragControls: any = null;
   let raycaster: any = null;
   let pointer: any = null;
   let pointerNDC: { x: number; y: number } | null = null;
@@ -70,7 +81,7 @@
 
   const placements = $derived(
     polygon
-      ? placeRooms(roomCodes, polygon, totalFloors)
+      ? placeRooms(roomCodes, polygon, totalFloors, savedOverrides)
       : ([] as RoomPlacement[]),
   );
 
@@ -108,11 +119,31 @@
     }
 
     try {
-      const [THREE, OrbitMod, CSS2DMod] = await Promise.all([
+      const [THREE, OrbitMod, CSS2DMod, DragMod, savedRes] = await Promise.all([
         import("three"),
         import("three/examples/jsm/controls/OrbitControls.js"),
         import("three/examples/jsm/renderers/CSS2DRenderer.js"),
+        import("three/examples/jsm/controls/DragControls.js"),
+        fetch(`/api/positions?building=${encodeURIComponent(name)}`, {
+          credentials: "same-origin",
+        }).catch(() => null),
       ]);
+
+      // Layer in any saved positions before we compute placements / build meshes.
+      if (savedRes && savedRes.ok) {
+        try {
+          const data = (await savedRes.json()) as {
+            positions?: Array<{ roomCode: string; floor: number; x: number; y: number }>;
+          };
+          const map = new Map<string, { floor: number; x: number; y: number }>();
+          for (const p of data.positions ?? []) {
+            map.set(p.roomCode, { floor: p.floor, x: p.x, y: p.y });
+          }
+          savedOverrides = map;
+        } catch {
+          // ignore — we'll fall back to seeded mock placements.
+        }
+      }
 
       const footprint = await fetchBuildingFootprint(
         buildingMeta.lat,
@@ -187,17 +218,60 @@
       scene.add(hemi);
 
       // === Ground ===
+      // Sized to comfortably contain the building plus context. The basemap
+      // texture (loaded async below) will be cropped to this exact half-extent
+      // so its pixels land 1:1 with world meters.
+      const groundHalf = Math.max(40, radius * 2.5);
+      const groundMat = new THREE.MeshStandardMaterial({
+        color: 0xd9d4cb,
+        roughness: 0.95,
+      });
       const ground = new THREE.Mesh(
-        new THREE.CircleGeometry(radius * 3.5, 64),
-        new THREE.MeshStandardMaterial({
-          color: 0xd9d4cb,
-          roughness: 0.95,
-        }),
+        new THREE.PlaneGeometry(groundHalf * 2, groundHalf * 2),
+        groundMat,
       );
       ground.rotation.x = -Math.PI / 2;
       ground.position.y = -0.02;
       ground.receiveShadow = true;
       scene.add(ground);
+
+      // Asynchronously upgrade the ground with an OSM-based street map. We
+      // don't await this — the viewer should be usable while tiles are loading.
+      // CRITICAL: center on the *polygon's* centroid (not on whatever lat/lon
+      // is in app_data.json), otherwise the basemap drifts a few meters
+      // relative to the 3D shape because app_data points usually aren't the
+      // true geometric center of the OSM building.
+      let basemapTexture: any = null;
+      void fetchBasemap({
+        centerLat: localPoly.centerLat,
+        centerLon: localPoly.centerLon,
+        radiusMeters: groundHalf,
+        zoom: 18,
+      })
+        .then((basemap) => {
+          if (!basemap || !scene) return;
+          basemapTexture = new THREE.CanvasTexture(basemap.canvas);
+          // Canvas image origin is top-left (north). After the plane's
+          // -π/2 X rotation, plane local +Y maps to world -Z (north). With
+          // flipY=false, UV v=0 samples canvas y=0 (north) and lands at the
+          // plane's bottom edge → world +Z (south)... but we want north at
+          // -Z. The default flipY=true flips it back the way we want.
+          basemapTexture.colorSpace = THREE.SRGBColorSpace;
+          basemapTexture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+          // Replace the geometry to match the basemap's *true* pixel-aligned
+          // extents (which can be ±1 px off the requested radius).
+          ground.geometry.dispose();
+          ground.geometry = new THREE.PlaneGeometry(
+            basemap.halfWidthMeters * 2,
+            basemap.halfDepthMeters * 2,
+          );
+          groundMat.color.setHex(0xffffff);
+          groundMat.map = basemapTexture;
+          groundMat.needsUpdate = true;
+        })
+        .catch((err) => {
+          console.warn("Basemap load failed", err);
+        });
 
       // === Building shape ===
       const shape = new THREE.Shape();
@@ -295,7 +369,10 @@
         cyl.position.set(
           placement.x,
           (placement.floor - 1) * FLOOR_HEIGHT + 0.95,
-          placement.y,
+          // Local +Y is north; the polygon's `-π/2` X-rotation puts north at
+          // world -Z, so we negate here to keep cylinders aligned with the
+          // shape (and with the OSM basemap's north).
+          -placement.y,
         );
         cyl.userData.roomCode = placement.code;
         cyl.userData.floor = placement.floor;
@@ -312,6 +389,57 @@
 
         roomMeshes.push({ mesh: cyl, placement, baseColor: ROOM_COLOR });
       }
+
+      // === Drag controls (editor mode) ===
+      // Built once and toggled via .enabled so we don't tear down meshes when
+      // entering/leaving edit mode.
+      dragControls = new DragMod.DragControls(
+        roomMeshes.map((rm) => rm.mesh),
+        camera,
+        renderer.domElement,
+      );
+      dragControls.enabled = false;
+      // Track per-drag state so we can lock Y to the floor's slab plane.
+      let dragOriginY = 0;
+      let dragCode: string | null = null;
+      let dragFloor: number | null = null;
+      dragControls.addEventListener("dragstart", (e: any) => {
+        controls.enabled = false;
+        const code = e.object?.userData?.roomCode as string | undefined;
+        const floor = e.object?.userData?.floor as number | undefined;
+        dragCode = code ?? null;
+        dragFloor = floor ?? null;
+        dragOriginY = e.object.position.y;
+        if (code) activeRoomCode = code;
+      });
+      dragControls.addEventListener("drag", (e: any) => {
+        // Lock Y so the marker can't fly off the floor it belongs to.
+        e.object.position.y = dragOriginY;
+      });
+      dragControls.addEventListener("dragend", (e: any) => {
+        controls.enabled = true;
+        if (!dragCode || dragFloor === null) return;
+        const next = {
+          floor: dragFloor,
+          x: e.object.position.x,
+          // World Z grows southward; our placement.y is local-north meters,
+          // so flip the sign on the way in.
+          y: -e.object.position.z,
+        };
+        const prev = savedOverrides.get(dragCode);
+        const unchanged =
+          prev &&
+          prev.floor === next.floor &&
+          Math.abs(prev.x - next.x) < 1e-4 &&
+          Math.abs(prev.y - next.y) < 1e-4;
+        if (!unchanged) {
+          const nextDirty = new Map(dirty);
+          nextDirty.set(dragCode, next);
+          dirty = nextDirty;
+        }
+        dragCode = null;
+        dragFloor = null;
+      });
 
       raycaster = new THREE.Raycaster();
       pointer = new THREE.Vector2();
@@ -356,6 +484,9 @@
         renderer.domElement.removeEventListener("click", onClickBound!);
       });
       disposers.push(() => {
+        dragControls?.dispose?.();
+      });
+      disposers.push(() => {
         for (const rm of roomMeshes) {
           rm.mesh.geometry.dispose();
           rm.mesh.material.dispose();
@@ -366,6 +497,7 @@
         edgeMat.dispose();
         ground.geometry.dispose();
         (ground.material as any).dispose();
+        if (basemapTexture) basemapTexture.dispose();
         for (const fg of floorGroups) {
           fg.group.traverse((obj: any) => {
             if (obj.geometry) obj.geometry.dispose();
@@ -423,11 +555,16 @@
   }
 
   $effect(() => {
-    // Hide rooms not on the selected floor (or show all).
+    // Hide rooms not on the selected floor (or show all). A dirty (unsaved)
+    // floor change wins over the seeded placement floor so newly-relocated
+    // rooms follow the filter.
     const selected = selectedFloor;
+    const dirtyMap = dirty;
     untrack(() => {
       for (const rm of roomMeshes) {
-        const visible = selected === "all" || rm.placement.floor === selected;
+        const effectiveFloor =
+          dirtyMap.get(rm.placement.code)?.floor ?? rm.placement.floor;
+        const visible = selected === "all" || effectiveFloor === selected;
         rm.mesh.visible = visible;
       }
       for (const fg of floorGroups) {
@@ -443,15 +580,22 @@
   $effect(() => {
     const code = activeRoomCode;
     const hover = hoveredRoomCode;
+    const editing = editMode;
+    const dirtyMap = dirty;
     untrack(() => {
       for (const rm of roomMeshes) {
         const isActive = rm.placement.code === code;
         const isHover = rm.placement.code === hover;
+        const isDirty = dirtyMap.has(rm.placement.code);
         const targetColor = isActive
           ? ROOM_HIGHLIGHT_COLOR
           : isHover
             ? 0xfb923c
-            : rm.baseColor;
+            : editing
+              ? isDirty
+                ? 0x059669
+                : ROOM_EDIT_COLOR
+              : rm.baseColor;
         const mat = rm.mesh.material as { color: { setHex: (hex: number) => void } };
         mat.color.setHex(targetColor);
         const scale = isActive ? 1.4 : isHover ? 1.15 : 1;
@@ -459,6 +603,115 @@
       }
     });
   });
+
+  // Toggle DragControls when entering / leaving edit mode.
+  $effect(() => {
+    const enabled = editMode;
+    untrack(() => {
+      if (dragControls) dragControls.enabled = enabled;
+      if (renderer?.domElement) {
+        renderer.domElement.style.cursor = enabled ? "grab" : "";
+      }
+    });
+  });
+
+  /**
+   * Move a room to a different floor (editor-only). Updates the mesh's
+   * world Y so it sits on the new floor's slab, then marks the change dirty
+   * with the room's *current* X/Z so a Save persists both moves at once.
+   */
+  function changeRoomFloor(code: string, nextFloor: number) {
+    if (!editMode) return;
+    const f = Math.max(1, Math.min(totalFloors, Math.floor(nextFloor)));
+    const target = roomMeshes.find((rm) => rm.placement.code === code);
+    if (!target) return;
+    target.mesh.position.y = (f - 1) * FLOOR_HEIGHT + 0.95;
+    target.mesh.userData.floor = f;
+    const next = {
+      floor: f,
+      x: target.mesh.position.x,
+      // World Z grows southward; convert back to local-north meters.
+      y: -target.mesh.position.z,
+    };
+    const prev = savedOverrides.get(code);
+    const unchanged =
+      prev &&
+      prev.floor === next.floor &&
+      Math.abs(prev.x - next.x) < 1e-4 &&
+      Math.abs(prev.y - next.y) < 1e-4;
+    const nextDirty = new Map(dirty);
+    if (unchanged) {
+      nextDirty.delete(code);
+    } else {
+      nextDirty.set(code, next);
+    }
+    dirty = nextDirty;
+    // If the user is filtering to a single floor, follow the room.
+    if (selectedFloor !== "all") selectedFloor = f;
+  }
+
+  function discardChanges() {
+    // Snap meshes back to their saved (or seeded) positions by re-reading
+    // `placements` and writing positions onto the matching meshes.
+    const target = new Map<string, RoomPlacement>();
+    for (const p of placements) target.set(p.code, p);
+    for (const rm of roomMeshes) {
+      const p = target.get(rm.placement.code);
+      if (!p) continue;
+      rm.mesh.position.set(
+        p.x,
+        (p.floor - 1) * FLOOR_HEIGHT + 0.95,
+        -p.y,
+      );
+    }
+    dirty = new Map();
+  }
+
+  async function saveChanges() {
+    if (dirty.size === 0) return;
+    saving = true;
+    try {
+      const payload = {
+        positions: Array.from(dirty.entries()).map(([roomCode, pos]) => ({
+          roomCode,
+          floor: pos.floor,
+          x: pos.x,
+          y: pos.y,
+        })),
+      };
+      const res = await fetch(
+        `/api/positions?building=${encodeURIComponent(name)}`,
+        {
+          method: "PUT",
+          headers: { "content-type": "application/json" },
+          credentials: "same-origin",
+          body: JSON.stringify(payload),
+        },
+      );
+      if (res.status === 401) {
+        toastStore.show("Session expired. Please log in again.", "error");
+        adminAuthStore.isAdmin = false;
+        return;
+      }
+      if (!res.ok) {
+        const data = (await res.json().catch(() => ({}))) as { error?: string };
+        toastStore.show(data.error ?? "Failed to save positions", "error");
+        return;
+      }
+      // Promote dirty changes into the saved overrides map.
+      const nextSaved = new Map(savedOverrides);
+      for (const [code, pos] of dirty.entries()) {
+        nextSaved.set(code, pos);
+      }
+      savedOverrides = nextSaved;
+      dirty = new Map();
+      toastStore.show(`Saved ${payload.positions.length} room positions.`, "success");
+    } catch {
+      toastStore.show("Network error while saving positions", "error");
+    } finally {
+      saving = false;
+    }
+  }
 
   onMount(() => {
     init();
@@ -485,6 +738,7 @@
       renderer = null;
       labelRenderer = null;
       controls = null;
+      dragControls = null;
       raycaster = null;
       pointer = null;
       roomMeshes = [];
@@ -498,6 +752,16 @@
       ? (buildingRooms.find((r) => r.code === activeRoomCode) ?? null)
       : null,
   );
+
+  // Resolve the floor we should *display* for the active room: dirty wins,
+  // then committed placements, then "?".
+  const activeRoomFloor = $derived.by(() => {
+    if (!activeRoomCode) return null;
+    const d = dirty.get(activeRoomCode);
+    if (d) return d.floor;
+    const p = placements.find((pl) => pl.code === activeRoomCode);
+    return p?.floor ?? null;
+  });
 </script>
 
 <svelte:window onkeydown={handleKeydown} />
@@ -573,6 +837,47 @@
           <p class="viewer-note">{footprintNote}</p>
         {/if}
 
+        {#if adminAuthStore.isAdmin}
+          <section class="viewer-section editor-section">
+            <h3>Editor</h3>
+            <div class="editor-controls">
+              <label class="edit-toggle">
+                <input
+                  type="checkbox"
+                  checked={editMode}
+                  onchange={(e) => (editMode = e.currentTarget.checked)}
+                />
+                <span class="edit-toggle-label">
+                  <Pencil size={12} /> Edit positions
+                </span>
+              </label>
+              {#if editMode}
+                <p class="editor-hint">
+                  Drag any room cylinder. Y is locked to its floor. Click Save
+                  to persist.
+                </p>
+                <div class="editor-actions">
+                  <button
+                    class="editor-btn primary"
+                    onclick={saveChanges}
+                    disabled={saving || dirty.size === 0}
+                  >
+                    <Save size={14} />
+                    {saving ? "Saving…" : `Save${dirty.size ? ` (${dirty.size})` : ""}`}
+                  </button>
+                  <button
+                    class="editor-btn"
+                    onclick={discardChanges}
+                    disabled={saving || dirty.size === 0}
+                  >
+                    <Undo2 size={14} /> Discard
+                  </button>
+                </div>
+              {/if}
+            </div>
+          </section>
+        {/if}
+
         <button class="viewer-reset" onclick={resetCamera}>
           <RotateCcw size={14} /> Reset camera
         </button>
@@ -591,11 +896,36 @@
         <div bind:this={canvasContainer} class="viewer-canvas"></div>
         <div bind:this={labelContainer} class="viewer-labels"></div>
 
+        <div class="viewer-attribution">
+          ©
+          <a href="https://www.maptiler.com/copyright/" target="_blank" rel="noreferrer">MapTiler</a>
+          ©
+          <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap contributors</a>
+        </div>
+
         {#if activeRoomMeta}
           <div class="room-info-card" transition:fade={{ duration: 120 }}>
             <div class="room-info-header">
               <strong>{activeRoomMeta.code}</strong>
-              <span class="room-info-floor">Floor {placements.find((p) => p.code === activeRoomMeta.code)?.floor ?? "?"}</span>
+              {#if editMode && activeRoomFloor !== null}
+                <label class="room-info-floor-edit">
+                  Floor
+                  <select
+                    value={activeRoomFloor}
+                    onchange={(e) =>
+                      changeRoomFloor(
+                        activeRoomMeta.code,
+                        parseInt(e.currentTarget.value, 10),
+                      )}
+                  >
+                    {#each Array.from({ length: totalFloors }, (_, i) => i + 1) as f (f)}
+                      <option value={f}>F{f}</option>
+                    {/each}
+                  </select>
+                </label>
+              {:else}
+                <span class="room-info-floor">Floor {activeRoomFloor ?? "?"}</span>
+              {/if}
             </div>
             {#if activeRoomMeta.collegeName}
               <div class="room-info-row">
@@ -810,6 +1140,73 @@
     background-color: hsl(0, 0%, 96%);
   }
 
+  .editor-section {
+    border-top: 1px dashed hsl(0, 0%, 88%);
+    padding-top: 0.75rem;
+  }
+  .editor-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .edit-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-size: 0.8125rem;
+    color: hsl(0, 0%, 20%);
+  }
+  .edit-toggle input {
+    accent-color: hsl(217, 91%, 50%);
+  }
+  .edit-toggle-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+  .editor-hint {
+    margin: 0;
+    font-size: 0.6875rem;
+    color: hsl(0, 0%, 45%);
+    line-height: 1.4;
+    background-color: hsl(217, 91%, 97%);
+    border: 1px solid hsl(217, 91%, 90%);
+    padding: 0.4rem 0.5rem;
+    border-radius: 0.5rem;
+  }
+  .editor-actions {
+    display: flex;
+    gap: 0.375rem;
+  }
+  .editor-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: 0.75rem;
+    padding: 0.4rem 0.625rem;
+    border: 1px solid hsl(0, 0%, 88%);
+    background: white;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    color: hsl(0, 0%, 20%);
+  }
+  .editor-btn:hover:not(:disabled) {
+    background-color: hsl(0, 0%, 96%);
+  }
+  .editor-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .editor-btn.primary {
+    background-color: hsl(160, 84%, 30%);
+    color: white;
+    border-color: hsl(160, 84%, 30%);
+  }
+  .editor-btn.primary:hover:not(:disabled) {
+    background-color: hsl(160, 84%, 26%);
+  }
+
   .viewer-stage {
     position: relative;
     flex: 1 1 auto;
@@ -824,6 +1221,22 @@
     position: absolute;
     inset: 0;
     pointer-events: none;
+  }
+  .viewer-attribution {
+    position: absolute;
+    bottom: 0.4rem;
+    right: 0.4rem;
+    font-size: 0.625rem;
+    color: hsl(0, 0%, 25%);
+    background-color: rgba(255, 255, 255, 0.78);
+    padding: 0.15rem 0.4rem;
+    border-radius: 0.25rem;
+    z-index: 3;
+    pointer-events: auto;
+  }
+  .viewer-attribution a {
+    color: hsl(0, 0%, 25%);
+    text-decoration: underline;
   }
   .viewer-status {
     position: absolute;
@@ -905,6 +1318,22 @@
     background-color: hsl(5, 53%, 32%);
     padding: 0.0625rem 0.375rem;
     border-radius: 999px;
+  }
+  .room-info-floor-edit {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.6875rem;
+    color: hsl(0, 0%, 30%);
+  }
+  .room-info-floor-edit select {
+    font: inherit;
+    border: 1px solid hsl(217, 91%, 70%);
+    background-color: hsl(217, 91%, 97%);
+    color: hsl(217, 91%, 25%);
+    border-radius: 0.375rem;
+    padding: 0.125rem 0.25rem;
+    cursor: pointer;
   }
   .room-info-row {
     display: flex;

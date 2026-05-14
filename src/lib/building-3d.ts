@@ -7,6 +7,15 @@ export type LocalPolygon = {
   widthMeters: number;
   /** Depth along y (north-south), meters. */
   depthMeters: number;
+  /**
+   * Latitude of the polygon's centroid — i.e., the lat that maps to the
+   * polygon's local (0, 0). Use this (not whatever the caller passed in) to
+   * align overlays like a basemap, otherwise things drift relative to the
+   * polygon by a few meters.
+   */
+  centerLat: number;
+  /** Longitude of the polygon's centroid. */
+  centerLon: number;
 };
 
 export type RoomPlacement = {
@@ -67,6 +76,8 @@ export function footprintToLocalPolygon(
     points,
     widthMeters: maxX - minX,
     depthMeters: maxY - minY,
+    centerLat: cy,
+    centerLon: cx,
   };
 }
 
@@ -127,11 +138,16 @@ function inferFloorFromCode(code: string): number | null {
  * Distribute room codes across floors and place each one at a stable mock
  * position inside the polygon. Positions are seeded by the room code so they
  * don't jump around between renders.
+ *
+ * `overrides` lets saved positions (from the editor) win over the seeded mock
+ * placement. The override is matched by room code; floor/x/y come straight
+ * from the saved record.
  */
 export function placeRooms(
   codes: string[],
   polygon: LocalPolygon,
   floorCount: number,
+  overrides?: Map<string, { floor: number; x: number; y: number }>,
 ): RoomPlacement[] {
   if (codes.length === 0 || polygon.points.length === 0) return [];
 
@@ -145,10 +161,12 @@ export function placeRooms(
 
   // Buckets per floor (1..floors). Codes whose inferred floor exceeds the known
   // floor count are clamped down. Codes without an inferred floor get
-  // round-robined across floors so they're not all on floor 1.
+  // round-robined across floors so they're not all on floor 1. Codes that have
+  // an editor-saved override are skipped here — they're emitted directly below.
   const buckets: string[][] = Array.from({ length: floors }, () => []);
   let rrIndex = 0;
   for (const item of inferred) {
+    if (overrides?.has(item.code)) continue;
     let floor: number;
     if (item.floor !== null) {
       floor = Math.min(item.floor, floors);
@@ -175,6 +193,21 @@ export function placeRooms(
   const spanY = maxY - minY || 1;
 
   const placements: RoomPlacement[] = [];
+
+  // Emit overrides first so they always appear (even if their saved floor is
+  // outside the current `floors` count, we clamp it).
+  if (overrides) {
+    for (const code of codes) {
+      const o = overrides.get(code);
+      if (!o) continue;
+      placements.push({
+        code,
+        floor: Math.max(1, Math.min(floors, Math.floor(o.floor))),
+        x: o.x,
+        y: o.y,
+      });
+    }
+  }
 
   for (let f = 1; f <= floors; f++) {
     const codesOnFloor = buckets[f - 1] ?? [];

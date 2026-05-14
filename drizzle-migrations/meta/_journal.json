@@ -15,6 +15,13 @@
       "when": 1771313209392,
       "tag": "0001_late_ben_urich",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1778315017860,
+      "tag": "0002_add_room_positions",
+      "breakpoints": true
     }
   ]
 }

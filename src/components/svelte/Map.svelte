@@ -6,6 +6,8 @@
     locationStore,
     mapStore,
     jeepneyStore,
+    adminAuthStore,
+    toastStore,
   } from "../../lib/store.svelte";
   import { untrack } from "svelte";
   import { fade } from "svelte/transition";
@@ -627,6 +629,91 @@
     queryStore.inputValue = buildingName;
   }
 
+  // Building position editing
+  let editingBuildingName = $state<string | null>(null);
+  let buildingDragPositions = $state<Map<string, [number, number]>>(new Map());
+  let savingPositions = $state(false);
+
+  function startMarkerDrag(e: PointerEvent, buildingName: string, currentLng: number, currentLat: number) {
+    if (!adminAuthStore.isAdmin) return;
+    e.preventDefault();
+    e.stopPropagation();
+    editingBuildingName = buildingName;
+    buildingDragPositions.set(buildingName, [currentLng, currentLat]);
+
+    const map = mapStore.mapInstance;
+    if (!map) return;
+
+    function onMove(moveEvent: PointerEvent) {
+      const { lng, lat } = map.unproject([moveEvent.clientX, moveEvent.clientY]);
+      buildingDragPositions.set(buildingName, [lng, lat]);
+    }
+
+    function onEnd() {
+      document.removeEventListener("pointermove", onMove);
+      document.removeEventListener("pointerup", onEnd);
+      const finalPos = buildingDragPositions.get(buildingName);
+      if (!finalPos) return;
+
+      const originalPos = buildings.find((b) => b.building_name === buildingName);
+      if (!originalPos || !originalPos.lon || !originalPos.lat) return;
+
+      if (
+        Math.abs(finalPos[0] - originalPos.lon) < 0.00001 &&
+        Math.abs(finalPos[1] - originalPos.lat) < 0.00001
+      ) {
+        buildingDragPositions.delete(buildingName);
+        editingBuildingName = null;
+        return;
+      }
+
+      saveBuildingPosition(buildingName, finalPos[0], finalPos[1]);
+    }
+
+    document.addEventListener("pointermove", onMove);
+    document.addEventListener("pointerup", onEnd);
+  }
+
+  async function saveBuildingPosition(
+    buildingName: string,
+    lng: number,
+    lat: number,
+  ) {
+    savingPositions = true;
+    try {
+      const response = await fetch(`/api/building-position?building=${encodeURIComponent(buildingName)}`, {
+        method: "PUT",
+        credentials: "same-origin",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ lon: lng, lat }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        throw new Error(data.error || `Server error: ${response.status}`);
+      }
+
+      toastStore.show("Building position updated", "success");
+      buildingDragPositions.delete(buildingName);
+      editingBuildingName = null;
+
+      const building = buildings.find((b) => b.building_name === buildingName);
+      if (building) {
+        building.lon = lng;
+        building.lat = lat;
+      }
+    } catch (error) {
+      toastStore.show(
+        error instanceof Error ? error.message : "Failed to save position",
+        "error",
+      );
+      buildingDragPositions.delete(buildingName);
+      editingBuildingName = null;
+    } finally {
+      savingPositions = false;
+    }
+  }
+
   let activeBuildingName = $derived.by(() => {
     if (!queryStore.category || queryStore.type !== "result") return null;
     switch (queryStore.category) {
@@ -683,14 +770,20 @@
     {/if}
     {#each buildings as building}
       {#if building.lat && building.lon}
+        {@const displayPos = buildingDragPositions.get(building.building_name) || [building.lon, building.lat]}
+        {@const isDragging = editingBuildingName === building.building_name}
         <Marker
-          lngLat={[building.lon, building.lat]}
+          lngLat={displayPos}
           onclick={() => handleMarkerClick(building.building_name)}
         >
           <div
             class="pin"
             class:active={activeBuildingName === building.building_name}
-            title={building.building_name}
+            class:editing={isDragging}
+            class:editable={adminAuthStore.isAdmin}
+            title={adminAuthStore.isAdmin ? "Drag to edit position" : building.building_name}
+            style:cursor={adminAuthStore.isAdmin && !isDragging ? "grab" : isDragging ? "grabbing" : "pointer"}
+            onpointerdown={(e) => startMarkerDrag(e, building.building_name, displayPos[0], displayPos[1])}
           >
             <University size="20" />
             <div
@@ -699,6 +792,9 @@
               transition:fade
             >
               {building.building_name}
+              {#if isDragging}
+                <span class="edit-indicator">●</span>
+              {/if}
             </div>
           </div>
         </Marker>
@@ -823,6 +919,47 @@
 
     .pin-label {
       opacity: 1;
+    }
+  }
+
+  .pin.editable {
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .pin.editing {
+    background-color: hsl(39, 84%, 53%);
+    border-color: hsl(39, 84%, 43%);
+    box-shadow: 0 0 0.5rem hsl(39, 84%, 53%), 0 2px 0.5rem rgba(0, 0, 0, 0.4);
+    animation: pulse-edit 1.5s ease-in-out infinite;
+  }
+
+  @keyframes pulse-edit {
+    0%,
+    100% {
+      box-shadow: 0 0 0.5rem hsl(39, 84%, 53%), 0 2px 0.5rem rgba(0, 0, 0, 0.4);
+    }
+    50% {
+      box-shadow: 0 0 1rem hsl(39, 84%, 63%), 0 2px 0.75rem rgba(0, 0, 0, 0.5);
+    }
+  }
+
+  .edit-indicator {
+    display: inline-block;
+    margin-left: 0.25rem;
+    color: hsl(39, 84%, 53%);
+    animation: blink 0.8s ease-in-out infinite;
+  }
+
+  @keyframes blink {
+    0%,
+    50%,
+    100% {
+      opacity: 1;
+    }
+    25%,
+    75% {
+      opacity: 0.3;
     }
   }
 

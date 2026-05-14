@@ -2,9 +2,12 @@
 import { defineConfig } from "astro/config";
 import react from "@astrojs/react";
 import svelte from "@astrojs/svelte";
+import node from "@astrojs/node";
 import AstroPWA from "@vite-pwa/astro";
 // https://astro.build/config
 export default defineConfig({
+  output: "server",
+  adapter: node({ mode: "standalone" }),
   integrations: [
     react(),
     svelte(),
@@ -30,7 +33,7 @@ export default defineConfig({
             type: "image/png",
           },
         ],
-        display_override: ["standalone"]
+        display_override: ["standalone"],
       },
     }),
   ],

@@ -128,7 +128,7 @@ export async function fetchBuildingFootprint(
       (
         way["building"](around:${radius},${lat},${lon});
       );
-      out tags;
+      out;
       >;
       out skel qt;
     `;
