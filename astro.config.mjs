@@ -11,7 +11,7 @@ export default defineConfig({
     svelte(),
     AstroPWA({
       workbox: {
-        globPatterns: ["**/*.{js,css,html,ico,png,svg,webmanifest,json,jpg}"],
+        globPatterns: ["**/*.{js,css,ico,png,svg,webmanifest,json,jpg}"],
       },
       includeAssets: ["favicon.ico", "apple-touch-icon.png"],
       manifest: {
