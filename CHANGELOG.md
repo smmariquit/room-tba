@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/smmariquit/room-tba/compare/v1.6.0...v1.7.0) (2026-05-18)
+
+
+### Features
+
+* **seo:** add crawlable entity pages ([89de2f1](https://github.com/smmariquit/room-tba/commit/89de2f110d203fc5c74650ee4105c8daaaad18f1))
+
 # [1.6.0](https://github.com/smmariquit/room-tba/compare/v1.5.0...v1.6.0) (2026-05-08)
 
 
