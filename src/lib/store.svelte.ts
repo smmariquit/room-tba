@@ -3,6 +3,13 @@ import { SvelteMap } from "svelte/reactivity";
   import * as maplibre from "maplibre-gl";
 import type { RecentSearch } from "./types";
 
+export type DormFilterType = "all" | "up" | "private";
+let _dormFilter = $state<DormFilterType>("all");
+export const dormFilter = {
+  get value() { return _dormFilter; },
+  set(v: DormFilterType) { _dormFilter = v; },
+};
+
 interface ModalStoreState {
   open: boolean;
   type: (typeof modalOptions)[number] | null;

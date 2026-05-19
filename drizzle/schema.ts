@@ -24,6 +24,7 @@ export const dormsTable = sqliteTable("dorms", (s) => ({
   is_up_managed: s.integer("is_up_managed", { mode: "boolean" }).notNull().default(true),
   price_range: s.text("price_range"), // e.g. "₱2,500-₱4,000/mo" (to be verified by user)
   contact_phone: s.text("contact_phone"),
+  facebook_link: s.text("facebook_link"),
 }));
 
 export const collegesTable = sqliteTable("colleges", (s) => ({

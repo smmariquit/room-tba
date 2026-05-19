@@ -6,6 +6,7 @@
     locationStore,
     mapStore,
     jeepneyStore,
+    dormFilter,
   } from "../../lib/store.svelte";
   import { untrack } from "svelte";
   import { fade } from "svelte/transition";
@@ -19,6 +20,13 @@
     type JeepneyStop,
   } from "../../constants/jeepney-routes";
   const { buildings, rooms, dorms } = getAppData();
+  const filteredDorms = $derived(
+    dormFilter.value === "all"
+      ? dorms
+      : dormFilter.value === "up"
+        ? dorms.filter((d) => d.is_up_managed)
+        : dorms.filter((d) => !d.is_up_managed),
+  );
   let directions: MapLibreGlDirections | undefined = $state.raw();
 
   const JEEPNEY_ROUTE_SOURCE_ID = "jeepney-route-line";
@@ -790,7 +798,7 @@
         </Marker>
       {/each}
     {/if}
-    {#each dorms as dorm}
+    {#each filteredDorms as dorm}
       {#if dorm.lat && dorm.lon}
         <Marker
           lngLat={[dorm.lon, dorm.lat]}

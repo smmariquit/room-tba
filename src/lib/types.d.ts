@@ -90,6 +90,7 @@ type DormData = {
   is_up_managed: boolean;
   price_range: string | null;
   contact_phone: string | null;
+  facebook_link: string | null;
 };
 
 interface ContributorInfo {

@@ -44,13 +44,26 @@
         ? "hsl(330, 65%, 50%)"
         : "hsl(150, 55%, 40%)",
   );
+
+  const googleMapsLink = $derived(
+    dorm?.lat && dorm?.lon
+      ? `https://www.google.com/maps?q=${dorm.lat},${dorm.lon}`
+      : null,
+  );
+
+  /** Only show short_name when it's a real abbreviation, not just the first word */
+  const showShortName = $derived(() => {
+    if (!dorm?.short_name) return false;
+    const first = dorm.dorm_name.split(/\s+/)[0].toLowerCase();
+    return dorm.short_name.toLowerCase() !== first;
+  });
 </script>
 
 <div class="dorm-result-wrapper">
   {#if dorm}
     <div class="dorm-header">
       <h2 class="dorm-title">{dorm.dorm_name}</h2>
-      {#if dorm.short_name}
+      {#if showShortName()}
         <span class="dorm-short-name">{dorm.short_name}</span>
       {/if}
     </div>
@@ -105,18 +118,29 @@
           }}
         >
           <CornerRightUp size={16} />
-          Get Directions
+          Directions
         </button>
       {/if}
-      {#if dorm.osm_link}
+      {#if googleMapsLink}
         <a
-          href={dorm.osm_link}
+          href={googleMapsLink}
           target="_blank"
           rel="noopener noreferrer"
-          class="action-btn osm-btn"
+          class="action-btn gmaps-btn"
         >
           <MapPin size={16} />
-          View on OSM
+          Google Maps
+        </a>
+      {/if}
+      {#if dorm.facebook_link}
+        <a
+          href={dorm.facebook_link}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="action-btn social-btn"
+        >
+          <ExternalLink size={16} />
+          Facebook
         </a>
       {/if}
     </div>
@@ -328,13 +352,22 @@
     background-color: #9a1517;
   }
 
-  .osm-btn {
-    background-color: hsl(0, 0%, 93%);
-    color: #333;
+  .gmaps-btn {
+    background-color: hsl(210, 50%, 93%);
+    color: hsl(210, 60%, 35%);
   }
 
-  .osm-btn:hover {
-    background-color: hsl(0, 0%, 87%);
+  .gmaps-btn:hover {
+    background-color: hsl(210, 50%, 87%);
+  }
+
+  .social-btn {
+    background-color: hsl(220, 50%, 93%);
+    color: hsl(220, 60%, 40%);
+  }
+
+  .social-btn:hover {
+    background-color: hsl(220, 50%, 87%);
   }
 
   .dorm-divider {
