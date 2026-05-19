@@ -1,3 +1,15 @@
+# [1.7.0](https://github.com/smmariquit/room-tba/compare/v1.6.0...v1.7.0) (2026-05-19)
+
+
+### Bug Fixes
+
+* **dorms:** polish UI, add socials/maps, filter, remove 5 dorms ([821954c](https://github.com/smmariquit/room-tba/commit/821954c5db05cf087c375d5d498068a1dc6f0dac))
+
+
+### Features
+
+* **dorms:** add UPLB dormitory feature with UP-managed and private dorms ([b74b247](https://github.com/smmariquit/room-tba/commit/b74b247c591be7190bf6d634bab91d8ac839044d))
+
 # [1.6.0](https://github.com/smmariquit/room-tba/compare/v1.5.0...v1.6.0) (2026-05-08)
 
 
