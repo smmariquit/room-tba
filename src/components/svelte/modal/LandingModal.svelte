@@ -6,7 +6,13 @@
     DISCORD_URL,
     MESSENGER_CONTRIBUTE_TARGET,
     MESSENGER_MAINTAIN_TARGET,
+    DONATE_URL,
   } from "@constants/community-links";
+  import Search from "@lucide/svelte/icons/search";
+  import MapIcon from "@lucide/svelte/icons/map";
+  import ClipboardPenLine from "@lucide/svelte/icons/clipboard-pen-line";
+  import Heart from "@lucide/svelte/icons/heart";
+  import ChevronLeft from "@lucide/svelte/icons/chevron-left";
   import CommunityPlatformLink from "@ui/community/CommunityPlatformLink.svelte";
   import {
     fetchGithubContributors,
@@ -23,8 +29,11 @@
   import { untrack } from "svelte";
 
   type LandingTab = "welcome" | "campus";
+  // "how" is a lean-modal secondary view reached from the footer link, never
+  // an auto-open target, so it stays local and out of the store's tab type.
+  type LandingView = LandingTab | "how";
 
-  let activeTab = $state<LandingTab>("welcome");
+  let activeTab = $state<LandingView>("welcome");
   let installPrompt = $state<
     | (Event & {
         prompt: () => Promise<void>;
@@ -48,10 +57,6 @@
   let creditsLoading = $state(false);
   let creditsLoaded = $state(false);
 
-  const tabs: { id: LandingTab; label: string }[] = [
-    { id: "welcome", label: "Welcome" },
-    { id: "campus", label: "Campus team" },
-  ];
 
   function toAvatarPeople(list: typeof contributors) {
     return list.map((person) => ({
@@ -109,9 +114,9 @@
     void loadGithubData();
   }
 
-  function selectTab(tab: LandingTab) {
-    activeTab = tab;
-    if (tab === "campus") {
+  function goTo(view: LandingView) {
+    activeTab = view;
+    if (view === "campus") {
       void loadGithubData();
       void loadCampusCredits();
     }
@@ -157,7 +162,13 @@
 <div class="landing-content">
   <header class="landing-header">
     <div class="hero-image">
-      <div class="hero-overlay" class:collapse-hero={activeTab === "campus"}>
+      <div class="hero-overlay" class:collapse-hero={activeTab !== "welcome"}>
+        {#if activeTab !== "welcome"}
+          <button type="button" class="landing-back" onclick={() => goTo("welcome")}>
+            <ChevronLeft size={16} aria-hidden="true" />
+            Back
+          </button>
+        {/if}
         <h2>
           <span class="hero-title" id="landing-modal-title">
             <img
@@ -173,46 +184,65 @@
           </span>
         </h2>
         <p class="hero-tagline">
-          Find rooms, explore the map, and discover campus events at UPLB.
+          {#if activeTab === "campus"}
+            The students who keep the campus data current.
+          {:else if activeTab === "how"}
+            How suggested edits become live campus data.
+          {:else}
+            Find rooms, plan classes, and explore UPLB.
+          {/if}
         </p>
       </div>
-    </div>
-
-    <div class="tab-bar" role="tablist" aria-label="About Room TBA">
-      {#each tabs as tab (tab.id)}
-        <button
-          type="button"
-          role="tab"
-          id="landing-tab-{tab.id}"
-          class="tab-btn"
-          class:active={activeTab === tab.id}
-          aria-selected={activeTab === tab.id}
-          aria-controls="landing-panel-{tab.id}"
-          onclick={() => selectTab(tab.id)}
-        >
-          {tab.label}
-        </button>
-      {/each}
     </div>
   </header>
 
   <div class="scroll-region map-chrome-scroll">
     {#if activeTab === "welcome"}
-      <div
-        class="tab-panel"
-        role="tabpanel"
-        id="landing-panel-welcome"
-        aria-labelledby="landing-tab-welcome"
-      >
+      <div class="tab-panel welcome-lean">
+        <ul class="core-list">
+          <li>
+            <span class="core-list__icon"><Search size={20} aria-hidden="true" /></span>
+            <span class="core-list__text">
+              <span class="core-list__label">Find a room or building</span>
+              <span class="core-list__sub">Search room codes, buildings, and offices.</span>
+            </span>
+          </li>
+          <li>
+            <span class="core-list__icon"><MapIcon size={20} aria-hidden="true" /></span>
+            <span class="core-list__text">
+              <span class="core-list__label">Explore the campus map</span>
+              <span class="core-list__sub">Dorms, colleges, jeepney routes, and events.</span>
+            </span>
+          </li>
+          <li>
+            <span class="core-list__icon"><ClipboardPenLine size={20} aria-hidden="true" /></span>
+            <span class="core-list__text">
+              <span class="core-list__label">Plan your classes</span>
+              <span class="core-list__sub">Build a draft schedule from the course list.</span>
+            </span>
+          </li>
+        </ul>
+
+        <aside class="donate-card">
+          <div class="donate-card__body">
+            <span class="donate-card__title">
+              <Heart size={16} aria-hidden="true" fill="currentColor" />
+              Keep Room TBA free
+            </span>
+            <p class="donate-card__note">
+              Student-run, no paywall. A small gift covers the map tiles and
+              servers for everyone.
+            </p>
+          </div>
+          <a href={DONATE_URL} class="donate-card__btn">Donate</a>
+        </aside>
+      </div>
+    {:else if activeTab === "how"}
+      <div class="tab-panel">
         <LandingGuideSteps />
       </div>
     {:else}
-      <div
-        class="tab-panel"
-        role="tabpanel"
-        id="landing-panel-campus"
-        aria-labelledby="landing-tab-campus"
-      >
+      <div class="tab-panel">
         <section class="people-block">
           <h3>Campus editors &amp; contributors</h3>
           <p class="section-note">
@@ -343,15 +373,35 @@
     {/if}
 
     <div class="scroll-footer">
-      <div class="footer-meta">
-        <VisitorCounter />
-        <GithubStarLink />
-      </div>
-      <p class="legal-hint">
-        <a href="/privacy" class="inline-link">Privacy</a>
-        ·
-        <a href="/terms" class="inline-link">Terms</a>
-      </p>
+      {#if activeTab === "welcome"}
+        <nav class="footer-links" aria-label="About Room TBA">
+          <button type="button" class="footer-link" onclick={() => goTo("campus")}>
+            Campus team
+          </button>
+          <span aria-hidden="true">·</span>
+          <button type="button" class="footer-link" onclick={() => goTo("how")}>
+            How it works
+          </button>
+          <span aria-hidden="true">·</span>
+          <a href="/privacy" class="footer-link">Privacy</a>
+        </nav>
+      {:else if activeTab === "campus"}
+        <div class="footer-meta">
+          <VisitorCounter />
+          <GithubStarLink />
+        </div>
+        <p class="legal-hint">
+          <a href="/privacy" class="inline-link">Privacy</a>
+          ·
+          <a href="/terms" class="inline-link">Terms</a>
+        </p>
+      {:else}
+        <p class="legal-hint">
+          <a href="/privacy" class="inline-link">Privacy</a>
+          ·
+          <a href="/terms" class="inline-link">Terms</a>
+        </p>
+      {/if}
     </div>
   </div>
 
@@ -490,6 +540,175 @@
     width: 100%;
     max-width: 36rem;
     margin: 0 auto;
+  }
+
+  /* Lean welcome: lead with the core use, left-aligned rows (not boxed cards),
+     then one deliberate donation card. */
+  .welcome-lean {
+    align-items: stretch;
+    gap: 1rem;
+    max-width: 30rem;
+  }
+
+  .core-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+  }
+
+  .core-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .core-list__icon {
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 0.625rem;
+    background: hsl(5, 45%, 95%);
+    color: hsl(5, 60%, 32%);
+  }
+
+  .core-list__text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.0625rem;
+    min-width: 0;
+  }
+
+  .core-list__label {
+    font-size: 0.9375rem;
+    font-weight: 650;
+    color: hsl(5, 25%, 16%);
+  }
+
+  .core-list__sub {
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    color: hsl(0, 0%, 34%);
+  }
+
+  .donate-card {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    padding: 0.875rem 1rem;
+    border: 1px solid hsl(5, 45%, 86%);
+    border-radius: 0.875rem;
+    background: hsl(5, 55%, 97%);
+  }
+
+  .donate-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1875rem;
+    min-width: 0;
+  }
+
+  .donate-card__title {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: hsl(5, 55%, 30%);
+  }
+
+  .donate-card__note {
+    margin: 0;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    color: hsl(5, 25%, 28%);
+  }
+
+  .donate-card__btn {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    border-radius: 0.625rem;
+    background: hsl(5, 75%, 28%);
+    color: #fff;
+    font-size: 0.875rem;
+    font-weight: 650;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .donate-card__btn:hover {
+    background: hsl(5, 75%, 22%);
+  }
+
+  .donate-card__btn:focus-visible {
+    outline: 2px solid hsl(5, 75%, 22%);
+    outline-offset: 2px;
+  }
+
+  .landing-back {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.625rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.125rem;
+    padding: 0.25rem 0.5rem 0.25rem 0.375rem;
+    border: 0;
+    border-radius: 0.5rem;
+    background: hsl(0, 0%, 100%, 0.18);
+    color: #fff;
+    font: inherit;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .landing-back:hover {
+    background: hsl(0, 0%, 100%, 0.28);
+  }
+
+  .landing-back:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+  }
+
+  .footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+    font-size: 0.8125rem;
+    color: hsl(0, 0%, 45%);
+  }
+
+  .footer-link {
+    border: 0;
+    background: none;
+    padding: 0;
+    font: inherit;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: hsl(5, 53%, 32%);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    cursor: pointer;
+  }
+
+  .footer-link:hover {
+    color: hsl(5, 53%, 24%);
+  }
+
+  .footer-link:focus-visible {
+    outline: 2px solid hsl(5, 53%, 35%);
+    outline-offset: 2px;
+    border-radius: 0.25rem;
   }
 
   .people-block {
