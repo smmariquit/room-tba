@@ -19,6 +19,7 @@
   import EntityEditorToggle from "@ui/editor/EntityEditorToggle.svelte";
   import EntityDirectionsChip from "./EntityDirectionsChip.svelte";
   import EntityGoogleMapsLink from "./EntityGoogleMapsLink.svelte";
+  import EntityPrintableMapLink from "./EntityPrintableMapLink.svelte";
   import EntityStreetAddress from "./EntityStreetAddress.svelte";
   import EntityShareCopyLink from "./EntityShareCopyLink.svelte";
   import EntityExternalLink from "./EntityExternalLink.svelte";
@@ -166,6 +167,7 @@
             name={place.name}
             ariaLabel={`Open ${place.name} in Google Maps`}
           />
+          <EntityPrintableMapLink placeName={place.name} />
         {/if}
         <EntityShareCopyLink url={placeShareUrl} entityLabel={place.name} />
         <EntityEditorToggle

@@ -1083,6 +1083,19 @@
     cursor: pointer;
   }
 
+  /* The redesign pill is a fixed 2.375rem tall; the default 1.875rem chip plus
+     the pill's 0.35rem vertical padding overflows it (chip protruded below the
+     search bar). Fit the chip inside the pill on the desktop shell. */
+  .search-root:not(.mobile-shell)
+    .map-search-chrome--redesign
+    .map-search-chrome__add,
+  .search-root:not(.mobile-shell)
+    .map-search-chrome--redesign
+    .map-search-chrome__add-stop {
+    height: 1.625rem;
+    align-self: center;
+  }
+
   .map-search-chrome__add:hover,
   .map-search-chrome__add-stop:hover,
   .map-search-chrome__add:focus-visible,

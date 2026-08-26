@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import "@lib/maplibre-worker";
   import type { InitialSearchState } from "@lib/app-data";
   import { getAppData } from "@lib/context";
   import { findCampusPointBySlug } from "@lib/route-links";
@@ -26,6 +27,7 @@
     sidebarStore,
     announcementsStore,
   } from "@lib/store.svelte";
+  import { isRecentSearch } from "@lib/locStorage";
   import { decodeSharePlan } from "@lib/planner/share-codec";
   import { resolveSharedPlan } from "@lib/planner/import-shared";
   import Modal from "@ui/modal/Modal.svelte";
@@ -986,6 +988,9 @@
     display: flex;
     flex-direction: column;
     align-items: flex-end;
+    /* The tools FAB needs its own breathing room above the controls stack —
+       without a row gap it sat flush against the location button. */
+    row-gap: 0.5rem;
     pointer-events: none;
     opacity: 1;
     transition: opacity var(--motion-duration-micro, 200ms) ease;

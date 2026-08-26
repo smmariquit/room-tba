@@ -195,3 +195,9 @@ type EntityLoadResult<T> = {
   rows: T[];
   source: "remote" | "cache";
 };
+
+/** Chromium-only `beforeinstallprompt` event; absent from TypeScript's DOM lib. */
+export type BeforeInstallPromptEvent = Event & {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: string }>;
+};

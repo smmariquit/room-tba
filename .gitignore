@@ -54,3 +54,5 @@ data/transit-geometry-cache/
 
 # graphify knowledge-graph output (local tool artifacts)
 graphify-out/
+public/_astro/maplibre-gl-worker.mjs
+public/_astro/maplibre-gl-shared.mjs

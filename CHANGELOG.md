@@ -1,3 +1,22 @@
+## [2.20.1](https://github.com/uplbtools/room-tba/compare/v2.20.0...v2.20.1) (2026-08-15)
+
+
+### Bug Fixes
+
+* **map:** import map view store ([973fc24](https://github.com/uplbtools/room-tba/commit/973fc24b84e66a0644c582f5424cbbd973ac8a34))
+
+# [2.20.0](https://github.com/uplbtools/room-tba/compare/v2.19.3...v2.20.0) (2026-08-13)
+
+
+### Bug Fixes
+
+* **planner:** auto-load more sections on scroll; count courses in the note ([71bb91a](https://github.com/uplbtools/room-tba/commit/71bb91a6ce0b60d2af225e13745164dcf463a721))
+
+
+### Features
+
+* **map:** camera debug mode via right-click menu ([#964](https://github.com/uplbtools/room-tba/issues/964)) ([405afa9](https://github.com/uplbtools/room-tba/commit/405afa9c136557f8ac9a2181507617d61db8a44c))
+
 ## [2.19.3](https://github.com/uplbtools/room-tba/compare/v2.19.2...v2.19.3) (2026-08-13)
 
 

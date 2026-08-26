@@ -437,7 +437,7 @@
             disabled={savingField !== null}
             fieldSaving={savingField === "divisionName"}
             unchanged={nameDraft.trim() === division.divisionName}
-            onsave={() => saveField("divisionName")}
+            onsave={submitAllChanges}
           >
             {#snippet control()}
               <input
@@ -469,7 +469,7 @@
             disabled={savingField !== null}
             fieldSaving={savingField === "collegeId"}
             unchanged={collegeDraft === String(division.collegeId ?? "")}
-            onsave={() => saveField("collegeId")}
+            onsave={submitAllChanges}
           >
             {#snippet control()}
               <select

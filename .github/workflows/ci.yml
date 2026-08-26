@@ -48,6 +48,9 @@ jobs:
       - name: Biome check (format + lint)
         run: bunx biome ci .
 
+      - name: Undefined identifiers (svelte-check crash class)
+        run: bun run check:undefined-names
+
       - name: Unit tests
         run: bun test src/lib src/constants --path-ignore-patterns='**/*.store.test.ts' --path-ignore-patterns='**/*.component.test.ts' --reporter=junit --reporter-outfile=junit-unit.xml
 

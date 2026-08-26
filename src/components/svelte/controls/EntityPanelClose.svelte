@@ -23,4 +23,11 @@
 
 <style>
   @import "./entity-detail.css";
+
+  /* Mobile sheets already close via the drawer handle, swipe, and scrim taps;
+     a second Close button reads as a duplicate affordance. Desktop keeps it —
+     the pinned drawer has no swipe gesture. */
+  :global(.app-layout:not(.redesign-desktop)) .entity-panel-close {
+    display: none;
+  }
 </style>

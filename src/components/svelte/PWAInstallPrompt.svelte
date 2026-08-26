@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import type { BeforeInstallPromptEvent } from "@lib/types";
   import { toastStore } from "@lib/store.svelte";
   import Download from "@lucide/svelte/icons/download";
   import X from "@lucide/svelte/icons/x";

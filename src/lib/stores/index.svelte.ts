@@ -5,6 +5,7 @@ import { describeLocationFix } from "@lib/geolocation";
 import { campusTransit } from "../../campus.config";
 import { getJSONFetch, getLocalRoomByCode } from "../local/data/utils.js";
 import type { BuildingTypeFilter } from "@constants/building-types";
+import type { ClassMapValue } from "@lib/types";
 import type { RouteTotals } from "../campus-route.js";
 import { orderDayStops, type Weekday } from "../schedule-import/day-stops.js";
 import { matchImportedScheduleRows } from "../schedule-import/match-classes.js";

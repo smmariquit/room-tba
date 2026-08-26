@@ -1,5 +1,6 @@
 <script lang="ts">
   import { modalStore } from "@lib/store.svelte";
+  import type { BeforeInstallPromptEvent } from "@lib/types";
   import { designers } from "@constants/contributors";
   import {
     UPLB_TOOLS_URL,
@@ -58,7 +59,7 @@
   let creditsLoaded = $state(false);
 
 
-  function toAvatarPeople(list: typeof contributors) {
+  function toAvatarPeople(list: typeof designers) {
     return list.map((person) => ({
       name: person.name,
       href: person.href,

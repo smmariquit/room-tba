@@ -1,8 +1,8 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import * as maplibregl from "maplibre-gl";
-  import maplibreWorkerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url";
-  import "maplibre-gl/dist/maplibre-gl.css";
+  import { configureMaplibreWorker } from "@lib/maplibre-worker";
+    import "maplibre-gl/dist/maplibre-gl.css";
   import { campusMap } from "../../../campus.config";
   import {
     campusSlug,
@@ -14,7 +14,7 @@
 
   // See Map.svelte: `?worker&url` (not `?url`) so Vite bundles the v6 module
   // worker with its sibling chunk; `?url` leaves it unable to load, no tiles.
-  maplibregl.setWorkerUrl(maplibreWorkerUrl);
+  configureMaplibreWorker();
 
   /** Plain OSM raster style — works on any deployment, no MapTiler key. */
   const OSM_STYLE: maplibregl.StyleSpecification = {

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { MapLibre, Marker } from "svelte-maplibre";
   import * as maplibregl from "maplibre-gl";
+  import { configureMaplibreWorker } from "@lib/maplibre-worker";
   // `?worker&url`, NOT `?url`. MapLibre 6 is ESM-only and its worker is a
   // module that imports a sibling chunk (maplibre-gl-shared). `?url` copies the
   // worker file verbatim without that sibling, so in production the module
@@ -8,9 +9,8 @@
   // basemap under working pins, #1003). `?worker&url` routes it through Vite's
   // worker pipeline, emitting a self-contained worker with its imports bundled.
   // Ref: MapLibre v5->v6 migration guide (setWorkerUrl + Vite).
-  import maplibreWorkerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url";
-
-  maplibregl.setWorkerUrl(maplibreWorkerUrl);
+  
+  configureMaplibreWorker();
   import { getAppActions, getAppData } from "@lib/context";
   import {
     queryStore,
@@ -383,7 +383,7 @@
   const EXTERNAL_CAMPUSES_MARKER_LAYER_ID = "external-campuses-markers";
   const EXTERNAL_CAMPUSES_LABELS_LAYER_ID = "external-campuses-labels";
   let activeRouteId = $state<string | null>(null);
-  let activeRouteStops = $state<DisplayJeepneyRoute["stops"]>([]);
+  let activeRouteStops = $state<JeepneyRoute["stops"]>([]);
   let activeRouteColor = $state<string>("#dc2626");
   let terrainModeWasEnabled = false;
   let selectedEditKey = $state<string | null>(null);

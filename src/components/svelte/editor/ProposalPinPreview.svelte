@@ -1,6 +1,6 @@
 <script lang="ts">
   import { MapLibre, Marker } from "svelte-maplibre";
-  import type { StyleSpecification } from "maplibre-gl";
+  import type { MapLibreMap, StyleSpecification } from "maplibre-gl";
   import { loadCampusMapStyle } from "@lib/maptiler-key";
   import {
     pinChangeBounds,
@@ -17,7 +17,7 @@
 
   let mapStyle = $state<StyleSpecification | null>(null);
   let styleError = $state(false);
-  let map = $state.raw<maplibregl.Map | null>(null);
+  let map = $state.raw<MapLibreMap | null>(null);
 
   const distance = $derived(pinMoveDistanceMeters(change));
 
