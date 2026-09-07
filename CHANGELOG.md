@@ -1,3 +1,61 @@
+## [2.29.2](https://github.com/uplbtools/room-tba/compare/v2.29.1...v2.29.2) (2026-09-07)
+
+
+### Bug Fixes
+
+* **boot:** self-healing watchdog and honest error card ([fd1f47a](https://github.com/uplbtools/room-tba/commit/fd1f47ad692208da723493946f8a3fbc923a75aa))
+
+## [2.29.1](https://github.com/uplbtools/room-tba/compare/v2.29.0...v2.29.1) (2026-09-07)
+
+
+### Bug Fixes
+
+* **pwa:** prompt-mode service worker updates so deploys stop breaking cached visitors ([b20915e](https://github.com/uplbtools/room-tba/commit/b20915ec22fd021f7439e6cc8483c81112457794))
+
+# [2.29.0](https://github.com/uplbtools/room-tba/compare/v2.28.0...v2.29.0) (2026-08-31)
+
+
+### Bug Fixes
+
+* **transparency:** ad note mentions campus forks as the reach goal ([d25248b](https://github.com/uplbtools/room-tba/commit/d25248b2b7fc80fef9c856c0e6a161c20bff72c3))
+* **transparency:** flatten the ad note ([782be03](https://github.com/uplbtools/room-tba/commit/782be03d1afe36d394a404206dbf90906a29be50))
+* **transparency:** link the campus forks, BulSU to its live site ([985bef1](https://github.com/uplbtools/room-tba/commit/985bef1cb706ef875e05f00f4f143b43012fbc5c))
+* **transparency:** no sponsors this period, correct the lede ([38cdf4e](https://github.com/uplbtools/room-tba/commit/38cdf4edc7b4de025e010f18f245b5126dd09810))
+* **transparency:** note the Vercel invoice is an enlistment peak, not the baseline ([3c35d0a](https://github.com/uplbtools/room-tba/commit/3c35d0a404e36c4a49ab788e0a70bfd8c53597d0))
+* **transparency:** show Meta ads VAT split ([87fbb8d](https://github.com/uplbtools/room-tba/commit/87fbb8d5bfde387136d7dbeb21dccafa25d85318))
+* **transparency:** show the BulSU live URL as visible text ([d13afed](https://github.com/uplbtools/room-tba/commit/d13afed5298f2972a5023b1fffffd04c5be1ae1c))
+
+
+### Features
+
+* **donate+transparency:** anonymity note on donate, grant applications in updates ([041a8b8](https://github.com/uplbtools/room-tba/commit/041a8b848975c33a3fa0d1e65cbffdf376d2c705))
+* **transparency:** ad campaign metrics from the Ads Manager report ([49d3dd5](https://github.com/uplbtools/room-tba/commit/49d3dd53535dff9bb5f89a4796152e64f033200e))
+* **transparency:** AMIS data-cleaning update ([68722ec](https://github.com/uplbtools/room-tba/commit/68722ecd1d48078484fc3e0eb2b44b71981dc28a))
+* **transparency:** community showcases in updates ([2ce0132](https://github.com/uplbtools/room-tba/commit/2ce0132491e6b384139eefe79508036831c738ee))
+* **transparency:** group ledgers by month paid ([60fb98e](https://github.com/uplbtools/room-tba/commit/60fb98e41b0b9755fe2358eb2385f18e7495e490))
+* **transparency:** inline SVG charts for traffic, donations, and the Vercel peak ([fdd09dc](https://github.com/uplbtools/room-tba/commit/fdd09dcdbe6ad686e9e0f37a156c7e1d052aecef))
+
+# [2.28.0](https://github.com/uplbtools/room-tba/compare/v2.27.0...v2.28.0) (2026-08-31)
+
+
+### Features
+
+* **transparency:** note ad-window traffic and donation numbers ([74ce451](https://github.com/uplbtools/room-tba/commit/74ce45183ed3080a1a8e4d9984825f66fb712295))
+
+# [2.24.0](https://github.com/uplbtools/room-tba/compare/v2.23.1...v2.24.0) (2026-08-31)
+
+
+### Features
+
+* **transparency:** add Meta ads spend with redacted billing report ([0bb6120](https://github.com/uplbtools/room-tba/commit/0bb61208c5550f08c5586d1edebf0773e0c5d611))
+
+## [2.23.1](https://github.com/uplbtools/room-tba/compare/v2.23.0...v2.23.1) (2026-08-31)
+
+
+### Bug Fixes
+
+* **transparency:** first report covers July to August 2026 ([a4d5361](https://github.com/uplbtools/room-tba/commit/a4d536177ecc4b66b24851eca288d7ce88c21eda))
+
 ## [2.20.1](https://github.com/uplbtools/room-tba/compare/v2.20.0...v2.20.1) (2026-08-15)
 
 

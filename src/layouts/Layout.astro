@@ -344,7 +344,11 @@ const shareTitle = ogTitle ?? title;
             function onFatalSignal(reason) {
               if (hydrated()) return;
               if (autoResetTried()) {
-                fail(reason);
+                // Give a boot that is still in flight a beat to finish
+                // before painting the card over it.
+                setTimeout(() => {
+                  fail(reason);
+                }, 4000);
                 return;
               }
               markAutoReset();
@@ -358,8 +362,13 @@ const shareTitle = ogTitle ?? title;
                 if (!t || !t.tagName) return;
                 var tag = t.tagName;
                 if (tag !== "SCRIPT" && tag !== "LINK") return;
+                // Only our own hashed bundle counts as fatal. A blocked
+                // third-party script (adblocker eating analytics) must not
+                // nuke a boot that is otherwise fine.
+                var srcUrl = String(t.src || t.href || "");
+                if (srcUrl.indexOf("/_astro/") === -1) return;
                 if (!appIsland()) return;
-                onFatalSignal("static asset failed: " + (t.src || t.href || tag));
+                onFatalSignal("static asset failed: " + srcUrl);
               },
               true,
             );
