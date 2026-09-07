@@ -1,5 +1,6 @@
 <script lang="ts">
   import Bus from "@lucide/svelte/icons/bus";
+  import PersonStanding from "@lucide/svelte/icons/person-standing";
   import ChevronLeft from "@lucide/svelte/icons/chevron-left";
   import ChevronRight from "@lucide/svelte/icons/chevron-right";
   import MapPin from "@lucide/svelte/icons/map-pin";
@@ -7,7 +8,9 @@
   import EntityGoogleMapsLink from "./EntityGoogleMapsLink.svelte";
   import EntityShareCopyLink from "./EntityShareCopyLink.svelte";
   import TransitStopEditor from "./TransitStopEditor.svelte";
+  import { getGoogleStreetViewUrl } from "@lib/google-maps-links";
   import { getJeepneyRouteShareUrl } from "@lib/share-links";
+  import MapChromeActionLink from "@ui/map-chrome/MapChromeActionLink.svelte";
   import { jeepneyStore, transitStore } from "@lib/store.svelte";
   import MapChromeActionChip from "@ui/map-chrome/MapChromeActionChip.svelte";
   import "@ui/map-chrome/map-chrome.css";
@@ -110,6 +113,14 @@
           name={stop.name}
           ariaLabel={`Open ${stop.name} in Google Maps`}
         />
+        <MapChromeActionLink
+          href={getGoogleStreetViewUrl(mapsUrl.lat, mapsUrl.lon)}
+          ariaLabel={`Open ${stop.name} in Google Street View`}
+          toolbar
+        >
+          <PersonStanding size={14} aria-hidden="true" />
+          Street View
+        </MapChromeActionLink>
       {/if}
       <EntityShareCopyLink
         url={getJeepneyRouteShareUrl(route.id, stopIndex, route)}

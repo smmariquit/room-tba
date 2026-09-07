@@ -97,8 +97,13 @@ const PLANS: Record<string, Plan> = {
     note: "OSRM car routing over all 20 stops. OSM relations 337589/337590 map only the in-campus segment, so they were not adopted.",
   },
   forestry: {
-    kind: "keep",
-    note: "OSRM car routing over the campus stops. OSM relations 1954831/1954832 exist but are tagged disused: with 2020 data.",
+    kind: "routed",
+    note: "OSRM car routing over the 14 stops through CPAf, Makiling Botanic Gardens, CFNR, and the residence halls. OSM relations 1954831/1954832 are tagged disused: with 2020 data and predate the residence-hall extension.",
+  },
+
+  "up-rural": {
+    kind: "routed",
+    note: "OSRM car routing over the 10 stops out Pili Drive to Jubileeville, Bay. No OSM relation found for this service.",
   },
 
   // DLTB commuter bus, mapped end to end in OSM under the operator's own name.
@@ -353,7 +358,16 @@ async function main() {
   for (const [routeId, plan] of Object.entries(PLANS)) {
     const stops = stopsByRoute.get(routeId);
     if (!stops || stops.length < 2) {
-      console.warn(`skip  ${routeId}: fewer than two stops in the database`);
+      // A database without this route (a local one holds only the campus
+      // routes) must not erase geometry another run already produced.
+      if (existing[routeId]) {
+        out[routeId] = existing[routeId];
+        console.warn(
+          `carry ${routeId}: fewer than two stops in the database, kept the existing entry`,
+        );
+      } else {
+        console.warn(`skip  ${routeId}: fewer than two stops in the database`);
+      }
       continue;
     }
 

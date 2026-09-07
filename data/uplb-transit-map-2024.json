@@ -1,0 +1,139 @@
+{
+  "source": {
+    "title": "Mapa ng Sistemang Pampublikong Sasakyan sa UP Los Baños / UPLB Public Transit System Map",
+    "creator": "Bernardo \"Berniemack\" Muerong Arellano III (Departamento ng Agham Panlipunan, UPLB)",
+    "version": "1.0, 30 July 2024 (data as of 25 July 2024)",
+    "license": "CC BY-NC-SA 4.0",
+    "licenseNote": "The license covers the map ARTWORK. This file transcribes only the factual route/stop information (facts are not copyrightable); Room TBA re-draws its own presentation and credits the creator as the cross-check source. Do not reuse the map graphic itself in the app or posters.",
+    "contact": "@habagatcentral · habagatcentral.net · up.edu.ph email printed on the map",
+    "dataBasis": "Local knowledge with conformation from the UPLB Office of the Vice Chancellor for Community Affairs (OVCCA); map states stops in campus are exact or approximate, with no official stop names"
+  },
+  "routes": {
+    "kaliwa": {
+      "code": "Si",
+      "name": "Kaliwa Route",
+      "mapColor": "maroon",
+      "stops": [
+        "Si01 CPark-Landbank (Silangan)",
+        "Si02 Makiling School",
+        "Si03 Old Rural-Saint Therese",
+        "Si04 Headquarters (HQ)",
+        "Si05 Seniors Social Garden",
+        "Si06 Engineering",
+        "Si07 Agronomy",
+        "Si08 Animal Husbandry",
+        "Si09 Baker Hall",
+        "Si09-A Men's Dorm (dorm branch)",
+        "Si09-B Women's Dorm (dorm branch)",
+        "Si10 Student Union (SU) (SU branch)",
+        "Si11 Graduate School",
+        "Si12 Library",
+        "Si13 Sacay",
+        "Si14 Church Among the Palms-Christian School",
+        "Si15 Raymundo Gate",
+        "Si16 CPark-DevComm (Kanluran)"
+      ]
+    },
+    "kanan": {
+      "code": "Ka",
+      "name": "Kanan Route",
+      "mapColor": "green",
+      "note": "Same loop as Kaliwa, opposite direction: Ka01 CPark-DevComm ... Ka17 CPark-Landbank. Ka06-A Women's Dorm / Ka06-B Men's Dorm on the dorm branch; Ka07 Mariang Banga and Ka08 SU on the SU branch.",
+      "stops": [
+        "Ka01 CPark-DevComm (Kanluran)",
+        "Ka02 Raymundo Gate",
+        "Ka03 Church Among the Palms-Christian School",
+        "Ka04 Sacay",
+        "Ka05 Library",
+        "Ka06 Graduate School",
+        "Ka06-A Women's Dorm (dorm branch)",
+        "Ka06-B Men's Dorm (dorm branch)",
+        "Ka07 Mariang Banga (SU branch)",
+        "Ka08 Student Union (SU) (SU branch)",
+        "Ka09 Baker Hall",
+        "Ka10 Animal Husbandry",
+        "Ka11 Agronomy",
+        "Ka12 Engineering",
+        "Ka13 Seniors Social Garden",
+        "Ka14 Headquarters (HQ)",
+        "Ka15 Old Rural-Saint Therese",
+        "Ka16 Makiling School",
+        "Ka17 CPark-Landbank (Silangan)"
+      ]
+    },
+    "forestry": {
+      "code": "Fo",
+      "name": "Forestry Route",
+      "mapColor": "yellow/amber",
+      "note": "2024 map path differs from our 2026 ground truth on the lower-campus leg (map: Sacay + Library; ours: CEM, OVCRE, Narra Bridge, Maria Makiling Statue). Upper leg is a one-way loop: up via FPRDI/Botanical Garden/Admin, around FOREHA-Makiling Trail-MAREHA, straight down Makiling Road past the Museum of Natural History.",
+      "stops": [
+        "Fo01 Forestry Terminal",
+        "Fo02 Sacay",
+        "Fo03 Library",
+        "Fo04 University Health Service (UHS)",
+        "Fo05 Public Affairs and Development (CPAf)",
+        "Fo06 Forest Products Research and Development Institute (FPRDI)",
+        "Fo07 Makiling Botanical Garden",
+        "Fo08 Forestry Admin",
+        "Fo09 FOREHA",
+        "Fo10 Makiling Trail",
+        "Fo11 MAREHA",
+        "Fo12 Museum of Natural History (downhill leg)"
+      ]
+    },
+    "up-rural": {
+      "code": "Ru",
+      "name": "UP Rural High-Jubileeville Route",
+      "mapColor": "navy",
+      "stops": [
+        "Ru01 Makiling School",
+        "Ru02 Old Rural-Saint Therese",
+        "Ru03 CEAT Library",
+        "Ru04 Pili Drive",
+        "Ru05 IRRI (interchange: IRRI Station, PNR South Haul)",
+        "Ru06 Putho Tuntungin",
+        "Ru07 IPB",
+        "Ru08 Paciano Rizal",
+        "Ru09 UP Rural High",
+        "Ru10 Jubileeville"
+      ]
+    },
+    "up-college": {
+      "code": "Co",
+      "name": "UP College / UP Gate Route",
+      "mapColor": "maroon+green pair",
+      "note": "Same corridor as the Calamba-Los Baños jeeps we already model as lb-to-calamba; reconcile stop names there instead of adding a duplicate route.",
+      "stops": [
+        "Co01 UP Gate (Grove)",
+        "Co02 Agapita-Lopez",
+        "Co03 College Junction-Olivarez (interchange: College Station, PNR)",
+        "Co04 Anos",
+        "Co05 Los Baños Bayan (near Los Baños Station, PNR)",
+        "Co06 Camp Sakay (Elridge)",
+        "Co07 Bagong Kalsada-Tadlac",
+        "Co08 Pansol",
+        "Co09 Halang",
+        "Co10 Calamba Crossing (near Calamba Station)"
+      ]
+    }
+  },
+  "ridingReminders": [
+    "Jeepneys coming from Calamba Crossing carry a UP COLLEGE or COLLEGE signboard.",
+    "Jeepneys with a UP GATE signboard terminate at Grove and do not enter the campus.",
+    "COLLEGE-bound jeepneys may become Kaliwa, Kanan, Forestry, or UP Gate routes as they approach campus; ask the driver or check the windshield signboard.",
+    "When hailing a jeepney bound for Forestry or Upper Campus, point your index finger upwards.",
+    "Jeepneys crossing Freedom Park may pass either the Student Union or the Dormitories; ask the driver which way it goes.",
+    "Outbound jeepneys post signboards: BAYAN (LB town proper), OLIVAREZ (College Junction / Olivarez Mall), SM CROSSING (SM City Calamba terminal), CROSSING CALAMBA (Calamba Crossing), SAKAY/LALAKAY (Camp Sakay / Lalakay only).",
+    "Campus stops have no official names; names are common place names or nearest landmarks, and stops outside campus are approximate.",
+    "No official public transport route serves UPCO, Jamboree, or the National Arts Center; tricycles are door-to-door and not mapped."
+  ],
+  "rail": [
+    "PNR South Haul: Calamba to Lucena; San Pablo / Lucena trips available; IRRI Station, College Station, Los Baños Station, Calamba Station are on it.",
+    "North-South Commuter Rail (Calamba to Clark Airport) under construction as of mid-2024; no trips between Calamba, Alabang, and Tutuban until done.",
+    "Metro connections drawn on the map: LRT-1 Sucat to Roosevelt, LRT-2 Recto to Antipolo, MRT-3 Taft to North Avenue."
+  ],
+  "buses": [
+    "Direct buses to UPLB from Metro Manila exist (STA CRUZ via Calamba/College signboards; a direct UPLB campus trip from LRT Buendia runs on a scheduled basis per UPLB OVCCA/OVCSA).",
+    "Metro Manila terminals reachable from College Junction: LRT Buendia/Magallanes, Cubao, Alabang, PITX, One Ayala (Makati)."
+  ]
+}

@@ -15,3 +15,8 @@ export function getGoogleMapsPinUrl(
   }
   return `https://www.google.com/maps?q=${lat},${lon}`;
 }
+
+/** Open Street View at the coordinates via the Maps URLs API (no key needed). */
+export function getGoogleStreetViewUrl(lat: number, lon: number): string {
+  return `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${lat},${lon}`;
+}

@@ -1,5 +1,8 @@
 import { describe, expect, test } from "bun:test";
-import { getGoogleMapsPinUrl } from "./google-maps-links";
+import {
+  getGoogleMapsPinUrl,
+  getGoogleStreetViewUrl,
+} from "./google-maps-links";
 
 describe("getGoogleMapsPinUrl", () => {
   test("uses a verified Google Maps place URL when one is curated", () => {
@@ -23,6 +26,14 @@ describe("getGoogleMapsPinUrl", () => {
   test("builds a Google Maps query URL from coordinates", () => {
     expect(getGoogleMapsPinUrl(14.6532, 121.0689)).toBe(
       "https://www.google.com/maps?q=14.6532,121.0689",
+    );
+  });
+});
+
+describe("getGoogleStreetViewUrl", () => {
+  test("builds a Maps URLs API pano viewpoint URL", () => {
+    expect(getGoogleStreetViewUrl(14.16497, 121.24132)).toBe(
+      "https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=14.16497,121.24132",
     );
   });
 });

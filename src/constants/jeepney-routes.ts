@@ -125,7 +125,7 @@ export const JEEPNEY_ROUTES: JeepneyRoute[] = [
     description:
       "Loop between Olivarez Plaza in Los Baños town and the UPLB academic core, passing Raymundo Gate, the Main Library, the dormitories, and CEAT.",
     directionNote:
-      "Kaliwa and Kanan are the same loop; the name says which way the jeep turns after entering the UPLB gate. Kaliwa turns left and follows the stops as listed (Carabao Park / DevCom first); Kanan turns right and serves the same stops in reverse (Carabao Park / Landbank first).",
+      "Kaliwa and Kanan are the same loop; the name says which way the jeep turns after entering the UPLB gate. Kanan follows the stops as listed (Carabao Park / DevCom first); Kaliwa serves the same stops in reverse (Carabao Park / Landbank first). Across Freedom Park a jeep may pass either the Student Union or the Dormitories; ask the driver which way it goes.",
     color: "#dc2626",
     fare: STANDARD_CAMPUS_FARE,
     stops: [
@@ -215,8 +215,9 @@ export const JEEPNEY_ROUTES: JeepneyRoute[] = [
         lon: 121.2443733752706,
       },
       {
-        name: "College of Engineering and Agro-Industrial Technology",
-        description: "Stop for CEAT classrooms and laboratories.",
+        name: "CEAT",
+        description:
+          "Stop for the College of Engineering and Agro-Industrial Technology classrooms and laboratories.",
         lat: 14.16087221013792,
         lon: 121.24495080555562,
       },
@@ -266,8 +267,10 @@ export const JEEPNEY_ROUTES: JeepneyRoute[] = [
     id: "forestry",
     name: "Forestry",
     description:
-      "Connects the campus core to the upper Forestry campus: from the Forestry jeep terminal past the Main Library area, Narra Bridge, and the University Health Service, climbing to the College of Forestry and Natural Resources.",
-    color: "#15803d",
+      "Connects the campus core to the upper Forestry campus: from the Forestry jeep terminal past Narra Bridge, the University Health Service, and CPAf, climbing past Makiling Botanic Gardens to the College of Forestry and Natural Resources and the FOREHA, New FOREHA, and MAREHA residence halls.",
+    directionNote:
+      "Uphill the jeep serves the stops as listed, ending at MAREHA. It then comes back down the same road, except it goes straight along Makiling Road instead of turning left again at the Admin Building, so downhill riders board the same stops in reverse.",
+    color: "#d97706",
     fare: STANDARD_CAMPUS_FARE,
     stops: [
       {
@@ -310,12 +313,152 @@ export const JEEPNEY_ROUTES: JeepneyRoute[] = [
         lon: 121.23868610580267,
       },
       {
+        name: "CPAf",
+        description:
+          "Stop serving the College of Public Affairs and Development on the climb to the upper campus.",
+        lat: 14.16031,
+        lon: 121.237609,
+      },
+      {
+        name: "Makiling Botanic Gardens",
+        description: "Stop at the Makiling Botanic Gardens entrance.",
+        lat: 14.156688,
+        lon: 121.233989,
+      },
+      {
+        name: "Forestry Admin Building",
+        description:
+          "Stop at the College of Forestry and Natural Resources administration building.",
+        lat: 14.154433,
+        lon: 121.234541,
+      },
+      {
         name: "Forest Biological Sciences Building",
         description:
           "Upper-campus stop near the Forest Biological Sciences Building.",
         lat: 14.154716857167369,
         lon: 121.2360341113496,
       },
+      {
+        name: "Upper Forestry Jeep Terminal",
+        description:
+          "Upper-campus terminal just southeast (behind) the Forestry Admin Building.",
+        // ponytail: eyeballed ~30 m SE of the admin building, no sourced pin yet.
+        lat: 14.15425,
+        lon: 121.2348,
+      },
+      {
+        name: "Forestry Residence Hall (FOREHA)",
+        description: "Stop at the Forestry Residence Hall.",
+        lat: 14.152468,
+        lon: 121.234908,
+      },
+      {
+        name: "New Forestry Residence Hall (New FOREHA)",
+        description: "Stop at the New Forestry Residence Hall.",
+        lat: 14.152119,
+        lon: 121.234358,
+      },
+      {
+        name: "Makiling Residence Hall (MAREHA)",
+        description:
+          "Last uphill stop, at the Makiling Residence Hall; the jeep heads back down campus from here.",
+        lat: 14.151829,
+        lon: 121.235084,
+      },
+    ],
+  },
+  {
+    id: "up-rural",
+    name: "UP Rural / Jubileeville",
+    description:
+      "Runs from the campus core out along Pili Drive past IRRI and IPB to Putho Tuntungin, Paciano Rizal, UP Rural High School, and Jubileeville in Bay.",
+    directionNote:
+      "Outbound the jeep serves the stops as listed, ending at Jubileeville; it returns to campus along the same road in reverse.",
+    color: "#1e3a8a",
+    fare: STANDARD_CAMPUS_FARE,
+    stops: [
+      {
+        name: "Makiling School",
+        description:
+          "Stop beside the UP Rural High School / Makiling School area.",
+        lat: 14.165744564457338,
+        lon: 121.24426410223518,
+      },
+      {
+        name: "Old Rural-Saint Therese",
+        description:
+          "Stop near St. Therese and the old UP Rural High School site.",
+        lat: 14.165120117289403,
+        lon: 121.24456008780996,
+      },
+      {
+        name: "CEAT Library",
+        description: "Stop near the CEAT Library on the way out to Pili Drive.",
+        // ponytail: anchored to the CEAT building pin; exact roadside stop unverified.
+        lat: 14.162271,
+        lon: 121.247953,
+      },
+      {
+        name: "Pili Drive",
+        description: "Stop along Pili Drive between campus and IRRI.",
+        // ponytail: midpoint estimate on Pili Drive itself, verify on the ground.
+        lat: 14.1654,
+        lon: 121.2517,
+      },
+      {
+        name: "IRRI",
+        description:
+          "Stop at the International Rice Research Institute; IRRI Station on the PNR South Haul line is nearby.",
+        lat: 14.168834,
+        lon: 121.255221,
+      },
+      {
+        name: "Putho Tuntungin",
+        description: "Stop in Barangay Putho-Tuntungin, Los Baños.",
+        lat: 14.1514804,
+        lon: 121.2524347,
+      },
+      {
+        name: "IPB",
+        description: "Stop at the Institute of Plant Breeding.",
+        lat: 14.151468,
+        lon: 121.262073,
+      },
+      {
+        name: "Paciano Rizal",
+        description: "Stop in Barangay Paciano Rizal, Bay.",
+        lat: 14.1524888,
+        lon: 121.2665505,
+      },
+      {
+        name: "UP Rural High",
+        description: "Stop at the UP Rural High School campus in Bay.",
+        lat: 14.1517146,
+        lon: 121.271828,
+      },
+      {
+        name: "Jubileeville",
+        description: "End of the route at Jubileeville subdivision, Bay.",
+        lat: 14.1494971,
+        lon: 121.2744736,
+      },
     ],
   },
 ];
+
+/**
+ * Rider tips transcribed from the UPLB Public Transit System Map (2024) by
+ * Bernardo "Berniemack" Muerong Arellano III, shown in the route modal with
+ * credit. Facts only; the map artwork itself is CC BY-NC-SA and is not reused.
+ */
+export const JEEPNEY_RIDING_NOTES: string[] = [
+  "Jeepneys from Calamba Crossing carry a UP COLLEGE or COLLEGE signboard; they may become Kaliwa, Kanan, Forestry, or UP Gate routes near campus. Check the windshield signboard or ask the driver.",
+  "A UP GATE signboard means the jeep stops at Grove and does not enter campus.",
+  "Hailing a jeep bound for Forestry or Upper Campus? Point your index finger upwards.",
+  "Outbound signboards: BAYAN (town proper), OLIVAREZ (College Junction), SM CROSSING, CROSSING CALAMBA, SAKAY/LALAKAY.",
+  "Campus stops have no official names or markers; hail or alight anywhere safe along the route.",
+];
+
+export const TRANSIT_DATA_CREDIT =
+  'Route data cross-checked with the UPLB Public Transit System Map (2024) by Bernardo "Berniemack" Muerong Arellano III.';

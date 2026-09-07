@@ -4,6 +4,8 @@
   import { jeepneyStore, modalStore, transitStore } from "@lib/store.svelte";
   import {
     JEEPNEY_FARE_NOTE,
+    JEEPNEY_RIDING_NOTES,
+    TRANSIT_DATA_CREDIT,
     resolveRouteGeometry,
     type StoredRouteGeometry,
   } from "@constants/jeepney-routes";
@@ -113,6 +115,14 @@
         {/each}
       </ol>
       <TransitStopEditor routeId={route.id} routeName={route.name} />
+
+      <h3 class="jeepney-modal__stops-title">Riding tips</h3>
+      <ul class="jeepney-modal__tips">
+        {#each JEEPNEY_RIDING_NOTES as note (note)}
+          <li>{note}</li>
+        {/each}
+      </ul>
+      <p class="jeepney-modal__credit">{TRANSIT_DATA_CREDIT}</p>
     </div>
 
     <div class="jeepney-modal__actions">
@@ -235,6 +245,22 @@
     margin: 0;
     font-size: 0.75rem;
     color: hsl(0, 0%, 32%);
+  }
+
+  .jeepney-modal__tips {
+    margin: 0;
+    padding-left: 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    font-size: 0.8125rem;
+    color: hsl(0, 0%, 24%);
+  }
+
+  .jeepney-modal__credit {
+    margin: 0;
+    font-size: 0.6875rem;
+    color: hsl(0, 0%, 45%);
   }
 
   .jeepney-modal__geometry-note {
