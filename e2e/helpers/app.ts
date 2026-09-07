@@ -51,9 +51,11 @@ export async function waitForAppBoot(page: Page, timeout = 120_000) {
 
   // Search is present in every map mode. The retired term chip was removed
   // from the chrome, so it must not gate the entire E2E suite.
+  // Do not focus it: since the Aug 2026 chrome redesign a focused search
+  // hides the map filter chips, which broke every browse test that opened
+  // a directory right after boot.
   const search = campusSearchBox(page);
   await search.waitFor({ state: "visible", timeout: 30_000 });
-  await search.focus();
 }
 
 export async function gotoHome(page: Page) {

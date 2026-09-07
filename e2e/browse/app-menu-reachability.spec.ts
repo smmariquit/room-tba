@@ -63,6 +63,8 @@ for (const viewport of [
       page,
     }) => {
       const panel = await openMenu(page);
+      // Leaderboard lives under the collapsed community disclosure now.
+      await panel.getByText("Community & project links").click();
       await expect(
         panel.getByRole("button", { name: /^leaderboard$/i }),
       ).toBeVisible();
