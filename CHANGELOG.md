@@ -1,3 +1,10 @@
+## [2.29.2](https://github.com/uplbtools/room-tba/compare/v2.29.1...v2.29.2) (2026-09-07)
+
+
+### Bug Fixes
+
+* **boot:** self-healing watchdog and honest error card ([fd1f47a](https://github.com/uplbtools/room-tba/commit/fd1f47ad692208da723493946f8a3fbc923a75aa))
+
 ## [2.29.1](https://github.com/uplbtools/room-tba/compare/v2.29.0...v2.29.1) (2026-09-07)
 
 
