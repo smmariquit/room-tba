@@ -91,7 +91,7 @@
     "dotenv": "^17.4.2",
     "drizzle-orm": "^0.45.2",
     "es-toolkit": "^1.52.0",
-    "maplibre-gl": "^6.6.0",
+    "maplibre-gl": "^6.7.0",
     "pdf-lib": "^1.17.1",
     "pg": "^8.23.0",
     "svelte": "^5.57.0",
