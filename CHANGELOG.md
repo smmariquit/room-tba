@@ -1,3 +1,10 @@
+## [2.29.1](https://github.com/uplbtools/room-tba/compare/v2.29.0...v2.29.1) (2026-09-07)
+
+
+### Bug Fixes
+
+* **pwa:** prompt-mode service worker updates so deploys stop breaking cached visitors ([b20915e](https://github.com/uplbtools/room-tba/commit/b20915ec22fd021f7439e6cc8483c81112457794))
+
 # [2.29.0](https://github.com/uplbtools/room-tba/compare/v2.28.0...v2.29.0) (2026-08-31)
 
 
