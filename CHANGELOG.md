@@ -1,3 +1,10 @@
+## [2.29.3](https://github.com/uplbtools/room-tba/compare/v2.29.2...v2.29.3) (2026-09-07)
+
+
+### Bug Fixes
+
+* **boot:** fatal signals only for our own chunks, grace period before the card ([0a78e77](https://github.com/uplbtools/room-tba/commit/0a78e77ecdcd00a6416c29acd34a6f78283e3ebb))
+
 ## [2.29.2](https://github.com/uplbtools/room-tba/compare/v2.29.1...v2.29.2) (2026-09-07)
 
 
