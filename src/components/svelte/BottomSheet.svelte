@@ -94,8 +94,11 @@
     if (!(target instanceof Element)) return true;
     if (target.closest(".bottom-sheet__handle")) return false;
     return Boolean(
+      // summary: native <details> disclosures (editor "More fields",
+      // calendar term cards) toggle on click; capturing the pointer for a
+      // sheet drag swallowed those taps entirely on mobile.
       target.closest(
-        "button, a, input, textarea, select, label, [role='button']",
+        "button, a, input, textarea, select, label, summary, [role='button']",
       ),
     );
   }

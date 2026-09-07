@@ -9,12 +9,16 @@ test("Campus directory controls open browse panels", async ({ page }) => {
   await openCampusDirectory(page, "classes");
 
   await expect(
-    page.locator(".side-panel-details h2", { hasText: "All classes" }),
+    page.locator(".side-panel-details h2, .bottom-sheet__body h2", {
+      hasText: "All classes",
+    }),
   ).toBeVisible();
 
   await openCampusDirectory(page, "buildings");
 
   await expect(
-    page.locator(".side-panel-details h2", { hasText: "Buildings" }),
+    page.locator(".side-panel-details h2, .bottom-sheet__body h2", {
+      hasText: "Buildings",
+    }),
   ).toBeVisible();
 });

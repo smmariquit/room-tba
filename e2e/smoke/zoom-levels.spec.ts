@@ -17,6 +17,8 @@ test("Layout remains functional at 150% zoom", async ({ page }) => {
 
   await openCampusDirectory(page, "buildings");
   await expect(
-    page.locator(".side-panel-details h2", { hasText: "Buildings" }),
+    page.locator(".side-panel-details h2, .bottom-sheet__body h2", {
+      hasText: "Buildings",
+    }),
   ).toBeVisible();
 });

@@ -34,7 +34,8 @@ test.describe("side panel parity", () => {
   }) => {
     test.skip(!isMobile, "mobile only");
     await openBuilding(page);
-    const panel = page.locator(".drawer-card").first();
+    // Mobile shows details in the bottom sheet, desktop in the drawer card.
+    const panel = page.locator(".drawer-card, .bottom-sheet").first();
     await expect(panel).toBeVisible();
     const overflow = await panel.evaluate(
       (el) => el.scrollWidth <= el.clientWidth + 2,

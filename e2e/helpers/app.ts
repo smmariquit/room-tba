@@ -58,6 +58,17 @@ export async function waitForAppBoot(page: Page, timeout = 120_000) {
   await search.waitFor({ state: "visible", timeout: 30_000 });
 }
 
+/** Mobile details live in a bottom sheet; expand it so panel content is reachable. */
+export async function expandDetailsSheet(page: Page) {
+  const expand = page.getByRole("button", {
+    name: "Expand details",
+    exact: true,
+  });
+  if (await expand.isVisible({ timeout: 1500 }).catch(() => false)) {
+    await expand.click();
+  }
+}
+
 export async function gotoHome(page: Page) {
   await suppressLandingModal(page);
   await page.goto("/");
