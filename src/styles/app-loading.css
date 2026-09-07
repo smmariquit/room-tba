@@ -154,6 +154,18 @@
   line-height: 1.5;
 }
 
+.app-boot-error__note {
+  margin: 0.75rem 0 0;
+  color: var(--app-loading-muted);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.app-boot-error__note a {
+  color: hsl(5, 53%, 32%);
+  font-weight: 600;
+}
+
 .app-boot-error__actions {
   display: flex;
   flex-wrap: wrap;
