@@ -28,7 +28,13 @@ export default defineConfig({
   integrations: [
     svelte(),
     AstroPWA({
-      registerType: "autoUpdate",
+      // "prompt" instead of "autoUpdate": an auto-updating worker seizes
+      // control of already-open pages mid-boot, their old hashed chunks miss
+      // the new precache, the fetches 404, and every cached visitor sees the
+      // boot error after each deploy. With "prompt" the old worker keeps
+      // serving its own consistent bundle until the user applies the update
+      // (StatusBar listens for pwa:need-refresh, wired in src/pwa.ts).
+      registerType: "prompt",
       workbox: {
         // AppRoot includes map + editor + PGlite; auth/proposals pushed it past 2 MiB.
         maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
