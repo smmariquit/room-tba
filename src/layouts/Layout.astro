@@ -226,7 +226,15 @@ const shareTitle = ogTitle ?? title;
       // Kept out of an Astro expression on purpose: inside `{cond ? (...) :
       // null}` the script body is parsed as JSX and every `{` breaks it.
       (() => {
-        var TIMEOUT_MS = 15000;
+        // Staged watchdog: first check at FIRST_CHECK_MS, then keep
+        // extending while the page is still visibly making progress (new
+        // resource fetches landing), up to MAX_WAIT_MS. A slow enlistment-week
+        // connection that is still downloading chunks gets time to finish
+        // instead of a premature error card.
+        var FIRST_CHECK_MS = 15000;
+        var RECHECK_MS = 10000;
+        var MAX_WAIT_MS = 45000;
+        var AUTO_RESET_FLAG = "app-boot-auto-reset";
 
         // Only the app pages mount AppRoot, so this both scopes the watchdog
         // and avoids firing on a static page's unrelated island.
@@ -297,7 +305,10 @@ const shareTitle = ogTitle ?? title;
                 '<div class="app-boot-error__actions">' +
                 '<button type="button" id="app-boot-reload" class="app-boot-error__button app-boot-error__button--primary">Reload</button>' +
                 '<button type="button" id="app-boot-reset" class="app-boot-error__button">Clear saved copy and reload</button>' +
-                "</div></div>";
+                "</div>" +
+                '<p class="app-boot-error__note">Clearing keeps your saved schedules. Offline maps will re-download.</p>' +
+                '<p class="app-boot-error__note">Still stuck? <a href="/messenger">Message us</a> and we will help.</p>' +
+                "</div>";
               document.body.appendChild(box);
 
               document
@@ -310,9 +321,90 @@ const shareTitle = ogTitle ?? title;
                 .addEventListener("click", resetAppData);
             }
 
-            setTimeout(() => {
-              fail("island never hydrated after " + TIMEOUT_MS + "ms");
-            }, TIMEOUT_MS);
+            function autoResetTried() {
+              try {
+                return sessionStorage.getItem(AUTO_RESET_FLAG) === "1";
+              } catch (err) {
+                return true;
+              }
+            }
+
+            function markAutoReset() {
+              try {
+                sessionStorage.setItem(AUTO_RESET_FLAG, "1");
+              } catch (err) {
+                /* private mode: skip the silent retry */
+              }
+            }
+
+            // A chunk that 404s or fails to parse will never hydrate no
+            // matter how long we wait. Recover silently once per session by
+            // dropping the stale copy and reloading; only show the card when
+            // that already failed.
+            function onFatalSignal(reason) {
+              if (hydrated()) return;
+              if (autoResetTried()) {
+                fail(reason);
+                return;
+              }
+              markAutoReset();
+              resetAppData();
+            }
+
+            window.addEventListener(
+              "error",
+              (event) => {
+                var t = event.target;
+                if (!t || !t.tagName) return;
+                var tag = t.tagName;
+                if (tag !== "SCRIPT" && tag !== "LINK") return;
+                if (!appIsland()) return;
+                onFatalSignal("static asset failed: " + (t.src || t.href || tag));
+              },
+              true,
+            );
+
+            window.addEventListener("unhandledrejection", (event) => {
+              var msg = String((event.reason && event.reason.message) || event.reason || "");
+              if (!/dynamically imported module|Importing a module script failed|ChunkLoadError/i.test(msg)) return;
+              if (!appIsland()) return;
+              onFatalSignal("chunk import failed: " + msg.slice(0, 120));
+            });
+
+            var bootStart = Date.now();
+            var lastResourceCount = 0;
+
+            function resourceCount() {
+              try {
+                return performance.getEntriesByType("resource").length;
+              } catch (err) {
+                return 0;
+              }
+            }
+
+            function checkBoot() {
+              if (hydrated()) return;
+              var waited = Date.now() - bootStart;
+              var count = resourceCount();
+              var progressing = count > lastResourceCount;
+              lastResourceCount = count;
+              if (waited < MAX_WAIT_MS && progressing) {
+                // Still downloading: a slow connection deserves patience, not
+                // an error card mid-boot.
+                setTimeout(checkBoot, RECHECK_MS);
+                return;
+              }
+              fail(
+                "island never hydrated after " +
+                  waited +
+                  "ms (progressing: " +
+                  progressing +
+                  ")",
+              );
+            }
+
+            lastResourceCount = resourceCount();
+            setTimeout(checkBoot, FIRST_CHECK_MS);
           })();
     </script>
     <slot />
