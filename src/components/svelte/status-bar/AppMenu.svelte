@@ -20,6 +20,7 @@
   import BookText from "@lucide/svelte/icons/book-text";
   import { onMount } from "svelte";
   import { APP_VERSION_LABEL } from "@constants/version";
+  import OnlineCounter from "../OnlineCounter.svelte";
   import { statusBarNavGroups } from "@constants/status-bar-links";
   import { trapFocus } from "@lib/focus-trap";
   import { openShortcutsHelp } from "@lib/keyboard-shortcuts";
@@ -263,6 +264,11 @@
       aria-label="App menu"
       use:portal
     >
+      <!-- Live presence lost its bottom-band chip in the Aug 2026 chrome
+           redesign; the menu is its passive-status home now. -->
+      <div class="app-menu__presence">
+        <OnlineCounter />
+      </div>
       {#if contributorSession}
         <section class="app-menu__section" aria-label="Signed in">
           <MapChromeSession
@@ -503,6 +509,19 @@
 </div>
 
 <style>
+  .app-menu__presence {
+    display: flex;
+    justify-content: flex-end;
+    padding: 0.25rem 0.25rem 0;
+  }
+
+  .app-menu__presence :global(.online-counter) {
+    height: auto;
+    padding: 0.25rem 0.625rem;
+    box-shadow: none;
+    font-size: 0.75rem;
+  }
+
   .app-menu {
     position: relative;
     display: inline-flex;
