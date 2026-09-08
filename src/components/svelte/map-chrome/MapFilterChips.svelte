@@ -87,6 +87,7 @@
   });
 
   function handleChip(id: ChipId) {
+    jeepneyStore.closeStop();
     if (id === "events") {
       queryStore.updateQuery({
         category: "events",

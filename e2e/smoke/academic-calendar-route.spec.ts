@@ -25,8 +25,17 @@ test.describe("academic calendar route", () => {
     await expect(
       dialog.getByText(/official UPLB academic calendar/),
     ).toBeVisible();
-    // The seeded E2E term (1252) must appear as a term card.
-    await expect(dialog.getByText("CRS 1252")).toBeVisible();
+    // The seeded E2E term (1252) must appear as a term card. Cards are
+    // native disclosures and only the in-session term starts open, so
+    // expand the seeded term's card before asserting its CRS id.
+    const card = dialog.locator("details.acal-card", {
+      hasText: "CRS 1252",
+    });
+    await expect(card).toHaveCount(1);
+    if (!(await card.getByText("CRS 1252").isVisible())) {
+      await card.locator("summary").click();
+    }
+    await expect(card.getByText("CRS 1252")).toBeVisible();
     await expect(page).toHaveURL(/\/calendar(\/|\?|$)/);
   });
 });

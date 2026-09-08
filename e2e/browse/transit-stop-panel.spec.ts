@@ -24,7 +24,9 @@ test.describe("transit stop deep link", () => {
     // reactive flush), killing the Svelte scheduler — clicks everywhere
     // stopped working while hover styles kept running. Browsing to another
     // sidebar tab must still close the stop panel.
-    await page.getByRole("button", { name: "Buildings", exact: true }).click();
+    await page
+      .getByRole("button", { name: "Class Buildings", exact: true })
+      .click();
     await expect(stopPanel).toBeHidden({ timeout: 10_000 });
   });
 });

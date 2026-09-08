@@ -104,17 +104,18 @@ test.describe("today day route", () => {
     });
   });
 
-  test("status-bar chip routes today's classes from the map", async ({
-    page,
-  }) => {
+  test("Map tools routes today's classes from the map", async ({ page }) => {
     await prepareDayRoutePage(page);
     await page.goto("/");
     await waitForAppBoot(page);
 
-    // Hidden-not-disabled surface: it only exists with routable classes today.
-    const chip = page.getByRole("button", { name: "Route my day" });
-    await expect(chip).toBeVisible({ timeout: 30_000 });
-    await chip.click();
+    // The day route moved into the Map tools toolbox with the chrome
+    // redesign. Hidden-not-disabled: the tool only exists with routable
+    // classes today.
+    await page.getByRole("button", { name: "Map tools" }).first().click();
+    const tool = page.getByRole("button", { name: /Route my day/ });
+    await expect(tool).toBeVisible({ timeout: 30_000 });
+    await tool.click();
     await expect(page.locator(".schedule-route-stop-pin")).toHaveCount(2, {
       timeout: 30_000,
     });

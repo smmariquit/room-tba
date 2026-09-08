@@ -1,5 +1,5 @@
 import { test, expect, type Page } from "@playwright/test";
-import { gotoHome, waitForAppBoot } from "../helpers/app";
+import { clickIfAppears, gotoHome, waitForAppBoot } from "../helpers/app";
 import { openCampusDirectory } from "../helpers/map-tools";
 
 test.describe("campus browsing", () => {
@@ -92,7 +92,12 @@ test.describe("campus browsing", () => {
       timeout: 10_000,
     });
 
-    await page.getByRole("button", { name: "Close browse list" }).click();
+    // The mobile sheet has no close affordance on the list; the next chip
+    // replaces the list either way, so closing is desktop-only.
+    await clickIfAppears(
+      page.getByRole("button", { name: "Close browse list" }),
+      2000,
+    );
     await browse(page, "services");
     await expect(
       page.getByRole("heading", { name: "Services & Establishments" }),

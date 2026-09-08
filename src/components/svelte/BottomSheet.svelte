@@ -94,8 +94,11 @@
     if (!(target instanceof Element)) return true;
     if (target.closest(".bottom-sheet__handle")) return false;
     return Boolean(
+      // summary: native <details> disclosures (editor "More fields",
+      // calendar term cards) toggle on click; capturing the pointer for a
+      // sheet drag swallowed those taps entirely on mobile.
       target.closest(
-        "button, a, input, textarea, select, label, [role='button']",
+        "button, a, input, textarea, select, label, summary, [role='button']",
       ),
     );
   }
@@ -146,12 +149,23 @@
     const delta = event.clientY - dragStartY;
     const velocity = Math.abs(delta) / Math.max(elapsed, 1);
     const moved = dragMoved;
+    const fromHandle = dragFromHandle;
 
     dragStartY = null;
     dragFromHandle = false;
     dragOffset = 0;
 
-    if (!moved) return;
+    if (!moved) {
+      // setPointerCapture retargets the pointerup to the sheet, so the
+      // browser never delivers a click to the handle button. Treat a
+      // no-move press on the handle as the tap it is, or the handle can
+      // only be dragged, never tapped.
+      if (fromHandle) {
+        snap = snap === "peek" ? "expanded" : "peek";
+        pointerToggledAt = performance.now();
+      }
+      return;
+    }
 
     const intent = resolveBottomSheetRelease({
       delta,
@@ -174,7 +188,11 @@
     dragOffset = 0;
   }
 
+  // Keyboard activation (Enter/Space) still arrives as a click; a pointer
+  // tap was already handled in onSheetPointerUp, so swallow its echo.
+  let pointerToggledAt = 0;
   function onHandleClick() {
+    if (performance.now() - pointerToggledAt < 400) return;
     if (dragMoved) {
       dragMoved = false;
       return;

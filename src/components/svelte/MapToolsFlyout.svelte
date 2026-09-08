@@ -1,6 +1,7 @@
 <script lang="ts">
   import ChevronDown from "@lucide/svelte/icons/chevron-down";
   import ChevronRight from "@lucide/svelte/icons/chevron-right";
+  import Route from "@lucide/svelte/icons/route";
   import Ruler from "@lucide/svelte/icons/ruler";
   import Timer from "@lucide/svelte/icons/timer";
   // Wrench, not layers: this trigger opens a toolbox (travel time, measure
@@ -13,6 +14,8 @@
     travelTimeStore,
     type MapToolsSection,
   } from "@lib/store.svelte";
+  import { sidebarStore } from "@lib/store.svelte";
+  import { routableTodayWeekday, routeToday } from "@lib/today-route";
   import { panelFadeIn, panelFadeOut } from "@lib/motion";
   import MapViewControls from "@ui/MapViewControls.svelte";
   import WaybackImageryControl from "@ui/WaybackImageryControl.svelte";
@@ -62,6 +65,25 @@
     travelTimeStore.toggle();
     // Hand the map back so the user can tap an origin right away.
     if (travelTimeStore.active) mapToolsStore.close();
+  }
+
+  // Day route lived on its own status-bar chip before the chrome redesign;
+  // the redesign dropped that mount, so the toolbox is its home now. Hidden
+  // when there is nothing to route today, same as the old chip.
+  const dayRoutable = $derived(routableTodayWeekday() !== null);
+  let dayRouting = $state(false);
+
+  async function handleRouteMyDay() {
+    if (dayRouting) return;
+    dayRouting = true;
+    try {
+      if (await routeToday()) {
+        mapToolsStore.close();
+        sidebarStore.changeOpened("map");
+      }
+    } finally {
+      dayRouting = false;
+    }
   }
 
   function toggleMeasureRoute() {
@@ -122,6 +144,24 @@
         title="Map tools"
         onclose={() => mapToolsStore.close()}
       >
+        {#if dayRoutable}
+          <button
+            type="button"
+            class="map-tools-flyout__tool"
+            aria-busy={dayRouting}
+            onclick={handleRouteMyDay}
+          >
+            <Route size={18} aria-hidden="true" />
+            <span class="map-tools-flyout__tool-copy">
+              <span class="map-tools-flyout__tool-label">Route my day</span>
+              <span class="map-tools-flyout__tool-description">
+                {dayRouting
+                  ? "Routing your classes now"
+                  : "Walk route through today's classes"}
+              </span>
+            </span>
+          </button>
+        {/if}
         <button
           type="button"
           class="map-tools-flyout__tool"
