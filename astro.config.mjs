@@ -201,7 +201,9 @@ export default defineConfig({
 
   redirects: {
     "/contribute": "/?contribute=1",
-    "/wiki/transparency": "/transparency",
+    // The money report moved to the org site; keep both old paths alive.
+    "/wiki/transparency": "https://www.uplb.tools/transparency",
+    "/transparency": "https://www.uplb.tools/transparency",
     "/discord": campusCommunity.discordUrl,
     "/messenger": MESSENGER_CONTRIBUTE_TARGET,
     "/messenger/contribute": MESSENGER_CONTRIBUTE_TARGET,

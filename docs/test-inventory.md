@@ -6,8 +6,8 @@ Running list of **automated** tests in this repo. Regenerate after adding or mov
 bun run generate:test-inventory
 ```
 
-**Last generated:** 2026-08-10<br>
-**Total spec files:** 285
+**Last generated:** 2026-09-08<br>
+**Total spec files:** 294
 
 See [testing.md](testing.md) for commands, CI gates, and databases. Issue-linked expectations: [issue-test-matrix.md](issue-test-matrix.md).
 
@@ -15,11 +15,11 @@ See [testing.md](testing.md) for commands, CI gates, and databases. Issue-linked
 
 | Command | Config / runner | Files |
 | ------- | ---------------- | ----- |
-| `bun test src` | Bun — unit (`src/lib`, `src/constants`) | 126 |
-| `bun run test:components` | Vitest — stores + Svelte @320px | 67 |
+| `bun test src` | Bun — unit (`src/lib`, `src/constants`) | 130 |
+| `bun run test:components` | Vitest — stores + Svelte @320px | 71 |
 | `bun run test:integration` | Bun — HTTP + services (E2E DB) | 16 |
 | `bun run e2e` | Playwright blocking — local preview | 49 |
-| `bun run e2e:advisory` | Playwright advisory — non-blocking CI | 18 |
+| `bun run e2e:advisory` | Playwright advisory — non-blocking CI | 19 |
 | `bun run e2e:staging` | Playwright — live staging URL | 3 |
 | `bun run check:migrations` | Schema table guard (not a spec file) | 1 script |
 
@@ -39,7 +39,7 @@ See [testing.md](testing.md) for commands, CI gates, and databases. Issue-linked
 
 Playwright **blocking** uses [playwright.config.ts](../playwright.config.ts) (`testDir: e2e`, ignores `advisory/` + `staging/`). Projects: **desktop-chrome**, **mobile-chrome** (skips `@desktop-only`).
 
-## Unit tests (Bun) — 126 files
+## Unit tests (Bun) — 130 files
 
 `bun test src/lib src/constants` (excludes `*.store.test.ts`).
 
@@ -109,6 +109,7 @@ Playwright **blocking** uses [playwright.config.ts](../playwright.config.ts) (`t
 - `src/lib/landmark-images.test.ts`
 - `src/lib/like-escape.test.ts`
 - `src/lib/local/clear-cached-data.test.ts`
+- `src/lib/local/data/app-data-snapshot.test.ts`
 - `src/lib/local/data/campus-directory-sync.test.ts`
 - `src/lib/local/data/pglite-schema.test.ts`
 - `src/lib/local/data/sync-keys.test.ts`
@@ -146,6 +147,7 @@ Playwright **blocking** uses [playwright.config.ts](../playwright.config.ts) (`t
 - `src/lib/schedule-import/day-stops.test.ts`
 - `src/lib/schedule-import/match-classes.test.ts`
 - `src/lib/schedule-renderer.test.ts`
+- `src/lib/search-suggestions.test.ts`
 - `src/lib/server/kubo-dorm-directory.test.ts`
 - `src/lib/services/admin-service.test.ts`
 - `src/lib/services/bulk-history.test.ts`
@@ -162,6 +164,7 @@ Playwright **blocking** uses [playwright.config.ts](../playwright.config.ts) (`t
 - `src/lib/term-label.test.ts`
 - `src/lib/term-url.test.ts`
 - `src/lib/today-agenda.test.ts`
+- `src/lib/transit-map-pdf.test.ts`
 - `src/lib/transit-urls.test.ts`
 - `src/lib/travel-graph/directions-fit.test.ts`
 - `src/lib/travel-graph/engine.test.ts`
@@ -169,6 +172,7 @@ Playwright **blocking** uses [playwright.config.ts](../playwright.config.ts) (`t
 - `src/lib/travel-graph/plan-multi-leg.test.ts`
 - `src/lib/travel-graph/route-proximity.test.ts`
 - `src/lib/turnstile-core.test.ts`
+- `src/lib/wayback-imagery.test.ts`
 
 
 ## Store tests (Vitest) — 19 files
@@ -196,7 +200,7 @@ Included in `bun run test:components`.
 - `src/lib/stores/ui-stores.store.test.ts`
 
 
-## Component tests (Vitest) — 48 files
+## Component tests (Vitest) — 52 files
 
 Layout guards at 320px / 768px where noted. Included in `bun run test:components`.
 
@@ -204,6 +208,7 @@ Layout guards at 320px / 768px where noted. Included in `bun run test:components
 - `src/components/svelte/AnnouncementBar.component.test.ts`
 - `src/components/svelte/BottomSheet.component.test.ts`
 - `src/components/svelte/BuildingTypeFilterBar.component.test.ts`
+- `src/components/svelte/CameraDebugHud.component.test.ts`
 - `src/components/svelte/EditorAdditionModal.component.test.ts`
 - `src/components/svelte/EditorShelf.component.test.ts`
 - `src/components/svelte/MapToolsFlyout.component.test.ts`
@@ -215,6 +220,7 @@ Layout guards at 320px / 768px where noted. Included in `bun run test:components
 - `src/components/svelte/StagingBanner.component.test.ts`
 - `src/components/svelte/StatusBar.component.test.ts`
 - `src/components/svelte/TravelTimeLegend.component.test.ts`
+- `src/components/svelte/WaybackImageryControl.component.test.ts`
 - `src/components/svelte/calendar/AcademicCalendarScreen.component.test.ts`
 - `src/components/svelte/community/CommunityBrandIcon.component.test.ts`
 - `src/components/svelte/community/FollowPrompt.component.test.ts`
@@ -229,6 +235,7 @@ Layout guards at 320px / 768px where noted. Included in `bun run test:components
 - `src/components/svelte/map-chrome/MapChromeActionChip.component.test.ts`
 - `src/components/svelte/map-chrome/MapChromeGhostButton.component.test.ts`
 - `src/components/svelte/map-chrome/MapChromeToggleButton.component.test.ts`
+- `src/components/svelte/map-chrome/MapContextMenu.component.test.ts`
 - `src/components/svelte/map-chrome/MapFilterChips.component.test.ts`
 - `src/components/svelte/map-chrome/bottom-chrome-icons.component.test.ts`
 - `src/components/svelte/map/ContributorDraftPinMarker.component.test.ts`
@@ -247,6 +254,7 @@ Layout guards at 320px / 768px where noted. Included in `bun run test:components
 - `src/components/svelte/status-bar/AppMenu.component.test.ts`
 - `src/components/svelte/status-bar/StatusBarLinkGroups.component.test.ts`
 - `src/components/svelte/today/TodayScreen.component.test.ts`
+- `src/lib/focus-trap.component.test.ts`
 - `src/test/map-chrome-layout.component.test.ts`
 
 
@@ -337,7 +345,7 @@ Layout guards at 320px / 768px where noted. Included in `bun run test:components
 - `e2e/admin/undo-redo.spec.ts`
 
 
-## E2E advisory (Playwright) — 18 files
+## E2E advisory (Playwright) — 19 files
 
 `bun run e2e:advisory` — a11y, offline, touch, cross-browser, etc.
 
@@ -350,6 +358,7 @@ Layout guards at 320px / 768px where noted. Included in `bun run test:components
 - `e2e/advisory/keyboard-nav.spec.ts`
 - `e2e/advisory/layout-chrome.spec.ts`
 - `e2e/advisory/map-attribution.spec.ts`
+- `e2e/advisory/map-camera-debug.spec.ts`
 - `e2e/advisory/maptiler-fallback.spec.ts`
 - `e2e/advisory/measure-route.spec.ts`
 - `e2e/advisory/mobile-touch-drag.spec.ts`
