@@ -7,7 +7,6 @@
   // Wrench, not layers: this trigger opens a toolbox (travel time, measure
   // route, legend), and `layers` is the legend chip sitting right beside it.
   import Wrench from "@lucide/svelte/icons/wrench";
-  import { fade } from "svelte/transition";
   import {
     mapToolsStore,
     measureRouteStore,
@@ -16,7 +15,6 @@
   } from "@lib/store.svelte";
   import { sidebarStore } from "@lib/store.svelte";
   import { routableTodayWeekday, routeToday } from "@lib/today-route";
-  import { panelFadeIn, panelFadeOut } from "@lib/motion";
   import MapViewControls from "@ui/MapViewControls.svelte";
   import WaybackImageryControl from "@ui/WaybackImageryControl.svelte";
   import MapLegend from "@ui/MapLegend.svelte";
@@ -25,15 +23,11 @@
   import TrailControl from "@ui/TrailControl.svelte";
   import JeepneyMenu from "@ui/JeepneyMenu.svelte";
   import ScheduleImportPanel from "@ui/ScheduleImportPanel.svelte";
-  import { trapFocus } from "@lib/focus-trap";
   import MapChromeFabTrigger from "@ui/map-chrome/MapChromeFabTrigger.svelte";
-  import MapChromePanel from "@ui/map-chrome/MapChromePanel.svelte";
+  import Dialog from "@ui/modal/Dialog.svelte";
   import "./map-chrome/map-chrome.css";
   import { MediaQuery } from "svelte/reactivity";
 
-  let panelEl = $state<HTMLDivElement | null>(null);
-  let shellEl = $state<HTMLDivElement | null>(null);
-  const reducedMotion = new MediaQuery("(prefers-reduced-motion: reduce)");
   const mobile = new MediaQuery("max-width:48rem");
   // Transit moved to the sidebar's Jeepney routes browse panel; Map tools now
   // mirrors the Settings modal sections.
@@ -91,33 +85,6 @@
     if (measureRouteStore.active) mapToolsStore.close();
   }
 
-  $effect(() => {
-    if (!mapToolsStore.open || !panelEl) return;
-    return trapFocus(panelEl, { onEscape: () => mapToolsStore.close() });
-  });
-
-  // The desktop panel opens absolutely below the trigger, which can sit well
-  // down the screen. A plain `max-height: 75vh` is measured from the viewport
-  // top, so the panel ran off the bottom edge with no way to scroll to it.
-  // Cap it to the space that actually remains below its own top edge instead.
-  $effect(() => {
-    const el = shellEl;
-    if (!mapToolsStore.open || !el || mobile.current) return;
-    const apply = () => {
-      const top = el.getBoundingClientRect().top;
-      // Stop above the attribution strip, not the viewport edge — the strip
-      // z-stacks above the panel and was printing over its last row.
-      const attribution = document.querySelector(".map-attrib-corner");
-      const reserved = 12 + (attribution?.getBoundingClientRect().height ?? 0);
-      el.style.setProperty(
-        "--tools-panel-max-h",
-        `${Math.max(160, window.innerHeight - top - reserved)}px`,
-      );
-    };
-    apply();
-    window.addEventListener("resize", apply);
-    return () => window.removeEventListener("resize", apply);
-  });
 </script>
 
 <div class="map-tools-flyout">
@@ -130,20 +97,16 @@
     <Wrench size={18} aria-hidden="true" />
   </MapChromeFabTrigger>
 
-  {#if mapToolsStore.open}
-    <div
-      class="map-tools-panel-shell"
-      bind:this={shellEl}
-      in:fade={panelFadeIn(reducedMotion.current)}
-      out:fade={panelFadeOut(reducedMotion.current)}
-    >
-      <MapChromePanel
-        bind:element={panelEl}
-        id="map-tools-panel"
-        panelClass="map-chrome-panel map-tools-panel"
-        title="Map tools"
-        onclose={() => mapToolsStore.close()}
-      >
+  <Dialog
+    open={mapToolsStore.open}
+    onclose={() => mapToolsStore.close()}
+    size="large"
+    ariaLabel="Map tools"
+    closeLabel="Close map tools"
+  >
+    <div class="map-tools-dialog" id="map-tools-panel">
+      <h2 class="map-tools-dialog__title">Map tools</h2>
+      <div class="map-tools-dialog__body">
         {#if dayRoutable}
           <button
             type="button"
@@ -236,12 +199,55 @@
             {/if}
           </div>
         {/each}
-      </MapChromePanel>
+      </div>
     </div>
-  {/if}
+  </Dialog>
 </div>
 
 <style>
+  /* Map tools is a full dialog now, not a popover wedged under its trigger.
+     The old shell had to measure remaining viewport space and cap its own
+     height; the dialog just scrolls its body. */
+  .map-tools-dialog {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    flex: 1 1 auto;
+    padding: 0.25rem 0.25rem 0.5rem;
+  }
+
+  .map-tools-dialog__title {
+    margin: 0 2.5rem 0.75rem 0.5rem;
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: hsl(0, 0%, 15%);
+  }
+
+  .map-tools-dialog__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-height: 0;
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: 0 0.5rem 0.25rem;
+  }
+
+  /* Two columns of tools on a wide dialog: the list was a single cramped
+     column even when there was room for more. */
+  @media (min-width: 48rem) {
+    .map-tools-dialog__body {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-content: start;
+      gap: 0.75rem 1rem;
+    }
+
+    .map-tools-dialog__body :global(.accordion-section) {
+      grid-column: 1 / -1;
+    }
+  }
+
   .map-tools-flyout {
     position: relative;
     pointer-events: auto;
