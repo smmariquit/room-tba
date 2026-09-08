@@ -368,7 +368,7 @@ const shareTitle = ogTitle ?? title;
                 var srcUrl = String(t.src || t.href || "");
                 if (srcUrl.indexOf("/_astro/") === -1) return;
                 if (!appIsland()) return;
-                onFatalSignal("static asset failed: " + srcUrl);
+                onFatalSignal(`static asset failed: ${srcUrl}`);
               },
               true,
             );
@@ -377,7 +377,7 @@ const shareTitle = ogTitle ?? title;
               var msg = String((event.reason && event.reason.message) || event.reason || "");
               if (!/dynamically imported module|Importing a module script failed|ChunkLoadError/i.test(msg)) return;
               if (!appIsland()) return;
-              onFatalSignal("chunk import failed: " + msg.slice(0, 120));
+              onFatalSignal(`chunk import failed: ${msg.slice(0, 120)}`);
             });
 
             var bootStart = Date.now();
