@@ -14,6 +14,8 @@ export async function openEntityEditor(page: Page, kind: EntityKind) {
   await expandDetailsSheet(page);
   await page.getByRole("button", { name: EDITOR_TOGGLE[kind] }).click();
   await expect(page.locator(".entity-editor")).toBeVisible({ timeout: 10_000 });
+  // Opening the editor drops the mobile sheet back to peek; re-expand.
+  await expandDetailsSheet(page);
 }
 
 export async function expandEditorMoreFields(page: Page) {

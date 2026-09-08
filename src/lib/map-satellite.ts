@@ -1,5 +1,5 @@
 import type maplibregl from "maplibre-gl";
-import { withMaptilerKey } from "./maptiler-key";
+import { hasConfiguredMaptilerKey, withMaptilerKey } from "./maptiler-key";
 
 export const SATELLITE_SOURCE_ID = "satellite-basemap";
 export const SATELLITE_LAYER_ID = "satellite-basemap";
@@ -28,6 +28,10 @@ export function syncSatelliteLayer(
   visible: boolean,
   historicalTileUrl?: string | null,
 ): void {
+  // Without a key there is no imagery to point at, and building the URL
+  // throws. Keyless deployments (E2E, forks on the fallback basemap) run
+  // this on every map load with satellite off, so bail before touching it.
+  if (!historicalTileUrl && !hasConfiguredMaptilerKey()) return;
   const sourceUrl =
     historicalTileUrl ?? withMaptilerKey(SATELLITE_TILEJSON_URL);
   if (

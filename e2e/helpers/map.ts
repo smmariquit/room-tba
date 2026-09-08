@@ -24,10 +24,17 @@ async function revealMapForPinDrag(page: Page) {
   const collapse = page.getByRole("button", {
     name: /collapse details( panel)?/i,
   });
-  if (await collapse.isVisible({ timeout: 3000 }).catch(() => false)) {
-    if ((await collapse.getAttribute("aria-expanded")) === "true") {
-      await collapse.click();
-    }
+  const appeared = await collapse
+    .waitFor({ state: "visible", timeout: 3000 })
+    .then(() => true)
+    .catch(() => false);
+  if (appeared && (await collapse.getAttribute("aria-expanded")) === "true") {
+    await collapse.click();
+    // Wait for the sheet/drawer to actually retract before dragging pins.
+    await page
+      .getByRole("button", { name: /expand details( panel)?/i })
+      .waitFor({ state: "visible", timeout: 5000 })
+      .catch(() => {});
   }
 }
 
@@ -69,8 +76,15 @@ async function openEntityMapEditControls(page: Page, entity: MapEditEntity) {
   const editEntity = page.getByRole("button", {
     name: EDIT_ENTITY_BUTTON[entity],
   });
-  if (await editEntity.isVisible({ timeout: 5000 }).catch(() => false)) {
+  const editVisible = await editEntity
+    .waitFor({ state: "visible", timeout: 5000 })
+    .then(() => true)
+    .catch(() => false);
+  if (editVisible) {
     await editEntity.click();
+    // Opening the editor drops the mobile sheet back to peek; re-expand so
+    // the editor's map controls can actually enter the viewport.
+    await expandDetailsSheet(page);
   }
 
   await expect(enableInPanel).toBeVisible({ timeout: 10_000 });
