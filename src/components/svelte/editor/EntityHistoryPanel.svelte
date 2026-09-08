@@ -97,7 +97,7 @@
         );
         return;
       }
-      afterProposalPublished(
+      await afterProposalPublished(
         appActions,
         appData,
         entityType as ProposalEntityType,

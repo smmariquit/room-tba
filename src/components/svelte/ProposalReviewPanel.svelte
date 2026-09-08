@@ -157,7 +157,7 @@
     const entityType = (data as { proposal?: { entityType?: string } }).proposal
       ?.entityType;
     if (entityType) {
-      afterProposalPublished(
+      await afterProposalPublished(
         appActions,
         appData,
         entityType as ProposalEntityType,
