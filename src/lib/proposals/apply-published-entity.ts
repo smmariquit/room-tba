@@ -7,6 +7,7 @@ import type {
   EventData,
   OrgData,
   PlaceData,
+  RoomData,
 } from "@lib/types";
 import type { ProposalEntityType } from "@lib/services/proposal-service";
 import {
@@ -141,16 +142,34 @@ export function applyPublishedEntity(
   }
 }
 
-export function afterProposalPublished(
+function isRoomRow(value: unknown): value is RoomData {
+  if (!value || typeof value !== "object") return false;
+  const row = value as Partial<RoomData>;
+  return typeof row.id === "number" && typeof row.code === "string";
+}
+
+export async function afterProposalPublished(
   actions: AppActions,
   getData: () => AppContextData,
   entityType: ProposalEntityType,
   published: unknown,
-): void {
+): Promise<void> {
   const applied = applyPublishedEntity(actions, entityType, published, getData);
   const tables = syncTablesForEntityType(entityType);
   if (tables.length > 0) {
     invalidateLocalSyncKeys(tables);
+  }
+
+  // Rooms have no in-memory list to upsert into and the campus refresh never
+  // syncs them, so the published row has to reach PGlite directly. Awaited,
+  // because reopening the room reads that table straight back and would
+  // otherwise race the write and show the pre-approval value.
+  if (
+    (entityType === "room" || entityType === "create_room") &&
+    isRoomRow(published)
+  ) {
+    const { upsertLocalRoom } = await import("@lib/local/data/sync");
+    await upsertLocalRoom(published);
   }
   if (applied) {
     // In-memory upsert is authoritative for the open panel. A full campus
