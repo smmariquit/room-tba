@@ -1,3 +1,13 @@
+## [2.29.4](https://github.com/uplbtools/room-tba/compare/v2.29.3...v2.29.4) (2026-09-08)
+
+
+### Bug Fixes
+
+* **browse+e2e:** browsing away closes the jeepney stop panel, spec label drift ([ef148e9](https://github.com/uplbtools/room-tba/commit/ef148e960a84c114306052a4aba736cf65a38002))
+* **e2e+chrome:** revive the suite after the Aug chrome redesign ([78a5adf](https://github.com/uplbtools/room-tba/commit/78a5adfa0ee18c701c090fda269da921b8710d19)), closes [#839](https://github.com/uplbtools/room-tba/issues/839)
+* **sheet+e2e:** let taps toggle disclosures inside the bottom sheet ([78e1d87](https://github.com/uplbtools/room-tba/commit/78e1d87060fb2266502bdfa89699dc6d09bbc467))
+* **sheet+map+e2e:** handle taps toggle the sheet, keyless boot stops throwing ([81650a7](https://github.com/uplbtools/room-tba/commit/81650a794dcd3bb529c93d5561d90935a03cb290))
+
 ## [2.29.2](https://github.com/uplbtools/room-tba/compare/v2.29.1...v2.29.2) (2026-09-07)
 
 
