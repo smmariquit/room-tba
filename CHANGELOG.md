@@ -1,3 +1,10 @@
+## [2.29.6](https://github.com/uplbtools/room-tba/compare/v2.29.5...v2.29.6) (2026-09-08)
+
+
+### Bug Fixes
+
+* **proposals:** write an approved room to the local cache ([#1157](https://github.com/uplbtools/room-tba/issues/1157)) ([b0276fe](https://github.com/uplbtools/room-tba/commit/b0276fe4f5042b8d3f1742e60915824d47c0e940)), closes [#1154](https://github.com/uplbtools/room-tba/issues/1154)
+
 ## [2.29.4](https://github.com/uplbtools/room-tba/compare/v2.29.3...v2.29.4) (2026-09-08)
 
 ### Bug Fixes
