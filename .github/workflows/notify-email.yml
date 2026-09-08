@@ -1,0 +1,46 @@
+name: Email on community contribution
+
+# Instant email to the maintainer when someone outside the collaborator
+# circle opens an issue or a PR. Complements the Discord triage nagger
+# (which catches staleness) with immediacy. Uses Resend with the org's
+# verified uplbtools.me domain; missing secret degrades to a log line.
+
+on:
+  issues:
+    types: [opened]
+  pull_request_target:
+    types: [opened]
+
+permissions:
+  contents: read
+
+jobs:
+  email:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send email via Resend
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          # Comma-separated recipients, editable in Settings > Variables.
+          NOTIFY_EMAILS: ${{ vars.NOTIFY_EMAILS }}
+          KIND: ${{ github.event_name == 'issues' && 'Issue' || 'PR' }}
+          AUTHOR: ${{ github.event.issue.user.login || github.event.pull_request.user.login }}
+          TITLE: ${{ github.event.issue.title || github.event.pull_request.title }}
+          URL: ${{ github.event.issue.html_url || github.event.pull_request.html_url }}
+          NUM: ${{ github.event.issue.number || github.event.pull_request.number }}
+          ASSOC: ${{ github.event.pull_request.author_association || github.event.issue.author_association }}
+        run: |
+          set -euo pipefail
+          if [ -z "$RESEND_API_KEY" ]; then
+            echo "RESEND_API_KEY not set; skipping." >&2
+            exit 0
+          fi
+          case "$ASSOC" in
+            OWNER|MEMBER|COLLABORATOR) echo "Author is $ASSOC; no email."; exit 0;;
+          esac
+          jq -n --arg from "Room TBA <digest@uplbtools.me>" \
+                --arg to "${NOTIFY_EMAILS:-semariquit@gmail.com}" \
+                --arg subject "[room-tba] $KIND #$NUM from $AUTHOR: $TITLE" \
+                --arg html "<p><strong>$AUTHOR</strong> opened $KIND <a href=\"$URL\">#$NUM</a>:</p><p>$TITLE</p><p>The Discord triage nagger will chase this if it goes stale. First response within 72h keeps the SLA green.</p>" \
+                '{from: $from, to: ($to | split(",") | map(gsub("^\\s+|\\s+$";""))), subject: $subject, html: $html}' \
+            | curl -sf -X POST -H "Authorization: Bearer $RESEND_API_KEY" -H "Content-Type: application/json" -d @- https://api.resend.com/emails

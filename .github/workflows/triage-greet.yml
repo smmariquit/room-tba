@@ -1,0 +1,41 @@
+name: Triage greet
+
+# First-response floor: every issue from outside the maintainer circle gets
+# an acknowledgement and a needs-triage label the moment it opens, so nothing
+# from the community sits at zero comments again (5 of 11 external issues had
+# zero responses when this was added, two of them bug reports from July).
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  issues: write
+
+jobs:
+  greet:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Label and acknowledge external issues
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const author = context.payload.issue.user.login;
+            const { data: perm } = await github.rest.repos.getCollaboratorPermissionLevel({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              username: author,
+            }).catch(() => ({ data: { permission: "none" } }));
+            if (["admin", "write"].includes(perm.permission)) return;
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              labels: ["needs-triage"],
+            });
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: "Thanks for the report! A maintainer will take a look. If this is a bug, a screenshot or the room/building involved helps a lot.",
+            });
