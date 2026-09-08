@@ -45,6 +45,15 @@ test.describe("App Menu", () => {
     expect(await versions.count()).toBeGreaterThan(1);
   });
 
+  test("shows the live presence counter", async ({ page }) => {
+    await page.goto("/");
+    await waitForAppBoot(page);
+    const menu = await openAppMenu(page);
+    // Renders "--" until the first heartbeat lands; either way the counter
+    // must be mounted, it vanished silently in the Aug 2026 redesign.
+    await expect(menu.locator(".online-counter")).toBeVisible();
+  });
+
   test("Settings opens from the support section", async ({ page }) => {
     await page.goto("/");
     await waitForAppBoot(page);
