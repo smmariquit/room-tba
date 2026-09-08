@@ -1,4 +1,4 @@
-import { queryStore } from "@lib/store.svelte";
+import { currentRoom, queryStore } from "@lib/store.svelte";
 import type { AppContextData } from "@lib/context";
 import type { ProposalEntityType } from "@lib/services/proposal-service";
 import type {
@@ -7,9 +7,36 @@ import type {
   DivisionData,
   DormData,
   EventData,
+  RoomData,
 } from "@lib/types";
 
 type PublishedRow = { id: number };
+
+/**
+ * Campus app data does not carry rooms (they load per building), so
+ * `applyPublishedEntity` has no room case and the campus refresh it falls back
+ * to never touches the rooms table. Without this the open room panel keeps the
+ * pre-approval value until the browser reloads.
+ */
+function syncOpenRoom(published: RoomData): void {
+  if (queryStore.category !== "room") return;
+  const open = currentRoom.value;
+  // The lookup started by opening the room can still be in flight when an
+  // approve lands, so fall back to the code the query was opened with.
+  // `setRoom` bumps the room load generation, which makes that lookup drop its
+  // result instead of writing the pre-approval row over this one.
+  const isOpen = open
+    ? open.id === published.id
+    : queryStore.queryValue.toUpperCase() === published.code.toUpperCase();
+  if (!isOpen) return;
+
+  currentRoom.setRoom(published);
+  queryStore.hydrateQuery({
+    type: "result",
+    category: "room",
+    value: published.code,
+  });
+}
 
 function openEntityId(
   data: AppContextData,
@@ -47,7 +74,7 @@ function openEntityId(
   }
 }
 
-/** Keep the open side panel pointed at the entity after approve renames it. */
+/** Keep the open side panel pointed at the entity a publish just changed. */
 export function syncOpenEntityQueryAfterPublish(
   getData: () => AppContextData,
   entityType: ProposalEntityType,
@@ -58,6 +85,11 @@ export function syncOpenEntityQueryAfterPublish(
   }
   const publishedId = Number((published as PublishedRow).id);
   if (!Number.isInteger(publishedId)) return;
+
+  if (entityType === "room") {
+    syncOpenRoom(published as RoomData);
+    return;
+  }
 
   const data = getData();
   const openId = openEntityId(data, queryStore.category, queryStore.queryValue);
