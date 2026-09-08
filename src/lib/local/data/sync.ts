@@ -785,6 +785,57 @@ export async function checkLocalBuildingRoom(id: number) {
   }
 }
 
+/**
+ * Write one room into the local cache.
+ *
+ * Rooms are the only entity that loads lazily, per building, behind
+ * `buildings.rooms_fetched`. Nothing in the campus refresh touches the rooms
+ * table, so a room the server just changed stays stale locally until someone
+ * reopens its building. Publishing an edit has to write the row itself.
+ *
+ * Deliberately not `syncBuildingRooms` with a one-room array: that marks the
+ * whole building as fetched, which would be a lie about the other rooms.
+ */
+export async function upsertLocalRoom(room: RoomData): Promise<void> {
+  try {
+    const localDB = await getDB();
+    await localDB.waitReady;
+    await localDB.query(
+      `
+            INSERT INTO rooms (id, room_code, directions, building_id, college_id, division_id, image_url, version, updated_at, category, full_name)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+            ON CONFLICT (id) DO UPDATE SET
+            room_code = EXCLUDED.room_code,
+            directions = EXCLUDED.directions,
+            building_id = EXCLUDED.building_id,
+            college_id = EXCLUDED.college_id,
+            division_id = EXCLUDED.division_id,
+            image_url = EXCLUDED.image_url,
+            version = EXCLUDED.version,
+            updated_at = EXCLUDED.updated_at,
+            category = EXCLUDED.category,
+            full_name = EXCLUDED.full_name;
+            `,
+      [
+        room.id,
+        room.code,
+        room.directions,
+        room.buildingId,
+        room.collegeId,
+        room.divisionId,
+        room.imageUrl ?? null,
+        room.version,
+        room.updatedAt,
+        room.category ?? null,
+        room.fullName ?? null,
+      ],
+    );
+  } catch (e) {
+    // A publish must not fail because the local cache did.
+    console.error("upsertLocalRoom failed", e);
+  }
+}
+
 export async function syncBuildingRooms(
   validSync: boolean,
   id: number,
