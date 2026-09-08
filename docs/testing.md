@@ -53,15 +53,16 @@ Integration + Playwright share one preview build in the blocking job (~30 min wa
 | **Ready for review** | Yes (first time) | Yes |
 | **`run/e2e` label** | Re-run after fixes | Re-run |
 | **Reopened** (non-draft) | Yes | Yes |
+| **Push to ready PR** | Yes (auto, cancels the in-flight run) | No |
 | **Draft push** | No | No |
 
 **Always on every push:** verify + migrations only.
 
-**Before merge to `staging`:** mark ready (or add `run/e2e`) and wait for **E2E / e2e** green. Pushes after ready do not re-trigger: add the label again.
+**Before merge to `staging`:** wait for **E2E / e2e** green. Every push to a non-draft PR re-runs the blocking job automatically (per-PR concurrency cancels the stale run). The `run/e2e` label still forces a run without pushing, and is the only way to re-run the advisory suite.
 
 ```sh
 gh pr ready <number>
-gh pr edit <number> --add-label run/e2e   # re-run integration + E2E + advisory
+gh pr edit <number> --add-label run/e2e   # force a run without pushing (also re-runs advisory)
 ```
 
 Workflows: [`.github/workflows/ci.yml`](../.github/workflows/ci.yml), [`.github/workflows/e2e.yml`](../.github/workflows/e2e.yml), [`.github/workflows/e2e-advisory.yml`](../.github/workflows/e2e-advisory.yml), [`.github/workflows/e2e-staging.yml`](../.github/workflows/e2e-staging.yml), [`.github/workflows/bundle-advisory.yml`](../.github/workflows/bundle-advisory.yml).

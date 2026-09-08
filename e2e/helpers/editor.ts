@@ -1,4 +1,5 @@
 import { expect, type Page } from "@playwright/test";
+import { expandDetailsSheet } from "./app";
 
 type EntityKind = "building" | "dorm" | "room" | "event";
 
@@ -10,14 +11,29 @@ const EDITOR_TOGGLE: Record<EntityKind, RegExp> = {
 };
 
 export async function openEntityEditor(page: Page, kind: EntityKind) {
+  await expandDetailsSheet(page);
   await page.getByRole("button", { name: EDITOR_TOGGLE[kind] }).click();
   await expect(page.locator(".entity-editor")).toBeVisible({ timeout: 10_000 });
+  // Opening the editor drops the mobile sheet back to peek; re-expand.
+  await expandDetailsSheet(page);
 }
 
 export async function expandEditorMoreFields(page: Page) {
-  const summary = page.locator("details.editor-advanced summary");
-  if (await summary.isVisible().catch(() => false)) {
+  // Opening the editor can drop the mobile sheet back to peek; re-expand so
+  // the disclosure is actually on screen before clicking it. isVisible()
+  // returns immediately, so wait on attachment and only open closed ones.
+  await expandDetailsSheet(page);
+  const summary = page.locator("details.editor-advanced summary").first();
+  const present = await summary
+    .waitFor({ state: "attached", timeout: 10_000 })
+    .then(() => true)
+    .catch(() => false);
+  if (!present) return;
+  const details = page.locator("details.editor-advanced").first();
+  if ((await details.getAttribute("open")) === null) {
+    await summary.scrollIntoViewIfNeeded();
     await summary.click();
+    await expect(details).toHaveJSProperty("open", true);
   }
 }
 

@@ -4,6 +4,7 @@ import {
   type CampusBrowseTab,
 } from "./browse-campus-shared.js";
 import type { SidePanelStore, QueryStore } from "./stores/ui-stores.svelte.js";
+import { jeepneyStore } from "./store.svelte.js";
 
 export type { CampusBrowseTab } from "./browse-campus-shared.js";
 import CampusBrowseList from "@ui/controls/CampusBrowseList.svelte";
@@ -20,6 +21,9 @@ export function openCampusBrowse(
   tab: CampusBrowseTab = "buildings",
 ) {
   dismissEphemeralOverlays();
+  // A selected jeepney stop outranks panel content in SidePanel, so browsing
+  // anywhere must drop it or the stop panel stays painted over the list.
+  jeepneyStore.closeStop();
   queryStore.updateQuery(campusBrowseQuery(tab));
   queryStore.inputValue = "";
   sidePanelStore.openPanel({
@@ -34,6 +38,7 @@ export function openBrowseClasses(
   sidePanelStore: SidePanelStore,
 ) {
   dismissEphemeralOverlays();
+  jeepneyStore.closeStop();
   queryStore.updateQuery({
     category: "classes",
     type: "result",

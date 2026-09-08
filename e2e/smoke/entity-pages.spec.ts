@@ -59,13 +59,21 @@ test.describe("landing", () => {
     await expect(campusSearchBox(page)).toBeVisible();
   });
 
-  test("don't show again persists", async ({ page }) => {
+  test("auto-open marks the tour seen, so it stays closed after reload", async ({
+    page,
+  }) => {
+    // The checkbox is gone: auto-opening the welcome tour now writes
+    // hideLandingModal itself, once per browser.
     await page.goto("/");
     await page.evaluate(() => localStorage.removeItem("hideLandingModal"));
     await page.reload();
     const getStarted = page.getByRole("button", { name: "Get Started" });
     if (await getStarted.isVisible({ timeout: 5000 }).catch(() => false)) {
-      await page.getByLabel(/don't show/i).check();
+      await expect
+        .poll(() =>
+          page.evaluate(() => localStorage.getItem("hideLandingModal")),
+        )
+        .toBe("true");
       await getStarted.click();
       await page.reload();
       await waitForAppBoot(page);

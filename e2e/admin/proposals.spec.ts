@@ -58,7 +58,8 @@ test.describe("contributor proposals", () => {
     await proposal.getByRole("button", { name: "Approve" }).click();
     await expect(proposal).toBeHidden({ timeout: 15_000 });
 
-    await page.getByRole("button", { name: "Close review" }).click();
+    // The shelf opens the review queue as a side panel now, so there is no
+    // Close review button. Opening the room replaces the panel content.
     await openRoom(page);
     await expect(page.getByText(marker)).toBeVisible({ timeout: 15_000 });
     await logout(page);
