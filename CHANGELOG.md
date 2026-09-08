@@ -1,3 +1,10 @@
+## [2.29.7](https://github.com/uplbtools/room-tba/compare/v2.29.6...v2.29.7) (2026-09-08)
+
+
+### Bug Fixes
+
+* **pwa:** stop content pages from precaching the whole app ([#1153](https://github.com/uplbtools/room-tba/issues/1153)) ([977a589](https://github.com/uplbtools/room-tba/commit/977a58966cc1936a3b2695c71bc3758719bef7f5))
+
 ## [2.29.6](https://github.com/uplbtools/room-tba/compare/v2.29.5...v2.29.6) (2026-09-08)
 
 
