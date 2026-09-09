@@ -12,19 +12,28 @@ import { registerSW } from "virtual:pwa-register";
 const NEED_REFRESH_EVENT = "pwa:need-refresh";
 const APPLY_UPDATE_EVENT = "pwa:apply-update";
 
-const updateSW = registerSW({
-  immediate: true,
-  onNeedRefresh() {
-    // The island usually mounts after this fires, so latch it on the document
-    // as well: StatusBar reads the flag on mount and would otherwise miss the
-    // event entirely.
-    document.documentElement.dataset.pwaNeedRefresh = "true";
-    window.dispatchEvent(new Event(NEED_REFRESH_EVENT));
-  },
-});
+// Only the map app gets a service worker. Registering one precaches the whole
+// app, so a reader who landed on a single wiki article from search used to
+// pull ~10 MB across 87 files in the background to read a 15 KB page. Layout
+// sets data-app-page on <html>; content pages leave it off. An already
+// registered worker is left alone, since those visitors have used the app.
+const isAppPage = document.documentElement.dataset.appPage === "true";
+
+const updateSW = isAppPage
+  ? registerSW({
+      immediate: true,
+      onNeedRefresh() {
+        // The island usually mounts after this fires, so latch it on the
+        // document as well: StatusBar reads the flag on mount and would
+        // otherwise miss the event entirely.
+        document.documentElement.dataset.pwaNeedRefresh = "true";
+        window.dispatchEvent(new Event(NEED_REFRESH_EVENT));
+      },
+    })
+  : null;
 
 // The refresh button lives in the app UI, which cannot reach this module
 // directly.
 window.addEventListener(APPLY_UPDATE_EVENT, () => {
-  void updateSW(true);
+  void updateSW?.(true);
 });

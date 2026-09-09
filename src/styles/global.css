@@ -1,1 +1,14 @@
 @import "tailwindcss";
+
+/* Moved out of Modal.svelte when the dialog shell was extracted (these are
+   global element styles, they were never modal-specific). */
+hr {
+  margin: 1rem 0;
+  border-width: 2px;
+  border-color: hsl(0, 0%, 90%);
+  border-style: solid;
+}
+
+mark {
+  background-color: hsl(5, 53%, 90%);
+}

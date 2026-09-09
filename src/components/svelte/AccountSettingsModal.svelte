@@ -1,22 +1,12 @@
 <script lang="ts">
   import LoadingIndicator from "@ui/LoadingIndicator.svelte";
-  import IconButton from "@ui/IconButton.svelte";
-  import { fade, fly } from "svelte/transition";
-  import { X, User2 } from "@lucide/svelte";
   import { adminAuthStore, toastStore } from "@lib/store.svelte";
-  import {
-    modalContentDismiss,
-    modalContentReveal,
-    overlayFade,
-  } from "@lib/motion";
-  import { trapFocus } from "@lib/focus-trap";
+  import Dialog from "@ui/modal/Dialog.svelte";
+  import SettingsSection from "@ui/modal/SettingsSection.svelte";
   import EntityEditorFormField from "@ui/editor/EntityEditorFormField.svelte";
   import EntityEditorSubmitButton from "@ui/editor/EntityEditorSubmitButton.svelte";
   import EntityEditorMessage from "@ui/editor/EntityEditorMessage.svelte";
   import "./editor/entity-editor.css";
-  import { MediaQuery } from "svelte/reactivity";
-
-  const reducedMotion = new MediaQuery("(prefers-reduced-motion: reduce)");
 
   type Profile = {
     username: string;
@@ -36,7 +26,6 @@
     createdAt: string;
   };
 
-  let frameEl = $state<HTMLDivElement | null>(null);
   let profile = $state<Profile | null>(null);
   let loadError = $state<string | null>(null);
   let contributions = $state<Contribution[]>([]);
@@ -110,14 +99,14 @@
     adminAuthStore.closeAccountSettings();
   }
 
-  function handleKeydown(e: KeyboardEvent) {
-    if (e.key === "Escape") close();
-  }
-
-  $effect(() => {
-    if (!frameEl) return;
-    return trapFocus(frameEl, { onEscape: close });
-  });
+  const profileDirty = $derived(
+    profile
+      ? displayNameDraft.trim() !== profile.displayName ||
+          avatarUrlDraft.trim() !== (profile.avatarUrl ?? "") ||
+          profileUrlDraft.trim() !== (profile.profileUrl ?? "") ||
+          showInCreditsDraft !== profile.showInCredits
+      : false,
+  );
 
   async function saveProfile() {
     if (!profile) return;
@@ -281,207 +270,192 @@
   }
 </script>
 
-<svelte:window onkeydown={handleKeydown} />
-
-<div class="settings-overlay" transition:fade={overlayFade(reducedMotion.current)}>
-  <div
-    bind:this={frameEl}
-    class="settings-frame"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="account-settings-title"
-    in:fly={modalContentReveal(reducedMotion.current)}
-    out:fly={modalContentDismiss(reducedMotion.current)}
-  >
-    <header class="settings-header">
-      <div class="settings-title" id="account-settings-title">
-        <User2 size={16} aria-hidden="true" />
-        <span>Account settings</span>
-      </div>
-      <IconButton size="sm" shape="rounded" label="Close account settings" onclick={close}>
-        <X size={18} aria-hidden="true" />
-      </IconButton>
+<Dialog
+  open={adminAuthStore.accountSettingsOpen}
+  onclose={close}
+  size="reading"
+  ariaLabel="Account settings"
+  closeLabel="Close account settings"
+>
+  <div class="settings-scroll">
+    <header class="settings-masthead">
+      <h2 class="settings-masthead__title">Account settings</h2>
+      {#if profile}
+        <p class="settings-masthead__identity">
+          <span class="settings-username">{profile.username}</span>
+          <span class="settings-role">{profile.role}</span>
+        </p>
+      {/if}
     </header>
 
-    <div class="settings-body">
-      {#if loadError}
-        <EntityEditorMessage variant="error" message={loadError} />
-      {:else if !profile}
-        <p class="settings-loading"><LoadingIndicator /></p>
-      {:else}
-        <section class="settings-section entity-editor-form">
-          <h3>Profile</h3>
-          <EntityEditorFormField label="Username" inputId="account-username">
-            {#snippet control()}
-              <input id="account-username" value={profile.username} disabled />
-            {/snippet}
-          </EntityEditorFormField>
-          <EntityEditorFormField label="Role" inputId="account-role">
-            {#snippet control()}
-              <input id="account-role" value={profile.role} disabled />
-            {/snippet}
-          </EntityEditorFormField>
-          <EntityEditorFormField label="Display name" inputId="account-display-name">
-            {#snippet control()}
-              <input
-                id="account-display-name"
-                bind:value={displayNameDraft}
-                disabled={savingProfile}
-              />
-            {/snippet}
-          </EntityEditorFormField>
-          <EntityEditorFormField
-            label="Avatar URL"
-            inputId="account-avatar-url"
-            hint="Optional HTTPS image URL shown in public credits."
-          >
-            {#snippet control()}
-              <input
-                id="account-avatar-url"
-                type="url"
-                placeholder="https://example.com/avatar.png"
-                bind:value={avatarUrlDraft}
-                disabled={savingProfile}
-              />
-            {/snippet}
-          </EntityEditorFormField>
-          <EntityEditorFormField
-            label="Profile URL"
-            inputId="account-profile-url"
-            hint="Optional HTTPS link shown from your public credit."
-          >
-            {#snippet control()}
-              <input
-                id="account-profile-url"
-                type="url"
-                placeholder="https://example.com"
-                bind:value={profileUrlDraft}
-                disabled={savingProfile}
-              />
-            {/snippet}
-          </EntityEditorFormField>
-          <label class="credits-visibility">
-            <input type="checkbox" bind:checked={showInCreditsDraft} disabled={savingProfile} />
-            Show my contributions in public credits
-          </label>
-          {#if profileError}
-            <EntityEditorMessage variant="error" message={profileError} />
-          {/if}
-          {#if profileSaved}
-            <EntityEditorMessage variant="success" message="Profile saved." />
-          {/if}
+    {#if loadError}
+      <EntityEditorMessage variant="error" message={loadError} />
+    {:else if !profile}
+      <p class="settings-loading"><LoadingIndicator /></p>
+    {:else}
+      <SettingsSection
+        title="Profile"
+        description="How you appear to other people on the map."
+      >
+        <EntityEditorFormField
+          label="Display name"
+          inputId="account-display-name"
+        >
+          {#snippet control()}
+            <input
+              id="account-display-name"
+              bind:value={displayNameDraft}
+              disabled={savingProfile}
+            />
+          {/snippet}
+        </EntityEditorFormField>
+        <EntityEditorFormField
+          label="Avatar URL"
+          inputId="account-avatar-url"
+          hint="Optional HTTPS image URL shown in public credits."
+        >
+          {#snippet control()}
+            <input
+              id="account-avatar-url"
+              type="url"
+              placeholder="https://example.com/avatar.png"
+              bind:value={avatarUrlDraft}
+              disabled={savingProfile}
+            />
+          {/snippet}
+        </EntityEditorFormField>
+        <EntityEditorFormField
+          label="Profile URL"
+          inputId="account-profile-url"
+          hint="Optional HTTPS link shown from your public credit."
+        >
+          {#snippet control()}
+            <input
+              id="account-profile-url"
+              type="url"
+              placeholder="https://example.com"
+              bind:value={profileUrlDraft}
+              disabled={savingProfile}
+            />
+          {/snippet}
+        </EntityEditorFormField>
+        <label class="credits-visibility">
+          <input
+            type="checkbox"
+            bind:checked={showInCreditsDraft}
+            disabled={savingProfile}
+          />
+          Show my contributions in public credits
+        </label>
+        {#if profileError}
+          <EntityEditorMessage variant="error" message={profileError} />
+        {/if}
+        {#if profileSaved}
+          <EntityEditorMessage variant="success" message="Profile saved." />
+        {/if}
+
+        {#snippet footer()}
           <EntityEditorSubmitButton
             label="Save profile"
             savingLabel="Saving…"
             saving={savingProfile}
-            disabled={
-              displayNameDraft.trim() === profile.displayName &&
-              avatarUrlDraft.trim() === (profile.avatarUrl ?? "") &&
-              profileUrlDraft.trim() === (profile.profileUrl ?? "") &&
-              showInCreditsDraft === profile.showInCredits
-            }
+            disabled={!profileDirty}
             onclick={saveProfile}
           />
+        {/snippet}
+      </SettingsSection>
 
-          <section class="contributions-section" aria-labelledby="my-contributions-heading">
-            <h4 id="my-contributions-heading">My contributions</h4>
-            {#if contributionsError}
-              <p>{contributionsError}</p>
-            {:else if contributions.length === 0}
-              <p>Your approved edits will appear here.</p>
-            {:else}
-              <ul>
-                {#each contributions as contribution (contribution.id)}
-                  <li>
-                    <span>{contribution.entityLabel}</span>
-                    <time datetime={contribution.createdAt}>
-                      {new Date(contribution.createdAt).toLocaleDateString()}
-                    </time>
-                  </li>
-                {/each}
-              </ul>
-            {/if}
-          </section>
+      <SettingsSection
+        title="Email"
+        description="Used for sign-in and for replies about your suggested edits."
+      >
+        {#snippet meta()}
+          <span class="settings-current">{profile.email ?? "No email set"}</span>
+        {/snippet}
 
-          <EntityEditorFormField label="Email" inputId="account-email">
+        {#if !showChangeEmail}
+          <button
+            type="button"
+            class="settings-link-btn"
+            onclick={() => (showChangeEmail = true)}
+          >
+            Change email
+          </button>
+        {:else}
+          <EntityEditorFormField label="New email" inputId="account-new-email">
             {#snippet control()}
-              <input id="account-email" value={profile.email ?? "(none)"} disabled />
+              <input
+                id="account-new-email"
+                type="email"
+                bind:value={newEmailDraft}
+                disabled={emailRequestPending}
+              />
             {/snippet}
           </EntityEditorFormField>
-          {#if !showChangeEmail}
-            <button
-              type="button"
-              class="settings-link-btn"
-              onclick={() => (showChangeEmail = true)}
-            >
-              Change email
-            </button>
-          {:else}
-            <EntityEditorFormField label="New email" inputId="account-new-email">
-              {#snippet control()}
-                <input
-                  id="account-new-email"
-                  type="email"
-                  bind:value={newEmailDraft}
-                  disabled={emailRequestPending}
-                />
-              {/snippet}
-            </EntityEditorFormField>
-            {#if emailError}
-              <EntityEditorMessage variant="error" message={emailError} />
-            {/if}
-            {#if emailRequestSent}
-              <EntityEditorMessage
-                variant="success"
-                message="Check your new inbox for a confirmation link."
-              />
-            {/if}
-            <EntityEditorSubmitButton
-              label="Send confirmation link"
-              savingLabel="Sending…"
-              saving={emailRequestPending}
-              disabled={!newEmailDraft.trim()}
-              onclick={requestEmailChange}
+          {#if emailError}
+            <EntityEditorMessage variant="error" message={emailError} />
+          {/if}
+          {#if emailRequestSent}
+            <EntityEditorMessage
+              variant="success"
+              message="Check your new inbox for a confirmation link."
             />
           {/if}
-        </section>
+          <EntityEditorSubmitButton
+            label="Send confirmation link"
+            savingLabel="Sending…"
+            saving={emailRequestPending}
+            disabled={!newEmailDraft.trim()}
+            onclick={requestEmailChange}
+          />
+        {/if}
+      </SettingsSection>
 
-        <section class="settings-section entity-editor-form">
-          <h3>{profile.hasPassword ? "Change password" : "Set a password"}</h3>
-          {#if profile.hasPassword}
-            <EntityEditorFormField label="Current password" inputId="account-current-password">
-              {#snippet control()}
-                <input
-                  id="account-current-password"
-                  type="password"
-                  autocomplete="current-password"
-                  bind:value={currentPasswordDraft}
-                  disabled={savingPassword}
-                />
-              {/snippet}
-            </EntityEditorFormField>
-          {/if}
+      <SettingsSection
+        title={profile.hasPassword ? "Password" : "Set a password"}
+        description={profile.hasPassword
+          ? "Change the password you sign in with."
+          : "Add a password so you can sign in without Google."}
+      >
+        {#if profile.hasPassword}
           <EntityEditorFormField
-            label="New password"
-            inputId="account-new-password"
-            hint="At least 10 characters."
+            label="Current password"
+            inputId="account-current-password"
           >
             {#snippet control()}
               <input
-                id="account-new-password"
+                id="account-current-password"
                 type="password"
-                autocomplete="new-password"
-                bind:value={newPasswordDraft}
+                autocomplete="current-password"
+                bind:value={currentPasswordDraft}
                 disabled={savingPassword}
               />
             {/snippet}
           </EntityEditorFormField>
-          {#if passwordError}
-            <EntityEditorMessage variant="error" message={passwordError} />
-          {/if}
-          {#if passwordSaved}
-            <EntityEditorMessage variant="success" message="Password saved." />
-          {/if}
+        {/if}
+        <EntityEditorFormField
+          label="New password"
+          inputId="account-new-password"
+          hint="At least 10 characters."
+        >
+          {#snippet control()}
+            <input
+              id="account-new-password"
+              type="password"
+              autocomplete="new-password"
+              bind:value={newPasswordDraft}
+              disabled={savingPassword}
+            />
+          {/snippet}
+        </EntityEditorFormField>
+        {#if passwordError}
+          <EntityEditorMessage variant="error" message={passwordError} />
+        {/if}
+        {#if passwordSaved}
+          <EntityEditorMessage variant="success" message="Password saved." />
+        {/if}
+
+        {#snippet footer()}
           <EntityEditorSubmitButton
             label={profile.hasPassword ? "Change password" : "Set password"}
             savingLabel="Saving…"
@@ -490,15 +464,28 @@
               (profile.hasPassword && !currentPasswordDraft)}
             onclick={savePassword}
           />
-        </section>
+        {/snippet}
+      </SettingsSection>
 
-        <section class="settings-section entity-editor-form">
-          <h3>Connected accounts</h3>
-          {#if identityError}
-            <EntityEditorMessage variant="error" message={identityError} />
-          {/if}
+      <SettingsSection
+        title="Connected accounts"
+        description="Sign in with Google instead of a password."
+      >
+        {#snippet meta()}
+          <span class="settings-current">
+            {profile.linkedGoogle ? "Google is connected." : "No account connected."}
+          </span>
+        {/snippet}
+
+        {#if identityError}
+          <EntityEditorMessage variant="error" message={identityError} />
+        {/if}
+        {#if profile.linkedGoogle && !profile.hasPassword}
+          <p class="field-hint">Set a password first to disconnect Google.</p>
+        {/if}
+
+        {#snippet footer()}
           {#if profile.linkedGoogle}
-            <p class="settings-status">Google is connected.</p>
             <EntityEditorSubmitButton
               label="Disconnect Google"
               savingLabel="Disconnecting…"
@@ -507,9 +494,6 @@
               variant="secondary"
               onclick={disconnectGoogle}
             />
-            {#if !profile.hasPassword}
-              <p class="field-hint">Set a password first to disconnect Google.</p>
-            {/if}
           {:else}
             <EntityEditorSubmitButton
               label="Connect Google"
@@ -517,17 +501,84 @@
               onclick={connectGoogle}
             />
           {/if}
-        </section>
+        {/snippet}
+      </SettingsSection>
 
-        <section class="settings-section entity-editor-form">
-          <h3>Data &amp; privacy</h3>
-          <EntityEditorSubmitButton
-            label="Download my data"
-            variant="secondary"
-            onclick={downloadExport}
-          />
+      <SettingsSection
+        title="Your contributions"
+        description="Edits of yours that reviewers have published."
+      >
+        {#if contributionsError}
+          <p class="settings-empty">{contributionsError}</p>
+        {:else if contributions.length === 0}
+          <p class="settings-empty">Your approved edits will appear here.</p>
+        {:else}
+          <ul class="contributions-list">
+            {#each contributions as contribution (contribution.id)}
+              <li>
+                <span>{contribution.entityLabel}</span>
+                <time datetime={contribution.createdAt}>
+                  {new Date(contribution.createdAt).toLocaleDateString()}
+                </time>
+              </li>
+            {/each}
+          </ul>
+        {/if}
+      </SettingsSection>
 
-          {#if !showDeleteConfirm}
+      <SettingsSection
+        title="Data and privacy"
+        description="Take a copy of your data, or close the account."
+        danger={showDeleteConfirm}
+      >
+        {#if showDeleteConfirm}
+          <p class="settings-delete-warning">
+            This deactivates your account and removes your email, display name,
+            and password. Your past proposals and edit history stay on record,
+            attributed to a deleted user.
+          </p>
+          {#if profile.hasPassword}
+            <EntityEditorFormField
+              label="Confirm password"
+              inputId="account-delete-password"
+            >
+              {#snippet control()}
+                <input
+                  id="account-delete-password"
+                  type="password"
+                  bind:value={deletePasswordDraft}
+                  disabled={deleting}
+                />
+              {/snippet}
+            </EntityEditorFormField>
+          {/if}
+          {#if deleteError}
+            <EntityEditorMessage variant="error" message={deleteError} />
+          {/if}
+        {/if}
+
+        {#snippet footer()}
+          {#if showDeleteConfirm}
+            <EntityEditorSubmitButton
+              label="Cancel"
+              variant="secondary"
+              disabled={deleting}
+              onclick={() => (showDeleteConfirm = false)}
+            />
+            <EntityEditorSubmitButton
+              label="Permanently delete my account"
+              savingLabel="Deleting…"
+              saving={deleting}
+              disabled={profile.hasPassword && !deletePasswordDraft}
+              variant="danger"
+              onclick={confirmDelete}
+            />
+          {:else}
+            <EntityEditorSubmitButton
+              label="Download my data"
+              variant="secondary"
+              onclick={downloadExport}
+            />
             <button
               type="button"
               class="settings-link-btn settings-link-btn--danger"
@@ -535,138 +586,100 @@
             >
               Delete my account
             </button>
-          {:else}
-            <div class="settings-danger-zone">
-              <p>
-                This deactivates your account and removes your email, display
-                name, and password. Your past proposals and edit history stay
-                on record, attributed to a deleted user.
-              </p>
-              {#if profile.hasPassword}
-                <EntityEditorFormField label="Confirm password" inputId="account-delete-password">
-                  {#snippet control()}
-                    <input
-                      id="account-delete-password"
-                      type="password"
-                      bind:value={deletePasswordDraft}
-                      disabled={deleting}
-                    />
-                  {/snippet}
-                </EntityEditorFormField>
-              {/if}
-              {#if deleteError}
-                <EntityEditorMessage variant="error" message={deleteError} />
-              {/if}
-              <div class="settings-danger-actions">
-                <EntityEditorSubmitButton
-                  label="Permanently delete my account"
-                  savingLabel="Deleting…"
-                  saving={deleting}
-                  disabled={profile.hasPassword && !deletePasswordDraft}
-                  variant="danger"
-                  onclick={confirmDelete}
-                />
-                <EntityEditorSubmitButton
-                  label="Cancel"
-                  variant="secondary"
-                  disabled={deleting}
-                  onclick={() => (showDeleteConfirm = false)}
-                />
-              </div>
-            </div>
           {/if}
-        </section>
-      {/if}
-    </div>
+        {/snippet}
+      </SettingsSection>
+    {/if}
   </div>
-</div>
+</Dialog>
 
 <style>
-  .settings-overlay {
-    position: fixed;
-    inset: 0;
-    background-color: rgba(8, 12, 22, 0.55);
-    z-index: var(--z-login-modal, 200);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
+  /* Grid, not a flex column: as flex items the cards shrank below their own
+     content and overlapped once the list outgrew the dialog. Grid rows size to
+     content and the scroll container takes the overflow. */
+  .settings-scroll {
+    display: grid;
+    grid-auto-rows: min-content;
+    gap: 0.75rem;
+    padding: 0.25rem 0.75rem 0.75rem;
+    overflow-y: auto;
+    min-height: 0;
+    flex: 1 1 auto;
   }
-  .settings-frame {
-    width: min(26rem, 100%);
-    max-height: min(38rem, 90vh);
-    background: white;
-    border-radius: 0.75rem;
-    box-shadow: 0 18px 38px rgba(0, 0, 0, 0.3);
-    overflow: hidden;
+
+  .settings-masthead {
     display: flex;
     flex-direction: column;
+    gap: 0.125rem;
+    /* Clears the dialog's own close button, which sits top right. */
+    padding: 0.5rem 2.25rem 0.25rem 0.25rem;
   }
-  .settings-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.75rem 1rem;
-    border-bottom: 1px solid hsl(0, 0%, 92%);
+
+  .settings-masthead__title {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: hsl(0, 0%, 12%);
   }
-  .settings-title {
+
+  .settings-masthead__identity {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    margin: 0;
+    font-size: 0.8125rem;
+    color: hsl(0, 0%, 42%);
+  }
+
+  .settings-username {
     font-weight: 600;
-    color: hsl(0, 0%, 15%);
+    color: hsl(0, 0%, 28%);
   }
-  .settings-body {
-    padding: 1rem;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
+
+  .settings-role {
+    padding: 0.0625rem 0.375rem;
+    border-radius: 999px;
+    background: hsl(0, 0%, 94%);
+    font-size: 0.75rem;
+    text-transform: capitalize;
   }
+
   .settings-loading {
     margin: 0;
     color: hsl(0, 0%, 45%);
   }
-  .settings-section {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid hsl(0, 0%, 93%);
+
+  .settings-current {
+    font-weight: 500;
   }
-  .settings-section:last-child {
-    border-bottom: none;
-    padding-bottom: 0;
+
+  .settings-empty {
+    margin: 0;
+    font-size: 0.875rem;
+    color: hsl(0, 0%, 40%);
   }
+
   /* Shared entity-editor input geometry comes from entity-editor.css via the
-     entity-editor-form class; the rules below only add what it lacks. */
-  .settings-body :global(.field-hint) {
+     entity-editor-form class on each section body; these only add what it
+     lacks. */
+  .settings-scroll :global(.field-hint) {
     margin: 0;
     font-size: 0.75rem;
     line-height: 1.4;
     color: hsl(0, 0%, 45%);
   }
-  .settings-body :global(.editor-field input:disabled) {
+
+  .settings-scroll :global(.editor-field input:disabled) {
     background: hsl(0, 0%, 96%);
     color: hsl(0, 0%, 38%);
   }
-  .settings-body :global(.editor-field input:focus-visible) {
+
+  .settings-scroll :global(.editor-field input:focus-visible) {
     outline: 2px solid hsl(5, 53%, 32%);
     outline-offset: 1px;
   }
-  .settings-section h3 {
-    margin: 0 0 0.25rem;
-    font-size: 0.875rem;
-    font-weight: 700;
-    color: hsl(5, 53%, 32%);
-  }
-  .settings-status {
-    margin: 0;
-    font-size: 0.8125rem;
-    color: hsl(0, 0%, 35%);
-  }
+
   .settings-link-btn {
-    align-self: flex-start;
     background: none;
     border: none;
     padding: 0;
@@ -678,6 +691,10 @@
     text-underline-offset: 2px;
   }
 
+  .settings-link-btn--danger {
+    color: #9a1b1b;
+  }
+
   .credits-visibility {
     display: flex;
     align-items: center;
@@ -685,21 +702,14 @@
     font-size: 0.875rem;
   }
 
-  .contributions-section {
-    margin: 1rem 0;
+  .settings-delete-warning {
+    margin: 0;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: hsl(0, 0%, 30%);
   }
 
-  .contributions-section h4,
-  .contributions-section p {
-    margin: 0 0 0.5rem;
-  }
-
-  .contributions-section p {
-    color: hsl(0, 0%, 40%);
-    font-size: 0.875rem;
-  }
-
-  .contributions-section ul {
+  .contributions-list {
     display: grid;
     gap: 0.375rem;
     margin: 0;
@@ -707,37 +717,15 @@
     list-style: none;
   }
 
-  .contributions-section li {
+  .contributions-list li {
     display: flex;
     justify-content: space-between;
     gap: 0.75rem;
     font-size: 0.875rem;
   }
 
-  .contributions-section time {
+  .contributions-list time {
     flex: 0 0 auto;
     color: hsl(0, 0%, 40%);
-  }
-  .settings-link-btn--danger {
-    color: #9a1b1b;
-  }
-  .settings-danger-zone {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    padding: 0.75rem;
-    border: 1px solid #f0c9c9;
-    border-radius: 0.5rem;
-    background: #fdf6f6;
-  }
-  .settings-danger-zone p {
-    margin: 0;
-    font-size: 0.8125rem;
-    color: hsl(0, 0%, 30%);
-  }
-  .settings-danger-actions {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
   }
 </style>

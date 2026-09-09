@@ -33,6 +33,16 @@ type Props = {
   structuredData?: StructuredData[];
   /** Map app shell only: static pages (changelog, legal) should disable this. */
   showAppLoadingShell?: boolean;
+  /**
+   * Whether this page mounts the map app. Content pages (wiki, legal, FAQ)
+   * leave it off, which keeps the service worker from registering there:
+   * registering precaches the whole app, so a reader who arrived at one wiki
+   * article from search was pulling 10 MB across 87 files in the background
+   * for a 15 KB page. Defaults to whatever the loading shell does, since the
+   * two have always meant the same thing, but stays separate so an app page
+   * can hide the shell without also losing offline support.
+   */
+  isAppPage?: boolean;
   /** Load the AdSense script. Wiki pages only — never the map (docs/ad-policy.md). */
   enableAds?: boolean;
 };
@@ -46,16 +56,21 @@ const {
   robots = "index,follow",
   structuredData = [],
   showAppLoadingShell = true,
+  isAppPage = showAppLoadingShell,
   enableAds = false,
 }: Props = Astro.props;
 
+// isAppPage rides on the document as data-app-page rather than reaching
+// src/pwa.ts as a prop, because Astro hoists <script> tags regardless of any
+// condition wrapped around them. The registration module loads on every page
+// either way, so it has to read the flag and decide for itself.
 const canonicalUrl = absoluteUrl(canonicalPath);
 const imageUrl = absoluteUrl(imagePath);
 const shareTitle = ogTitle ?? title;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-app-page={isAppPage ? "true" : undefined}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />

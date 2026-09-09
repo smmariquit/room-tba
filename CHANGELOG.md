@@ -1,3 +1,17 @@
+## [2.29.7](https://github.com/uplbtools/room-tba/compare/v2.29.6...v2.29.7) (2026-09-08)
+
+
+### Bug Fixes
+
+* **pwa:** stop content pages from precaching the whole app ([#1153](https://github.com/uplbtools/room-tba/issues/1153)) ([977a589](https://github.com/uplbtools/room-tba/commit/977a58966cc1936a3b2695c71bc3758719bef7f5))
+
+## [2.29.6](https://github.com/uplbtools/room-tba/compare/v2.29.5...v2.29.6) (2026-09-08)
+
+
+### Bug Fixes
+
+* **proposals:** write an approved room to the local cache ([#1157](https://github.com/uplbtools/room-tba/issues/1157)) ([b0276fe](https://github.com/uplbtools/room-tba/commit/b0276fe4f5042b8d3f1742e60915824d47c0e940)), closes [#1154](https://github.com/uplbtools/room-tba/issues/1154)
+
 ## [2.29.4](https://github.com/uplbtools/room-tba/compare/v2.29.3...v2.29.4) (2026-09-08)
 
 ### Bug Fixes
