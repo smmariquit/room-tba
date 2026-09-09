@@ -1,0 +1,80 @@
+name: Triage nagger
+
+# Daily 9am Manila. Pings @everyone in the core channel (the webhook posts
+# to #core, so the ping reaches exactly the core team) whenever community
+# input is going stale:
+#   - external issues with no maintainer response after 72h
+#   - contributor PRs with no review after 48h
+# Mondays it always posts a full digest, breach or not, so decay stays
+# visible. Requires the DISCORD_TRIAGE_WEBHOOK secret (webhook into #core).
+
+on:
+  schedule:
+    - cron: "0 1 * * *"
+  workflow_dispatch:
+
+permissions:
+  issues: read
+  pull-requests: read
+
+jobs:
+  nag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Collect breaches and post to Discord
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WEBHOOK: ${{ secrets.DISCORD_TRIAGE_WEBHOOK }}
+        run: |
+          set -euo pipefail
+          if [ -z "$WEBHOOK" ]; then
+            echo "DISCORD_TRIAGE_WEBHOOK is not set; nothing to do." >&2
+            exit 0
+          fi
+          repo="${GITHUB_REPOSITORY}"
+          now=$(date -u +%s)
+          collabs=$(gh api "repos/$repo/collaborators?per_page=100" -q '.[].login' | tr '\n' ' ')
+          is_collab() { case " $collabs " in *" $1 "*) return 0;; *) return 1;; esac; }
+
+          issue_lines=""
+          while IFS=$'\t' read -r num author created comments title; do
+            is_collab "$author" && continue
+            age_h=$(( (now - $(date -u -d "$created" +%s)) / 3600 ))
+            if [ "$comments" -eq 0 ] && [ "$age_h" -ge 72 ]; then
+              days=$(( age_h / 24 ))
+              issue_lines="${issue_lines}$(printf '\n- [#%s](https://github.com/%s/issues/%s) by %s, silent for %sd: %s' "$num" "$repo" "$num" "$author" "$days" "$title")"
+            fi
+          done < <(gh api "repos/$repo/issues?state=open&per_page=100" -q '.[] | select(.pull_request | not) | [.number, .user.login, .created_at, .comments, .title] | @tsv')
+
+          pr_lines=""
+          while IFS=$'\t' read -r num author created title; do
+            is_collab "$author" && continue
+            case "$author" in app/*|*'[bot]') continue;; esac
+            age_h=$(( (now - $(date -u -d "$created" +%s)) / 3600 ))
+            reviews=$(gh api "repos/$repo/pulls/$num/reviews" -q 'length')
+            if [ "$reviews" -eq 0 ] && [ "$age_h" -ge 48 ]; then
+              days=$(( age_h / 24 ))
+              pr_lines="${pr_lines}$(printf '\n- [#%s](https://github.com/%s/pull/%s) by %s, unreviewed for %sd: %s' "$num" "$repo" "$num" "$author" "$days" "$title")"
+            fi
+          done < <(gh pr list --repo "$repo" --state open --json number,author,createdAt,title -q '.[] | [.number, .author.login, .createdAt, .title] | @tsv')
+
+          weekday=$(date -u -d '+8 hours' +%u)
+          body=""
+          if [ -n "$issue_lines" ]; then
+            body="${body}$(printf '\n**Issues with no first response (72h SLA):**')${issue_lines}"
+          fi
+          if [ -n "$pr_lines" ]; then
+            body="${body}$(printf '\n**Contributor PRs with no review (48h SLA):**')${pr_lines}"
+          fi
+
+          if [ -z "$body" ] && [ "$weekday" != "1" ]; then
+            echo "No breaches, not Monday. Quiet."
+            exit 0
+          fi
+          if [ -z "$body" ]; then
+            content="@everyone Monday triage: nothing is breaching SLA. Community inbox is clean."
+          else
+            content="@everyone Community input is going stale:${body}"
+          fi
+          jq -n --arg c "$content" '{content: $c, allowed_mentions: {parse: ["everyone"]}}' \
+            | curl -sf -H "Content-Type: application/json" -d @- "$WEBHOOK"

@@ -6,6 +6,7 @@ export function isResendConfigured(): boolean {
 
 export type SendEmailInput = {
   to: string[];
+  cc?: string[];
   subject: string;
   text: string;
   html?: string;
@@ -30,6 +31,7 @@ export async function sendEmail(input: SendEmailInput): Promise<void> {
     body: JSON.stringify({
       from: RESEND_FROM_EMAIL,
       to: input.to,
+      ...(input.cc?.length ? { cc: input.cc } : {}),
       subject: input.subject,
       text: input.text,
       ...(input.html ? { html: input.html } : {}),

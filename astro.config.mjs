@@ -37,7 +37,11 @@ export default defineConfig({
       registerType: "prompt",
       workbox: {
         // AppRoot includes map + editor + PGlite; auth/proposals pushed it past 2 MiB.
-        maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
+        // pglite's wasm (10MB) and data (6MB) must fit: they are the boot
+        // path, and an install without them refetches from the network,
+        // where any newer deploy 404s the old hashes and boot dies (the
+        // "Room TBA did not finish loading" card).
+        maximumFileSizeToCacheInBytes: 12 * 1024 * 1024,
         // The Vercel adapter otherwise points globDirectory at dist/server,
         // so nothing client-side gets precached and the app can't load
         // offline. Glob the actual client output instead.
@@ -46,7 +50,7 @@ export default defineConfig({
         // not the ~650 entity SEO pages) so the app loads offline. The
         // navigate fallback serves that shell for offline navigations.
         globPatterns: [
-          "**/*.{js,css,ico,png,svg,webmanifest,json,jpg}",
+          "**/*.{js,css,ico,png,svg,webmanifest,json,jpg,wasm,data}",
           "index.html",
           "privacy/index.html",
           "terms/index.html",
@@ -197,7 +201,9 @@ export default defineConfig({
 
   redirects: {
     "/contribute": "/?contribute=1",
-    "/wiki/transparency": "/transparency",
+    // The money report moved to the org site; keep both old paths alive.
+    "/wiki/transparency": "https://www.uplb.tools/transparency",
+    "/transparency": "https://www.uplb.tools/transparency",
     "/discord": campusCommunity.discordUrl,
     "/messenger": MESSENGER_CONTRIBUTE_TARGET,
     "/messenger/contribute": MESSENGER_CONTRIBUTE_TARGET,
@@ -390,6 +396,10 @@ export default defineConfig({
   adapter: e2eNodeAdapter
     ? node({ mode: "standalone" })
     : vercel({
+        // Old clients keep resolving their own deployment's hashed assets
+        // (?dpl= pinning) instead of 404ing after every release. Second
+        // layer of the boot-failure fix; the first is precaching pglite.
+        skewProtection: true,
         // Entity SEO pages use prerender=false and render on first request; Vercel
         // caches HTML at the edge (ISR). Admin writes revalidate via ISR_BYPASS_TOKEN.
         isr: {

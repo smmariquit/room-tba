@@ -45,6 +45,25 @@ test.describe("community redirects", () => {
   });
 });
 
+const TRANSPARENCY_TARGET = "https://www.uplb.tools/transparency";
+
+/**
+ * The money report used to be src/pages/transparency.astro and now lives on the
+ * org site. Both old paths were linked from donate, the wiki index, and posts
+ * elsewhere, so they have to keep resolving. A redirect nobody tests is a
+ * redirect that breaks quietly.
+ */
+test.describe("transparency report redirects", () => {
+  for (const path of ["/transparency", "/wiki/transparency"]) {
+    test(`${path} redirects to the org site`, async ({ request }) => {
+      const res = await request.get(path, { maxRedirects: 0 });
+      expect(res.status()).toBeGreaterThanOrEqual(300);
+      expect(res.status()).toBeLessThan(400);
+      expect(res.headers().location).toBe(TRANSPARENCY_TARGET);
+    });
+  }
+});
+
 test.describe("admin redirects", () => {
   test("/admin redirects to in-app login", async ({ page }) => {
     await page.goto("/admin");
