@@ -1,3 +1,15 @@
+# [2.30.0](https://github.com/uplbtools/room-tba/compare/v2.29.7...v2.30.0) (2026-09-10)
+
+
+### Bug Fixes
+
+* **boot:** survive deploys, skew protection plus a complete precache ([#1150](https://github.com/uplbtools/room-tba/issues/1150)) ([f4d2670](https://github.com/uplbtools/room-tba/commit/f4d2670ffc2b4d6a7bb697bc2dbf597573f161d2))
+
+
+### Features
+
+* **menu:** remount the live presence counter in the App menu ([fb59f36](https://github.com/uplbtools/room-tba/commit/fb59f3664c635c1dfc8c9a30a858b22aba8e67aa))
+
 ## [2.29.7](https://github.com/uplbtools/room-tba/compare/v2.29.6...v2.29.7) (2026-09-08)
 
 
