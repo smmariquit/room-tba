@@ -13,10 +13,15 @@ export const githubProfileOverrides: Record<
     href: "https://kendan.dev",
   },
   klnwlks: { name: "Kalinaw Lukas Aom Bebis", href: "https://lukasbebis.com" },
+  unisA02: { name: "Eunice Almeyda" },
+  meonnn: { name: "Simeon Ricalde", href: "https://meonnn.github.io/" },
 };
 
 /** Design credits for people who did not appear in GitHub commit history. */
-export const designers: ContributorInfo[] = [{ name: "Gwy Telmosa" }];
+export const designers: ContributorInfo[] = [
+  { name: "Rovic Villaralvo", href: "https://rovicdesign.framer.website/" },
+  { name: "Gwy Telmosa" },
+];
 
 export const contributors: ContributorInfo[] = [
   { name: "Niño Anthony Marmeto" },
