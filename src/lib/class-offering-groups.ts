@@ -44,6 +44,31 @@ export function offeringGroupKey(
   return `${courseCode}::${section}`;
 }
 
+/**
+ * Lecture sections a child section could belong to, most specific first.
+ * "ST2R" is normally the recit of lecture "ST2", but STAT 135 names its recits
+ * "WX1R" to "WX6R" under one lecture "WX", so the digit-stripped form is a
+ * second candidate. Callers keep the first one that actually exists (#799).
+ */
+export function parentLectureCandidates(row: ClassMapValue): string[] {
+  const first = parentLectureSection(row);
+  if (!first) return [];
+  const stripped = first.replace(/\d+$/, "");
+  return stripped && stripped !== first ? [first, stripped] : [first];
+}
+
+/** First parent candidate present in `known` (section names), else null. */
+export function resolveParentLecture(
+  row: ClassMapValue,
+  known: Iterable<string>,
+): string | null {
+  const have = new Set([...known].map((s) => s.trim().toUpperCase()));
+  for (const candidate of parentLectureCandidates(row)) {
+    if (have.has(candidate)) return candidate;
+  }
+  return null;
+}
+
 /** Group LEC/LAB/SEM rows that share course code + section (#301). */
 export function groupClassesByOffering(
   classes: ClassMapValue[],
@@ -84,10 +109,16 @@ export function groupClassesByOffering(
   for (const group of groups.values()) {
     const linkedLectures = new Map<number, ClassMapValue>();
     for (const row of group.sections) {
-      const parentSection = parentLectureSection(row);
-      const parentKey = offeringGroupKey(row.courseCode, parentSection);
-      const parent = parentKey ? groups.get(parentKey) : null;
-      if (!parent || parent === group) continue;
+      let parent: ClassOfferingGroup | null = null;
+      for (const candidate of parentLectureCandidates(row)) {
+        const key = offeringGroupKey(row.courseCode, candidate);
+        const found = key ? groups.get(key) : null;
+        if (found && found !== group) {
+          parent = found;
+          break;
+        }
+      }
+      if (!parent) continue;
       for (const parentRow of parent.sections) {
         if (classType(parentRow) === "LEC") {
           linkedLectures.set(parentRow.id, parentRow);

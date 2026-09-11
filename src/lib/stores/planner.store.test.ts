@@ -70,6 +70,26 @@ describe("PlannerStore", () => {
     expect(store.activePlan?.sections).toEqual([]);
   });
 
+  test("removing a compact recit (WX1R) also removes lecture WX (#799)", () => {
+    const store = makeStore();
+    store.addOffering([
+      row({ id: 1, courseCode: "STAT 135", section: "WX", type: "LEC" }),
+      row({ id: 2, courseCode: "STAT 135", section: "WX1R", type: "RCT" }),
+    ]);
+    store.removeOffering("STAT 135", "WX1R");
+    expect(store.activePlan?.sections).toEqual([]);
+  });
+
+  test("removing lecture WX also removes its compact recit (#799)", () => {
+    const store = makeStore();
+    store.addOffering([
+      row({ id: 1, courseCode: "STAT 135", section: "WX", type: "LEC" }),
+      row({ id: 2, courseCode: "STAT 135", section: "WX1R", type: "RCT" }),
+    ]);
+    store.removeOffering("STAT 135", "WX");
+    expect(store.activePlan?.sections).toEqual([]);
+  });
+
   test("refreshActivePlan does NOT stale a section whose course was not fetched", () => {
     const store = makeStore();
     store.addOffering([row({ id: 1, section: "AB", type: "LEC" })]);

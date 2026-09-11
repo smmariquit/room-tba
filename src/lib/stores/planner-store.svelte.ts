@@ -1,6 +1,7 @@
 import {
   offeringGroupKey,
   parentLectureSection,
+  resolveParentLecture,
 } from "../class-offering-groups.js";
 import { findConflicts } from "../planner/conflicts.js";
 import {
@@ -121,7 +122,15 @@ export class PlannerStore {
     // component removes the whole unit. Resolve each section to its lecture
     // (itself if it is the lecture, else the parent encoded in a child section
     // like "C-4L" -> "C") and drop everything in that unit for the course.
-    const unitOf = (s: string) => parentLectureSection({ section: s }) ?? s;
+    // Resolve against the sections actually in the plan so a compact recit
+    // like "WX1R" finds lecture "WX" rather than a nonexistent "WX1" (#799).
+    const planned = plan.sections
+      .filter((s) => s.courseCode === courseCode)
+      .map((s) => s.section);
+    const unitOf = (s: string) =>
+      resolveParentLecture({ section: s }, planned) ??
+      parentLectureSection({ section: s }) ??
+      s;
     const targetUnit = unitOf(section);
     plan.sections = plan.sections.filter(
       (s) => s.courseCode !== courseCode || unitOf(s.section) !== targetUnit,
