@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
 import {
   groupClassesByOffering,
+  parentLectureCandidates,
   parentLectureSection,
 } from "./class-offering-groups.js";
 import type { ClassMapValue } from "@lib/types";
@@ -45,6 +46,15 @@ describe("parentLectureSection", () => {
     expect(parentLectureSection(row({ section: "ST2R", type: "RCT" }))).toBe(
       "ST2",
     );
+  });
+
+  test("offers the digit-stripped lecture as a second candidate (#799)", () => {
+    expect(
+      parentLectureCandidates(row({ section: "WX1R", type: "RCT" })),
+    ).toEqual(["WX1", "WX"]);
+    expect(
+      parentLectureCandidates(row({ section: "G-1L", type: "LAB" })),
+    ).toEqual(["G"]);
   });
 
   test("returns null for standalone lecture/seminar sections", () => {
@@ -125,6 +135,24 @@ describe("groupClassesByOffering", () => {
     expect(ab2r?.sections.map((s) => `${s.section}/${s.type}`)).toEqual([
       "AB2/LEC",
       "AB2R/RCT",
+    ]);
+  });
+
+  test("links STAT 135 compact recits (WX1R) to the single lecture WX (#799)", () => {
+    const groups = groupClassesByOffering([
+      row({ id: 1, courseCode: "STAT 135", section: "WX", type: "LEC" }),
+      row({ id: 2, courseCode: "STAT 135", section: "WX1R", type: "RCT" }),
+      row({ id: 3, courseCode: "STAT 135", section: "WX2R", type: "RCT" }),
+    ]);
+
+    expect(groups.map((group) => group.section).sort()).toEqual([
+      "WX1R",
+      "WX2R",
+    ]);
+    const wx1r = groups.find((g) => g.section === "WX1R");
+    expect(wx1r?.sections.map((s) => `${s.section}/${s.type}`)).toEqual([
+      "WX/LEC",
+      "WX1R/RCT",
     ]);
   });
 });
