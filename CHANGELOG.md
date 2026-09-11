@@ -1,3 +1,10 @@
+## [2.30.1](https://github.com/uplbtools/room-tba/compare/v2.30.0...v2.30.1) (2026-09-11)
+
+
+### Bug Fixes
+
+* **planner:** link compact recit sections like WX1R to their lecture ([8badbe2](https://github.com/uplbtools/room-tba/commit/8badbe22b40c8fb3a66b402760533a77f51b1b22)), closes [#799](https://github.com/uplbtools/room-tba/issues/799)
+
 # [2.30.0](https://github.com/uplbtools/room-tba/compare/v2.29.7...v2.30.0) (2026-09-10)
 
 
