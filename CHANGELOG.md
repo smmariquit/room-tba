@@ -24,6 +24,13 @@
 
 * **proposals:** write an approved room to the local cache ([#1157](https://github.com/uplbtools/room-tba/issues/1157)) ([b0276fe](https://github.com/uplbtools/room-tba/commit/b0276fe4f5042b8d3f1742e60915824d47c0e940)), closes [#1154](https://github.com/uplbtools/room-tba/issues/1154)
 
+## [2.29.5](https://github.com/uplbtools/room-tba/compare/v2.29.4...v2.29.5) (2026-09-08)
+
+
+### Bug Fixes
+
+* **proposals:** refresh the open room panel after an approve ([#1154](https://github.com/uplbtools/room-tba/issues/1154)) ([4bedbf7](https://github.com/uplbtools/room-tba/commit/4bedbf756b03cf5492dd6c355f4b32c0a21b23be)), closes [#895](https://github.com/uplbtools/room-tba/issues/895)
+
 ## [2.29.4](https://github.com/uplbtools/room-tba/compare/v2.29.3...v2.29.4) (2026-09-08)
 
 ### Bug Fixes
